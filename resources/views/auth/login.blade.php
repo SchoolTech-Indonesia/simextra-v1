@@ -16,8 +16,8 @@
             @csrf
 
             <div>
-                <x-label for="email" value="{{ __('Email') }}" />
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
+                <x-label for="NISN_NIP" value="{{ __('NISN_NIP') }}" />
+                <x-input id="NISN_NIP" class="block mt-1 w-full" type="text" name="NISN_NIP" :value="old('NISN_NIP')" required autofocus autocomplete="NISN_NIP" />
             </div>
 
             <div class="mt-4">

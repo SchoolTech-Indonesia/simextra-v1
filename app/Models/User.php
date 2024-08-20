@@ -25,10 +25,15 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'NISN_NIP',
         'email',
         'password',
     ];
 
+    public function username()
+{
+    return 'NISN_NIP';
+}
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -58,6 +63,7 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
+            'NISN_NIP_verified_at' => 'datetime',
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];

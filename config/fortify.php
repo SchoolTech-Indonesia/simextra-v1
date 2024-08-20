@@ -44,8 +44,8 @@ return [
     | another name for the field you may define it below as needed.
     |
     */
-'username' => 'NISN_NIP',
-'email' => 'email',
+    'username' => 'NISN_NIP',
+    'email' => 'email',
 
     /*
     |--------------------------------------------------------------------------

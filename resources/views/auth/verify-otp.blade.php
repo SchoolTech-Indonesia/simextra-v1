@@ -5,7 +5,7 @@
         </x-slot>
 
         <div class="mb-4 text-sm text-gray-600">
-            {{ __('Forgot your password? No problem. Just let us know your NISN and we will email you an OTP that will allow you to reset your password.') }}
+            {{ __('Enter the OTP you received to verify your identity.') }}
         </div>
 
         @if (session('status'))
@@ -16,16 +16,16 @@
 
         <x-validation-errors class="mb-4" />
 
-        <form method="POST" action="{{ route('password.forgot') }}">
+        <form method="POST" action="{{ route('otp.verify') }}">
             @csrf
-            <div class="block">
-                <x-label for="NISN_NIP" value="{{ __('NISN_NIP') }}" />
-                <x-input id="NISN_NIP" class="block mt-1 w-full" type="text" name="NISN_NIP" :value="old('NISN_NIP')" required autofocus autocomplete="NISN_NIP" />
+            <div class="block mt-4">
+                <x-label for="otp" value="{{ __('OTP') }}" />
+                <x-input id="otp" class="block mt-1 w-full" type="text" name="otp" required autofocus />
             </div>
 
             <div class="flex items-center justify-end mt-4">
                 <x-button>
-                    {{ __('Send OTP') }}
+                    {{ __('Verify OTP') }}
                 </x-button>
             </div>
         </form>

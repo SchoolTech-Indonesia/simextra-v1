@@ -28,6 +28,9 @@ class User extends Authenticatable
         'NISN_NIP',
         'email',
         'password',
+        'otp',
+        'otp_token',
+        'otp_expires_at'
     ];
 
     public function username()

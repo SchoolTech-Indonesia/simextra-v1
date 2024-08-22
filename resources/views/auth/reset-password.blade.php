@@ -1,38 +1,67 @@
-<x-guest-layout>
-    <x-authentication-card>
-        <x-slot name="logo">
-            <x-authentication-card-logo />
-        </x-slot>
+@extends('layouts.guest')
 
-        <div class="mb-4 text-sm text-gray-600">
-            {{ __('Reset your password.') }}
+@section('content')
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h4>{{ __('Reset Your Password') }}</h4>
+                </div>
+                <div class="card-body">
+                    <div class="mb-4 text-sm text-gray-600">
+                        {{ __('Reset your password.') }}
+                    </div>
+
+                    @if (session('status'))
+                        <div class="alert alert-success">
+                            {{ session('status') }}
+                        </div>
+                    @endif
+
+                    <!-- Validation Errors -->
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    <form method="POST" action="{{ route('password.update') }}" class="needs-validation" novalidate>
+                        @csrf
+
+                        <div class="form-group">
+                            <label for="password">{{ __('New Password') }}</label>
+                            <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
+                            @error('password')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password_confirmation">{{ __('Confirm Password') }}</label>
+                            <input id="password_confirmation" type="password" class="form-control @error('password_confirmation') is-invalid @enderror" name="password_confirmation" required autocomplete="new-password">
+                            @error('password_confirmation')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+
+                        <div class="form-group text-right">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                {{ __('Reset Password') }}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-
-        @if (session('status'))
-            <div class="mb-4 font-medium text-sm text-green-600">
-                {{ session('status') }}
-            </div>
-        @endif
-
-        <x-validation-errors class="mb-4" />
-
-        <form method="POST" action="{{ route('password.update') }}">
-            @csrf
-            <div class="block mt-4">
-                <x-label for="password" value="{{ __('New Password') }}" />
-                <x-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
-            </div>
-
-            <div class="block mt-4">
-                <x-label for="password_confirmation" value="{{ __('Confirm Password') }}" />
-                <x-input id="password_confirmation" class="block mt-1 w-full" type="password" name="password_confirmation" required autocomplete="new-password" />
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <x-button>
-                    {{ __('Reset Password') }}
-                </x-button>
-            </div>
-        </form>
-    </x-authentication-card>
-</x-guest-layout>
+    </div>
+</div>
+@endsection

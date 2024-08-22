@@ -64,7 +64,7 @@ class OtpController extends Controller
                     ->first();
 
         if (!$user) {
-            return back()->withErrors(['otp' => 'Token Anda Salah atau Sudah Kadaluarsa']);
+            return back()->withErrors(['otp' => 'Kode OTP Anda Salah atau Sudah Kadaluarsa']);
         }
 
         // Menyimpan ID User ke dalam Session untuk reset password

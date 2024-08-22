@@ -20,15 +20,22 @@ class OtpController extends Controller
     {
         $request->validate(['NISN_NIP' => 'required']);
 
+        // Mencari user berdasarkan NISN atau NIP
         $user = User::where('NISN_NIP', $request->NISN_NIP)->first();
 
+        // Jika user tidak ditemukan
         if (!$user) {
             return back()->withErrors(['NISN_NIP' => 'NIP atau NISN Tidak Ditemukan']);
         }
 
-        // Generate OTP
+        // Jika user ditemukan tetapi email kosong
+        if (empty($user->email)) {
+            return back()->withErrors(['NISN_NIP' => 'Anda Belum Mempunyai Email Terdaftar untuk Reset Password, Harap Menghubungi Admin']);
+        }
+
+        // Generate OTP dan token
         $otp = rand(100000, 999999);
-        $otpToken = Str::random(60); // Generate random otp token 
+        $otpToken = Str::random(60); // Generate random otp token
         $user->otp = $otp;
         $user->otp_expires_at = now()->addMinutes(10);
         $user->otp_token = $otpToken; // Menyimpan otp token untuk verifikasi
@@ -39,6 +46,7 @@ class OtpController extends Controller
 
         return redirect()->route('otp.verify.form')->with('status', 'Kode OTP Berhasil Dikirim ke Email Anda');
     }
+
 
     public function showOtpVerificationForm()
     {

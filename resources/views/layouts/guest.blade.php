@@ -21,7 +21,11 @@
         <div class="font-sans text-gray-900 antialiased">
             {{ $slot }}
         </div>
+        <div class="simple-footer">
+              Copyright © SchoolTech Indonesia 2024
+            </div>
 
         @livewireScripts
+       
     </body>
 </html>

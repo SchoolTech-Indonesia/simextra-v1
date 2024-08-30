@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OtpController;
-
+use App\Http\Controllers\PermissionController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -16,8 +16,11 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
-    
+    Route::resource('permission', PermissionController::class);
+Route::get('/permission', [PermissionController::class, 'show'])->name('user.permission.show');
 });
+
+
 
 Route::get('/forgot-password', [OtpController::class, 'showForgotPasswordForm'])->name('password.forgot.form');
 Route::post('/forgot-password', [OtpController::class, 'sendOtp'])->name('password.forgot');

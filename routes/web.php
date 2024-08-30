@@ -17,7 +17,8 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
     Route::resource('permission', PermissionController::class);
-Route::get('/permission', [PermissionController::class, 'show'])->name('user.permission.show');
+// Route::get('/permission', [PermissionController::class, 'show'])->name('user.permission.show');
+// Route::get('/permission', PermissionController::class);
 });
 
 

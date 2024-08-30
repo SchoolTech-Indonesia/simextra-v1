@@ -13,7 +13,7 @@
                     <div class="card-header">
                         <h4>{{ __('Permissions List') }}</h4>
                         <div class="card-header-action">
-                            <a href="{{ route('permission.create') }}" class="btn btn-primary">{{ __('Add Permission') }}</a>
+                            <a href="{{ route('permissions.create') }}" class="btn btn-primary">{{ __('Add Permission') }}</a>
                         </div>
                     </div>
 
@@ -33,8 +33,8 @@
                                         <td>{{ $permission->slug }}</td>
                                         <td>{{ $permission->name }}</td>
                                         <td>
-                                            <a href="{{ route('permission.edit', $permission->id) }}" class="btn btn-sm btn-primary">{{ __('Edit') }}</a>
-                                            <form action="{{ route('permission.destroy', $permission->id) }}" method="POST" style="display:inline;">
+                                            <a href="{{ route('permissions.edit', $permission->id) }}" class="btn btn-sm btn-primary">{{ __('Edit') }}</a>
+                                            <form action="{{ route('permissions.destroy', $permission->id) }}" method="POST" style="display:inline;">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-sm btn-danger">{{ __('Delete') }}</button>

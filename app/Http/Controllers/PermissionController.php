@@ -15,7 +15,6 @@ class PermissionController extends Controller
 
         // Pass the permissions data to the view
         return view('user.permission.show', compact('permissions'));
-        // dd($permissions);
     }
 
     public function create()

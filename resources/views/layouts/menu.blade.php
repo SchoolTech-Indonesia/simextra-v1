@@ -8,7 +8,7 @@
   <li class="nav-item dropdown{% if 'layout' in page %} active{% endif %}">
     <a href="#" class="nav-link has-dropdown"><i class="fas fa-users"></i> <span>User</span></a>
     <ul class="dropdown-menu">
-      <li class="active"{% endif %}><a class="nav-link" href="{{ route('user.permission.show') }}">Permission Management</a></li>
+      <li class="active"{% endif %}><a class="nav-link" href="{{ route('permissions.index') }}">Permission Management</a></li>
     </ul>
   </li>
   <!-- Add more sections like above for other menus -->

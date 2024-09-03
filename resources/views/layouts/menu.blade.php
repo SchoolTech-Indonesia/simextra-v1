@@ -4,13 +4,17 @@
     <a href="#" class="nav-link has-dropdown"><i class="fas fa-fire"></i><span>Dashboard</span></a>
   </li>
   <li class="menu-header">Main Menu</li>
+  @role('superadmin')
   <li class="nav-item dropdown{% if 'layout' in page %} active{% endif %}">
-    <a href="#" class="nav-link has-dropdown"><i class="fas fa-columns"></i> <span>Layout</span></a>
+    <a href="#" class="nav-link has-dropdown"><i class="fas fa-columns"></i> <span>User</span></a>
     <ul class="dropdown-menu">
-      <li{% if 'layout-default' in page %} class="active"{% endif %}><a class="nav-link" href="layout-default.html">Default Layout</a></li>
-      <li{% if 'layout-transparent' in page %} class="active"{% endif %}><a class="nav-link" href="layout-transparent.html">Transparent Sidebar</a></li>
-      <li{% if 'layout-top' in page %} class="active"{% endif %}><a class="nav-link" href="layout-top-navigation.html">Top Navigation</a></li>
+     
+      <li{% if 'permissions-management' in page %} class="active"{% endif %}><a class="nav-link" href="{{ route('permissions.index') }}">Permission Management</a></li>
+      <li{% if 'roles-management' in page %} class="active"{% endif %}><a class="nav-link" href="{{ route('roles.index') }}">Role Management</a></li>
+      <li{% if 'users-management' in page %} class="active"{% endif %}><a class="nav-link" href="{{ route('users.index') }}">User Management</a></li>
+      
     </ul>
   </li>
+  @endrole
   <!-- Add more sections like above for other menus -->
 </ul>

@@ -25,15 +25,16 @@ return new class extends Migration
         }
 
         Schema::create($tableNames['permissions'], function (Blueprint $table) {
-            //$table->engine('InnoDB');
             $table->bigIncrements('id'); // permission id
-            $table->string('name');       // For MyISAM use string('name', 225); // (or 166 for InnoDB with Redundant/Compact row format)
+            $table->string('name');       // For MyISAM use string('name', 225);
+            $table->string('slug')->unique(); // Adding the slug column with unique constraint
             $table->string('guard_name'); // For MyISAM use string('guard_name', 25);
+            $table->string('permission')->nullable(); // Tambahkan kolom permission di sini
             $table->timestamps();
-
+        
             $table->unique(['name', 'guard_name']);
         });
-
+        
         Schema::create($tableNames['roles'], function (Blueprint $table) use ($teams, $columnNames) {
             //$table->engine('InnoDB');
             $table->bigIncrements('id'); // role id

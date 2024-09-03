@@ -16,11 +16,14 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
-    Route::resource('permissions', PermissionController::class);
-//     Route::get('/permission', [PermissionController::class, 'show'])->name('user.permission.show');
+    
+// Route::get('/permission', [PermissionController::class, 'show'])->name('user.permission.show');
 // Route::get('/permission', PermissionController::class);
 });
 
+
+Route::delete('/permissions/{id}', [PermissionController::class, 'destroy'])->name('permissions.destroy');
+Route::resource('permissions', PermissionController::class);
 
 Route::get('/forgot-password', [OtpController::class, 'showForgotPasswordForm'])->name('password.forgot.form');
 Route::post('/forgot-password', [OtpController::class, 'sendOtp'])->name('password.forgot');

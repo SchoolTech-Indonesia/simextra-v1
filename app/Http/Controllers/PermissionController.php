@@ -10,10 +10,7 @@ class PermissionController extends Controller
 {
     public function index()
     {
-        // Retrieve all permission from the database
         $permissions = Permission::all();
-
-        // Pass the permissions data to the view
         return view('user.permission.show', compact('permissions'));
     }
 
@@ -24,9 +21,13 @@ class PermissionController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate(['name' => 'required']);
-        Permission::create($request->all());
-        return redirect()->route('permission.index')->with('success', 'Permission created successfully.');
+        $request->validate([
+            'name' => 'required',
+            'slug' => 'required|unique:permissions,slug',
+        ]);
+
+        Permission::create($request->only(['name', 'slug']));
+        return redirect()->route('permissions.index')->with('success', 'Permission created successfully.');
     }
 
     public function edit(Permission $permission)
@@ -36,16 +37,21 @@ class PermissionController extends Controller
 
     public function update(Request $request, Permission $permission)
     {
-        $request->validate(['name' => 'required']);
-        $permission->update($request->all());
-        return redirect()->route('permission.index')->with('success', 'Permission updated successfully.');
+        $request->validate([
+            'name' => 'required',
+            'slug' => 'required|unique:permissions,slug,' . $permission->id,
+        ]);
+
+        $permission->update($request->only(['name', 'slug']));
+        return redirect()->route('permissions.index')->with('success', 'Permission updated successfully.');
     }
 
     public function destroy(Permission $permission)
-    {
-        $permission->delete();
-        return redirect()->route('permission.index')->with('success', 'Permission deleted successfully.');
-    }
+{
+    $permission->delete();
+    return redirect()->route('permissions.index')->with('success', 'Permission deleted successfully.');
+}
+
 
     public function show(Permission $permission)
     {

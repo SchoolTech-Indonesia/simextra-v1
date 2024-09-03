@@ -1,6 +1,11 @@
 @extends('layouts.app') {{-- Assuming this is your main Stisla layout --}}
 
 @section('content')
+@if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
 <section class="section">
     <div class="section-header">
         <h1>{{ __('Persmission Management') }}</h1>
@@ -97,7 +102,7 @@
                 {{-- Form to edit permission --}}
                 <form id="edit-permission-form" action="" method="POST">
                     @csrf
-                    @method('PUT')
+                    @method('PUT') 
                     <div class="form-group">
                         <label for="edit-permission-slug">{{ __('Permission Slug') }}</label>
                         <input type="text" name="slug" class="form-control" id="edit-permission-slug" required>
@@ -107,7 +112,7 @@
                         <input type="text" name="name" class="form-control" id="edit-permission-name" required>
                     </div>
                     <button type="submit" class="btn btn-primary">{{ __('Update') }}</button>
-                </form>
+                </form>                     
             </div>
         </div>
     </div>
@@ -127,37 +132,34 @@
                 <p>{{ __('Are you sure you want to delete this permission?') }}</p>
                 <form id="delete-permission-form" action="" method="POST">
                     @csrf
-                    @method('DELETE')
+                    @method('DELETE') <!-- Metode DELETE untuk penghapusan -->
                     <button type="submit" class="btn btn-danger">{{ __('Delete') }}</button>
-                </form>
+                </form>                
             </div>
         </div>
     </div>
 </div>
 
+
 <script>
-    // Pass data to the edit modal
-    $('#editPermissionModal').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget)
-        var id = button.data('id')
-        var slug = button.data('slug')
-        var name = button.data('name')
+$('#editPermissionModal').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget);
+    var id = button.data('id');
+    var slug = button.data('slug');
+    var name = button.data('name');
 
-        var modal = $(this)
-        modal.find('.modal-title').text('{{ __("Edit Permission") }}')
-        modal.find('#edit-permission-slug').val(slug)
-        modal.find('#edit-permission-name').val(name)
-        modal.find('#edit-permission-form').attr('action', '/permissions/' + id)
-    })
+    var modal = $(this);
+    modal.find('#edit-permission-slug').val(slug);
+    modal.find('#edit-permission-name').val(name);
+    modal.find('#edit-permission-form').attr('action', '/permissions/' + id);
+});
 
-    // Pass data to the delete modal
-    $('#deletePermissionModal').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget)
-        var id = button.data('id')
-
-        var modal = $(this)
-        modal.find('.modal-title').text('{{ __("Delete Permission") }}')
-        modal.find('#delete-permission-form').attr('action', '/permissions/' + id)
-    })
+$('#deletePermissionModal').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget);
+    var id = button.data('id');
+    
+    var modal = $(this);
+    modal.find('#delete-permission-form').attr('action', '/permissions/' + id);
+});
 </script>
 @endsection

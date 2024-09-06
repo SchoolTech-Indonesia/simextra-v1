@@ -19,14 +19,15 @@ class PermissionController extends Controller
 
     public function create()
     {
-        return view('user.permission.create');
+        
     }
 
     public function store(Request $request)
     {
         $request->validate(['name' => 'required']);
-        Permission::create($request->all());
-        return redirect()->route('permission.index')->with('success', 'Permission created successfully.');
+        $permission = Permission::create($request->all());
+        
+        return response()->json($permission); // Return the created permission
     }
 
     public function edit(Permission $permission)

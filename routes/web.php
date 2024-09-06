@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OtpController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\ProfileController;
+
 
 Route::get('/', function () {
     return view('auth.login');
@@ -13,6 +15,9 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
+    Route::post('/profile/photo/upload', [ProfileController::class, 'uploadPhoto'])->name('profile.photo.upload');
+    Route::put('/profile/update', [ProfileController::class, 'updateProfile'])->name('profile.update');
+    
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
@@ -20,6 +25,8 @@ Route::middleware([
 // Route::get('/permission', [PermissionController::class, 'show'])->name('user.permission.show');
 // Route::get('/permission', PermissionController::class);
 });
+
+
 
 
 Route::get('/forgot-password', [OtpController::class, 'showForgotPasswordForm'])->name('password.forgot.form');

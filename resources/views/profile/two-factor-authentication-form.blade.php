@@ -1,124 +1,102 @@
-<x-action-section>
-    <x-slot name="title">
-        {{ __('Two Factor Authentication') }}
-    </x-slot>
+<div class="card">
+    <div class="card-header">
+        <h4>{{ __('Profile Information') }}</h4>
+    </div>
 
-    <x-slot name="description">
-        {{ __('Add additional security to your account using two factor authentication.') }}
-    </x-slot>
+    <div class="card-body">
+        <p class="text-muted">{{ __('Update your account\'s profile information and email address.') }}</p>
 
-    <x-slot name="content">
-        <h3 class="text-lg font-medium text-gray-900">
-            @if ($this->enabled)
-                @if ($showingConfirmation)
-                    {{ __('Finish enabling two factor authentication.') }}
-                @else
-                    {{ __('You have enabled two factor authentication.') }}
-                @endif
-            @else
-                {{ __('You have not enabled two factor authentication.') }}
+        <form wire:submit.prevent="updateProfileInformation">
+            <!-- Profile Photo -->
+            @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
+                <div x-data="{photoName: null, photoPreview: null}" class="form-group">
+                    <!-- Profile Photo File Input -->
+                    <input type="file" id="photo" class="d-none"
+                           wire:model.live="photo"
+                           x-ref="photo"
+                           x-on:change="
+                                photoName = $refs.photo.files[0].name;
+                                const reader = new FileReader();
+                                reader.onload = (e) => {
+                                    photoPreview = e.target.result;
+                                };
+                                reader.readAsDataURL($refs.photo.files[0]);
+                           " />
+
+                    <label for="photo" class="form-label">{{ __('Photo') }}</label>
+
+                    <!-- Current Profile Photo -->
+                    <div class="mt-2" x-show="! photoPreview">
+                        <img src="{{ $this->user->profile_photo_url }}" alt="{{ $this->user->name }}" class="rounded-circle" style="height: 80px; width: 80px; object-fit: cover;">
+                    </div>
+
+                    <!-- New Profile Photo Preview -->
+                    <div class="mt-2" x-show="photoPreview" style="display: none;">
+                        <span class="block rounded-circle" style="height: 80px; width: 80px; background-image: url('{{ photoPreview }}'); background-size: cover; background-position: center;">
+                        </span>
+                    </div>
+
+                    <button type="button" class="btn btn-secondary mt-2" x-on:click.prevent="$refs.photo.click()">
+                        {{ __('Select A New Photo') }}
+                    </button>
+
+                    @if ($this->user->profile_photo_path)
+                        <button type="button" class="btn btn-secondary mt-2" wire:click="deleteProfilePhoto">
+                            {{ __('Remove Photo') }}
+                        </button>
+                    @endif
+
+                    <div class="text-danger mt-2" x-show="$errors.has('photo')">
+                        @error('photo') {{ $message }} @enderror
+                    </div>
+                </div>
             @endif
-        </h3>
 
-        <div class="mt-3 max-w-xl text-sm text-gray-600">
-            <p>
-                {{ __('When two factor authentication is enabled, you will be prompted for a secure, random token during authentication. You may retrieve this token from your phone\'s Google Authenticator application.') }}
-            </p>
-        </div>
+            <!-- Name -->
+            <div class="form-group">
+                <label for="name" class="form-label">{{ __('Name') }}</label>
+                <input id="name" type="text" class="form-control" wire:model="state.name" required autocomplete="name">
+                <div class="text-danger mt-2" x-show="$errors.has('state.name')">
+                    @error('state.name') {{ $message }} @enderror
+                </div>
+            </div>
 
-        @if ($this->enabled)
-            @if ($showingQrCode)
-                <div class="mt-4 max-w-xl text-sm text-gray-600">
-                    <p class="font-semibold">
-                        @if ($showingConfirmation)
-                            {{ __('To finish enabling two factor authentication, scan the following QR code using your phone\'s authenticator application or enter the setup key and provide the generated OTP code.') }}
-                        @else
-                            {{ __('Two factor authentication is now enabled. Scan the following QR code using your phone\'s authenticator application or enter the setup key.') }}
-                        @endif
+            <!-- Email -->
+            <div class="form-group">
+                <label for="email" class="form-label">{{ __('Email') }}</label>
+                <input id="email" type="email" class="form-control" wire:model="state.email" required autocomplete="username">
+                <div class="text-danger mt-2" x-show="$errors.has('state.email')">
+                    @error('state.email') {{ $message }} @enderror
+                </div>
+
+                @if (Laravel\Fortify\Features::enabled(Laravel\Fortify\Features::emailVerification()) && ! $this->user->hasVerifiedEmail())
+                    <p class="text-sm mt-2">
+                        {{ __('Your email address is unverified.') }}
+
+                        <button type="button" class="btn btn-link text-muted" wire:click.prevent="sendEmailVerification">
+                            {{ __('Click here to re-send the verification email.') }}
+                        </button>
                     </p>
-                </div>
 
-                <div class="mt-4 p-2 inline-block bg-white">
-                    {!! $this->user->twoFactorQrCodeSvg() !!}
-                </div>
+                    @if ($this->verificationLinkSent)
+                        <p class="mt-2 text-success font-weight-bold text-sm">
+                            {{ __('A new verification link has been sent to your email address.') }}
+                        </p>
+                    @endif
+                @endif
+            </div>
 
-                <div class="mt-4 max-w-xl text-sm text-gray-600">
-                    <p class="font-semibold">
-                        {{ __('Setup Key') }}: {{ decrypt($this->user->two_factor_secret) }}
-                    </p>
-                </div>
-
-                @if ($showingConfirmation)
-                    <div class="mt-4">
-                        <x-label for="code" value="{{ __('Code') }}" />
-
-                        <x-input id="code" type="text" name="code" class="block mt-1 w-1/2" inputmode="numeric" autofocus autocomplete="one-time-code"
-                            wire:model="code"
-                            wire:keydown.enter="confirmTwoFactorAuthentication" />
-
-                        <x-input-error for="code" class="mt-2" />
+            <div class="form-group mt-3">
+                @if (session()->has('saved'))
+                    <div class="alert alert-success">
+                        {{ __('Saved.') }}
                     </div>
                 @endif
-            @endif
 
-            @if ($showingRecoveryCodes)
-                <div class="mt-4 max-w-xl text-sm text-gray-600">
-                    <p class="font-semibold">
-                        {{ __('Store these recovery codes in a secure password manager. They can be used to recover access to your account if your two factor authentication device is lost.') }}
-                    </p>
-                </div>
-
-                <div class="grid gap-1 max-w-xl mt-4 px-4 py-4 font-mono text-sm bg-gray-100 rounded-lg">
-                    @foreach (json_decode(decrypt($this->user->two_factor_recovery_codes), true) as $code)
-                        <div>{{ $code }}</div>
-                    @endforeach
-                </div>
-            @endif
-        @endif
-
-        <div class="mt-5">
-            @if (! $this->enabled)
-                <x-confirms-password wire:then="enableTwoFactorAuthentication">
-                    <x-button type="button" wire:loading.attr="disabled">
-                        {{ __('Enable') }}
-                    </x-button>
-                </x-confirms-password>
-            @else
-                @if ($showingRecoveryCodes)
-                    <x-confirms-password wire:then="regenerateRecoveryCodes">
-                        <x-secondary-button class="me-3">
-                            {{ __('Regenerate Recovery Codes') }}
-                        </x-secondary-button>
-                    </x-confirms-password>
-                @elseif ($showingConfirmation)
-                    <x-confirms-password wire:then="confirmTwoFactorAuthentication">
-                        <x-button type="button" class="me-3" wire:loading.attr="disabled">
-                            {{ __('Confirm') }}
-                        </x-button>
-                    </x-confirms-password>
-                @else
-                    <x-confirms-password wire:then="showRecoveryCodes">
-                        <x-secondary-button class="me-3">
-                            {{ __('Show Recovery Codes') }}
-                        </x-secondary-button>
-                    </x-confirms-password>
-                @endif
-
-                @if ($showingConfirmation)
-                    <x-confirms-password wire:then="disableTwoFactorAuthentication">
-                        <x-secondary-button wire:loading.attr="disabled">
-                            {{ __('Cancel') }}
-                        </x-secondary-button>
-                    </x-confirms-password>
-                @else
-                    <x-confirms-password wire:then="disableTwoFactorAuthentication">
-                        <x-danger-button wire:loading.attr="disabled">
-                            {{ __('Disable') }}
-                        </x-danger-button>
-                    </x-confirms-password>
-                @endif
-
-            @endif
-        </div>
-    </x-slot>
-</x-action-section>
+                <button type="submit" class="btn btn-primary" wire:loading.attr="disabled" wire:target="photo">
+                    {{ __('Save') }}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

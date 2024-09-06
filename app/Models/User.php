@@ -32,8 +32,10 @@ class User extends Authenticatable
         'password',
         'otp',
         'otp_token',
-        'otp_expires_at'
+        'otp_expires_at',
+        'profile_photo_path',
     ];
+    
 
     public function username()
 {
@@ -65,12 +67,18 @@ class User extends Authenticatable
      *
      * @return array<string, string>
      */
-    protected function casts(): array
-    {
-        return [
-            'NISN_NIP_verified_at' => 'datetime',
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
+    // protected function casts(): array
+    // {
+    //     return [
+    //         'NISN_NIP_verified_at' => 'datetime',
+    //         'email_verified_at' => 'datetime',
+    //         'password' => 'hashed',
+    //     ];
+    // }
+    protected $casts = [
+        'NISN_NIP_verified_at' => 'datetime',
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+    ];
+    
 }

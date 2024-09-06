@@ -1,53 +1,55 @@
-<x-action-section>
-    <x-slot name="title">
-        {{ __('Delete Account') }}
-    </x-slot>
+<div class="section">
+    <div class="section-header">
+        <h1>{{ __('Delete Account') }}</h1>
+    </div>
 
-    <x-slot name="description">
-        {{ __('Permanently delete your account.') }}
-    </x-slot>
+    <div class="section-body">
+        <div class="alert alert-warning">
+            {{ __('Permanently delete your account.') }}
+        </div>
 
-    <x-slot name="content">
-        <div class="max-w-xl text-sm text-gray-600">
+        <p class="text-muted">
             {{ __('Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.') }}
-        </div>
+        </p>
 
-        <div class="mt-5">
-            <x-danger-button wire:click="confirmUserDeletion" wire:loading.attr="disabled">
-                {{ __('Delete Account') }}
-            </x-danger-button>
-        </div>
+        <button class="btn btn-danger mt-3" onclick="confirmUserDeletion()">
+            {{ __('Delete Account') }}
+        </button>
 
         <!-- Delete User Confirmation Modal -->
-        <x-dialog-modal wire:model.live="confirmingUserDeletion">
-            <x-slot name="title">
-                {{ __('Delete Account') }}
-            </x-slot>
+        <div class="modal fade" id="deleteAccountModal" tabindex="-1" role="dialog" aria-labelledby="deleteAccountModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteAccountModalLabel">{{ __('Delete Account') }}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        {{ __('Are you sure you want to delete your account? Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.') }}
 
-            <x-slot name="content">
-                {{ __('Are you sure you want to delete your account? Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.') }}
-
-                <div class="mt-4" x-data="{}" x-on:confirming-delete-user.window="setTimeout(() => $refs.password.focus(), 250)">
-                    <x-input type="password" class="mt-1 block w-3/4"
-                                autocomplete="current-password"
-                                placeholder="{{ __('Password') }}"
-                                x-ref="password"
-                                wire:model="password"
-                                wire:keydown.enter="deleteUser" />
-
-                    <x-input-error for="password" class="mt-2" />
+                        <div class="form-group mt-4">
+                            <input type="password" class="form-control" placeholder="{{ __('Password') }}" id="deleteAccountPassword">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('Cancel') }}</button>
+                        <button type="button" class="btn btn-danger" onclick="deleteUser()">{{ __('Delete Account') }}</button>
+                    </div>
                 </div>
-            </x-slot>
+            </div>
+        </div>
+    </div>
+</div>
 
-            <x-slot name="footer">
-                <x-secondary-button wire:click="$toggle('confirmingUserDeletion')" wire:loading.attr="disabled">
-                    {{ __('Cancel') }}
-                </x-secondary-button>
+<script>
+    function confirmUserDeletion() {
+        $('#deleteAccountModal').modal('show');
+    }
 
-                <x-danger-button class="ms-3" wire:click="deleteUser" wire:loading.attr="disabled">
-                    {{ __('Delete Account') }}
-                </x-danger-button>
-            </x-slot>
-        </x-dialog-modal>
-    </x-slot>
-</x-action-section>
+    function deleteUser() {
+        // Logic to delete the user
+        $('#deleteAccountModal').modal('hide');
+    }
+</script>

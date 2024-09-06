@@ -33,11 +33,15 @@ class PermissionController extends Controller
         $request->validate([
             'name' => 'required|unique:permissions,name',
             'slug' => 'required|unique:permissions,slug',
+        ], [
+            'name.unique' => 'Nama Untuk Permission ini Sudah Ada!.',
+            'slug.unique' => 'Slug Untuk Permission ini Sudah Ada!.',
         ]);
+    
     
         Permission::create($request->only('name', 'slug'));
     
-        return redirect()->route('permissions.index')->with('success', 'Permission created successfully.');
+        return redirect()->route('permissions.index')->with('success', 'Permission Berhasil Ditambahkan!');
     }
     
     /**
@@ -51,10 +55,17 @@ class PermissionController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Permission $permission)
+    public function edit($id)
     {
-        return view('admin.permissions.edit', compact('permission'));
+        // Find the permission by ID
+        $permission = Permission::findOrFail($id);
+
+        // Return the edit view with the permission data
+        return response()->json([
+            'permission' => $permission
+        ]);
     }
+    
 
     /**
      * Update the specified resource in storage.
@@ -66,11 +77,14 @@ class PermissionController extends Controller
         $request->validate([
             'name' => 'required|unique:permissions,name,' . $permission->id,
             'slug' => 'required|unique:permissions,slug,' . $permission->id,
+        ], [
+            'name.unique' => 'Nama Untuk Permission ini Sudah Ada!.',
+            'slug.unique' => 'Slug Untuk Permission ini Sudah Ada!.',
         ]);
     
         $permission->update($request->only('name', 'slug'));
     
-        return redirect()->route('permissions.index')->with('success', 'Permission updated successfully.');
+        return redirect()->route('permissions.index')->with('success', 'Permission Berhasil Diubah.');
     }
     
 
@@ -80,6 +94,6 @@ class PermissionController extends Controller
     public function destroy(Permission $permission)
     {
         $permission->delete();
-        return redirect()->route('permissions.index')->with('success', 'Permission deleted successfully.');
+        return redirect()->route('permissions.index')->with('success', 'Permission Berhasil Dihapus!');
     }
 }

@@ -39,13 +39,10 @@
                       <td>{{ $permission->slug }}</td>
                       <td>{{ $permission->name }}</td>
                       <td class="align-middle">
-                        <button class="btn btn-primary btn-detail" data-id="{{ $permission->id }}" data-toggle="modal" data-target="#detailPermissionsModal">
-                          <i class="fas fa-search"></i>
-                        </button>
                         <button class="btn btn-icon btn-primary" data-id="{{ $permission->id }}" data-name="{{ $permission->name }}" data-slug="{{ $permission->slug }}" data-toggle="modal" data-target="#editPermissionsModal" onclick="editPermission({{ $permission->id }})">
                           <i class="far fa-edit"></i>
                         </button>
-                        <form action="{{ route('permissions.destroy', $permission->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this permission?');">
+                        <form action="{{ route('permissions.destroy', $permission->id) }}" method="POST" style="display:inline;" onsubmit="return deletePermission(event, this);">
                           @csrf
                           @method('DELETE')
                           <button type="submit" class="btn btn-icon btn-danger"><i class="fas fa-times"></i></button>
@@ -78,15 +75,21 @@
           </div>
           <div class="modal-body">
             {{-- Form to add Permission --}}
-            <form action="{{ route('permissions.store') }}" method="POST">
+            <form id="add-permission-form" action="{{ route('permissions.store') }}" method="POST">
                 @csrf
                 <div class="form-group">
                     <label for="permission-slug">Permission Slug</label>
-                    <input type="text" name="slug" class="form-control" id="permission-slug" required>
+                    <input type="text" name="slug" class="form-control" id="permission-slug" value="{{ old('slug') }}" required>
+                    @error('slug')
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
                 </div>
                 <div class="form-group">
                     <label for="permission-name">Permission Name</label>
-                    <input type="text" name="name" class="form-control" id="permission-name" required>
+                    <input type="text" name="name" class="form-control" id="permission-name" value="{{ old('name') }}" required>
+                    @error('name')
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
                 </div>
                 <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
             </form>
@@ -106,41 +109,29 @@
               </button>
           </div>
           <div class="modal-body">
-            <form id="edit-permission-form" action="{{ route('permissions.update', $permission->id) }}" method="POST">
-                    @csrf
-                    @method('PUT')
-                    <input type="hidden" id="permission-id">
-                    <div class="form-group">
-                        <label for="edit-permission-slug">Permission Slug</label>
-                        <input type="text" name="slug" class="form-control" id="edit-permission-slug" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="edit-permission-name">Permission Name</label>
-                        <input type="text" name="name" class="form-control" id="edit-permission-name" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
-                </form>
+          <form id="edit-permission-form" action="{{ route('permissions.update', $permission->id) }}" method="POST">
+              @csrf
+              @method('PUT')
+              <input type="hidden" id="permission-id">
+              <div class="form-group">
+                  <label for="edit-permission-slug">Permission Slug</label>
+                  <input type="text" name="slug" class="form-control" id="edit-permission-slug" value="{{ old('slug') }}" required>
+                  @error('slug')
+                      <span class="text-danger">{{ $message }}</span>
+                  @enderror
+              </div>
+              <div class="form-group">
+                  <label for="edit-permission-name">Permission Name</label>
+                  <input type="text" name="name" class="form-control" id="edit-permission-name" value="{{ old('name') }}" required>
+                  @error('name')
+                      <span class="text-danger">{{ $message }}</span>
+                  @enderror
+              </div>
+              <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
+          </form>
           </div>
       </div>
   </div>
-</div>
-
-{{-- Detail Permission Modal --}}
-<div class="modal fade" id="detailPermissionsModal" tabindex="-1" role="dialog" aria-labelledby="detailPermissionsModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-      <div class="modal-content">
-          <div class="modal-header">
-              <h5 class="modal-title" id="detailPermissionsModalLabel">Permission Details</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-              </button>
-          </div>
-          <div class="modal-body">
-              <h5 id="permission-name"></h5>
-              <p><strong>Slug:</strong> <span id="permission-slug"></span></p>
-          </div>
-      </div>
-  </div>
 </div>
 
 <script>
@@ -166,19 +157,110 @@ function editPermission(id) {
 }
 
 
-$('.btn-detail').click(function() {
-    var permissionId = $(this).data('id');
+$('#add-permission-form').on('submit', function(e) {
+    e.preventDefault();
+    var form = $(this);
+    var formData = form.serialize();
+
     $.ajax({
-        url: '/admin/permissions/' + permissionId,
-        type: 'GET',
+        url: form.attr('action'),
+        method: form.attr('method'),
+        data: formData,
         success: function(response) {
-            $('#permission-name').text(response.permission.name);
-            $('#permission-slug').text(response.permission.slug);
+            Swal.fire({
+                title: 'Success!',
+                text: 'Permission Berhasil Ditambahkan.',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            }).then(() => {
+                location.reload(); 
+            });
         },
         error: function(xhr) {
-            console.log(xhr.responseText);
+            Swal.fire({
+                title: 'Error!',
+                text: 'Nama/Slug Sudah Pernah Ditambahkan!',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+
+            // Show validation errors
+            var errors = xhr.responseJSON.errors;
+            if (errors) {
+                $.each(errors, function(key, value) {
+                    $(`#${key}`).after(`<span class="text-danger">${value[0]}</span>`);
+                });
+            }
         }
     });
 });
+
+$('#edit-permission-form').on('submit', function(e) {
+    e.preventDefault();
+    var form = $(this);
+    var formData = form.serialize();
+
+    $.ajax({
+        url: form.attr('action'),
+        method: form.attr('method'),
+        data: formData,
+        success: function(response) {
+            Swal.fire({
+                title: 'Success!',
+                text: 'Permission Berhasil Diubah.',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            }).then(() => {
+                location.reload(); 
+            });
+        },
+        error: function(xhr) {
+            Swal.fire({
+                title: 'Error!',
+                text: 'Nama/Slug Sudah Pernah Ditambahkan!',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
+    });
+});
+
+function deletePermission(e, form) {
+    e.preventDefault();
+
+    Swal.fire({
+        title: 'Apakah Anda Yakin?',
+        text: "Apakah Anda Yakin ingin Menghapus Permission ini?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Ya',
+        cancelButtonText: 'Tidak',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: $(form).attr('action'),
+                method: 'POST',
+                data: $(form).serialize(),
+                success: function(response) {
+                    Swal.fire(
+                        'Deleted!',
+                        'Permission Berhasil Dihapus',
+                        'success'
+                    ).then(() => {
+                        location.reload(); 
+                    });
+                },
+                error: function(xhr) {
+                    Swal.fire(
+                        'Error!',
+                        'Permission Gagal Dihapus!.',
+                        'error'
+                    );
+                }
+            });
+        }
+    });
+}
 </script>
 @endsection

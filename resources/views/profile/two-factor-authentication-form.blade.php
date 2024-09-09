@@ -4,7 +4,7 @@
     </div>
 
     <div class="card-body">
-        <p class="text-muted">{{ __('Update your account\'s profile information and email address.') }}</p>
+
 
         <form wire:submit.prevent="updateProfileInformation">
             <!-- Profile Photo -->

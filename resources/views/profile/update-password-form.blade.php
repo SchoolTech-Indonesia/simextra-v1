@@ -1,7 +1,7 @@
 <div class="card">
     <div class="card-header">
-        <h4>{{ __('Update Password') }}</h4>
-        <p>{{ __('Ensure your account is using a long, random password to stay secure.') }}</p>
+        <h4>{{ __('Edit Password') }}</h4>
+
     </div>
     <div class="card-body">
         <form wire:submit.prevent="updatePassword">

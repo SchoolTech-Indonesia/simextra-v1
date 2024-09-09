@@ -1,10 +1,10 @@
 <div class="card">
     <div class="card-header">
-        <h4>{{ __('Profile Information') }}</h4>
+        <h4>{{ __('Edit Profile') }}</h4>
     </div>
 
     <div class="card-body">
-        <p class="text-muted">{{ __('Update your account\'s profile information and email address.') }}</p>
+        {{-- <p class="text-muted">{{ __('Update your account\'s profile information and email address.') }}</p> --}}
 
         <form wire:submit.prevent="updateProfileInformation">
             <!-- Profile Photo -->

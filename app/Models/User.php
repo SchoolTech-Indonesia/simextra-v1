@@ -2,14 +2,13 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Sanctum\HasApiTokens;
+use Laravel\Jetstream\HasProfilePhoto;
+use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
-use Laravel\Jetstream\HasProfilePhoto;
-use Laravel\Sanctum\HasApiTokens;
-use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 
 class User extends Authenticatable
 {
@@ -18,7 +17,6 @@ class User extends Authenticatable
     use HasProfilePhoto;
     use Notifiable;
     use TwoFactorAuthenticatable;
-    use HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -29,13 +27,13 @@ class User extends Authenticatable
         'name',
         'NISN_NIP',
         'email',
+        'phone_number',
         'password',
+        'status',
         'otp',
         'otp_token',
-        'otp_expires_at',
-        'profile_photo_path',
+        'otp_expires_at'
     ];
-    
 
     public function username()
 {
@@ -53,11 +51,6 @@ class User extends Authenticatable
         'two_factor_secret',
     ];
 
-    /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array<int, string>
-     */
     protected $appends = [
         'profile_photo_url',
     ];
@@ -67,18 +60,12 @@ class User extends Authenticatable
      *
      * @return array<string, string>
      */
-    // protected function casts(): array
-    // {
-    //     return [
-    //         'NISN_NIP_verified_at' => 'datetime',
-    //         'email_verified_at' => 'datetime',
-    //         'password' => 'hashed',
-    //     ];
-    // }
-    protected $casts = [
-        'NISN_NIP_verified_at' => 'datetime',
-        'email_verified_at' => 'datetime',
-        'password' => 'hashed',
-    ];
-    
+    protected function casts(): array
+    {
+        return [
+            'NISN_NIP_verified_at' => 'datetime',
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+        ];
+    }
 }

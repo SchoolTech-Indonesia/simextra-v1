@@ -15,6 +15,7 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
+    Route::post('/profile/delete-photo', [ProfileController::class, 'deletePhoto'])->name('profile.deletePhoto');
     Route::post('/profile/photo/upload', [ProfileController::class, 'uploadPhoto'])->name('profile.photo.upload');
     Route::put('/profile/update', [ProfileController::class, 'updateProfile'])->name('profile.update');
     
@@ -25,6 +26,9 @@ Route::middleware([
 // Route::get('/permission', [PermissionController::class, 'show'])->name('user.permission.show');
 // Route::get('/permission', PermissionController::class);
 });
+
+
+
 
 
 

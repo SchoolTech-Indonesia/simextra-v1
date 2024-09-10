@@ -15,6 +15,14 @@
   <!-- Template CSS -->
   <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}"> <!-- Path to Stisla CSS -->
   <link rel="stylesheet" href="{{ asset('assets/css/components.css') }}"> <!-- Path to Stisla Components CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+  <!-- Add jQuery dependency -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Add Toaster library -->
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
   @stack('styles') <!-- Stack for additional styles -->
 </head>
 

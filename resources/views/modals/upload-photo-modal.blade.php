@@ -90,4 +90,14 @@
 //         }
 //     });
 // });
+
+window.addEventListener('toaster', event => {
+    Toastify({
+      text: event.detail.message,
+      duration: 3000,
+      close: true,
+      gravity: "top",
+      position: "right",
+    }).showToast();
+  });
 // </script>

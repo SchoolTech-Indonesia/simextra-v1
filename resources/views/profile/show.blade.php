@@ -40,7 +40,19 @@
                 <div class="card-body position-relative">
                     <!-- Display Profile Picture -->
                     <div class="text-center position-absolute" style="top: -150px; left: 50%; transform: translateX(-50%);">
-                        <img id="profile-photo-display" src="{{ asset(Auth::user()->profile_photo_path) }}" alt="Profile Picture" class="rounded-circle border border-white" width="150" height="150" style="box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);">
+                        <div id="profile-photo-container" class="position-relative" style="width: 150px; height: 150px;">
+                            <!-- Profile Photo -->
+                            <img id="profile-photo-display" src="{{ asset(Auth::user()->profile_photo_path) }}" alt="Profile Picture"
+                                class="rounded-circle border border-white" width="150" height="150"
+                                style="cursor: {{ Auth::user()->profile_photo_path !== 'https://freesvg.org/img/abstract-user-flat-4.png' ? 'pointer' : 'default' }}; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);"
+                                onclick="{{ Auth::user()->profile_photo_path !== 'https://freesvg.org/img/abstract-user-flat-4.png' ? 'confirmRemoveProfilePhoto()' : '' }}">
+                            <!-- Remove icon overlay (optional for better UX) -->
+                            @if(Auth::user()->profile_photo_path !== 'https://freesvg.org/img/abstract-user-flat-4.png')
+                                <div class="position-absolute" style="top: 0; right: 0; width: 30px; height: 30px; background: rgba(0, 0, 0, 0.5); border-radius: 50%;">
+                                    <i class="fa fa-times text-white" style="line-height: 30px;"></i>
+                                </div>
+                            @endif
+                        </div>
                     </div>
                   <!-- Button to Open Modal for Photo Upload -->
                   <div class="text-center mt-2">
@@ -169,6 +181,44 @@
         </div>
     </div>
 </div>
+<script>
+    function confirmRemoveProfilePhoto() {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "Do you want to remove your profile photo?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, remove it!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Call the remove profile photo function via AJAX or Livewire
+                removeProfilePhoto();
+            }
+        })
+    }
+
+    function removeProfilePhoto() {
+    $.ajax({
+        url: '{{ route('profile.deletePhoto') }}', // Use Laravel's route helper
+        type: 'POST',
+        data: {
+            _token: '{{ csrf_token() }}'
+        },
+        success: function(response) {
+            // alert(response.success);
+            location.reload(); // Optionally reload or update the UI
+        },
+        error: function(xhr) {
+            alert(xhr.responseJSON.error);
+        }
+    });
+}
+
+
+</script>
 
 <!-- Include the Modal Here -->
 @include('modals.upload-photo-modal')

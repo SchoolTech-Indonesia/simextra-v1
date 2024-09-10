@@ -4,9 +4,7 @@
     </div>
 
     <div class="card-body">
-        {{-- <p class="text-muted">{{ __('Update your account\'s profile information and email address.') }}</p> --}}
-
-        <form wire:submit.prevent="updateProfileInformation">
+        <form id="profile-form" wire:submit.prevent="updateProfileInformation">
             <!-- Profile Photo -->
             @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
                 <div x-data="{photoName: null, photoPreview: null}" class="form-group">
@@ -14,19 +12,17 @@
                     <input type="file" id="photo" class="d-none"
                            wire:model.live="photo"
                            x-ref="photo"
-                           x-on:change="
-                                photoName = $refs.photo.files[0].name;
+                           x-on:change="photoName = $refs.photo.files[0].name;
                                 const reader = new FileReader();
                                 reader.onload = (e) => {
                                     photoPreview = e.target.result;
                                 };
-                                reader.readAsDataURL($refs.photo.files[0]);
-                           " />
+                                reader.readAsDataURL($refs.photo.files[0]);" />
 
                     <label for="photo" class="form-label">{{ __('Photo') }}</label>
 
                     <!-- Current Profile Photo -->
-                    <div class="mt-2" x-show="! photoPreview">
+                    <div class="mt-2" x-show="!photoPreview">
                         <img src="{{ $this->user->profile_photo_url }}" alt="{{ $this->user->name }}" class="rounded-circle" style="height: 80px; width: 80px; object-fit: cover;">
                     </div>
 
@@ -86,17 +82,41 @@
                 @endif
             </div>
 
-            <div class="form-group mt-3">
-                @if (session()->has('saved'))
-                    <div class="alert alert-success">
-                        {{ __('Saved.') }}
-                    </div>
-                @endif
-
-                <button type="submit" class="btn btn-primary" wire:loading.attr="disabled" wire:target="photo">
+            <div class="d-flex mt-3 justify-content-end">
+                <button type="button" class="btn btn-primary" id="save-button">
                     {{ __('Save') }}
                 </button>
             </div>
         </form>
     </div>
 </div>
+
+@push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.getElementById('save-button').addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent the default form submission
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'Do you want to save the changes?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, save it!',
+                cancelButtonText: 'No, cancel!',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Submit the form if confirmed
+                    document.getElementById('profile-form').submit();
+                }
+            });
+        });
+
+        window.addEventListener('profile-updated', event => {
+            Swal.fire({
+                icon: event.detail.type,
+                title: event.detail.title,
+                text: event.detail.text,
+            });
+        });
+    </script>
+@endpush

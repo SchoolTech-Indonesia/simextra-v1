@@ -53,7 +53,5 @@ class UserSeeder extends Seeder
             'email' => $faker->unique()->safeEmail,
             'password' => Hash::make('superadmin'),
         ]);
-
-        
     }
 }

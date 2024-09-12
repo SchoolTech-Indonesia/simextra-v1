@@ -34,7 +34,6 @@
                   <tbody>
                     <?php $i= 1 ?>
                     @foreach($permissions as $permission)
-
                     <tr>
                       <td class="text-center"><?= $i ?></td>
                       <td>{{ $permission->slug }}</td>
@@ -110,39 +109,32 @@
               </button>
           </div>
           <div class="modal-body">
-            <form id="edit-permission-form" method="POST">
-                @csrf
-                @method('PUT')
-                <input type="hidden" id="permission-id">
-                <div class="form-group">
-                    <label for="edit-permission-slug">Permission Slug</label>
-                    <input type="text" name="slug" class="form-control" id="edit-permission-slug" value="{{ old('slug') }}" required>
-                    @error('slug')
-                        <span class="text-danger">{{ $message }}</span>
-                    @enderror
-                </div>
-                <div class="form-group">
-                    <label for="edit-permission-name">Permission Name</label>
-                    <input type="text" name="name" class="form-control" id="edit-permission-name" value="{{ old('name') }}" required>
-                    @error('name')
-                        <span class="text-danger">{{ $message }}</span>
-                    @enderror
-                </div>
-                <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
-            </form>
+          <form id="edit-permission-form" action="{{ route('permissions.update', $permission->id) }}" method="POST">
+              @csrf
+              @method('PUT')
+              <input type="hidden" id="permission-id">
+              <div class="form-group">
+                  <label for="edit-permission-slug">Permission Slug</label>
+                  <input type="text" name="slug" class="form-control" id="edit-permission-slug" value="{{ old('slug') }}" required>
+                  @error('slug')
+                      <span class="text-danger">{{ $message }}</span>
+                  @enderror
+              </div>
+              <div class="form-group">
+                  <label for="edit-permission-name">Permission Name</label>
+                  <input type="text" name="name" class="form-control" id="edit-permission-name" value="{{ old('name') }}" required>
+                  @error('name')
+                      <span class="text-danger">{{ $message }}</span>
+                  @enderror
+              </div>
+              <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
+          </form>
           </div>
       </div>
   </div>
 </div>
 
 <script>
-
-$.ajaxSetup({
-    headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    }
-});
-
 $(document).ready(function() {
     $('.select2').select2({
         placeholder: "Select permissions",  

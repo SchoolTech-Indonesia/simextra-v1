@@ -6,7 +6,8 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\SchoolController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OtpController;
-
+use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\MajorController;
 Route::get('/', function () {
     return view('auth.login');
@@ -17,11 +18,13 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
+    Route::post('/profile/delete-photo', [ProfileController::class, 'deletePhoto'])->name('profile.deletePhoto');
+    Route::post('/profile/photo/upload', [ProfileController::class, 'uploadPhoto'])->name('profile.photo.upload');
+    Route::put('/profile/update', [ProfileController::class, 'updateProfile'])->name('profile.update');
+    
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
-
-  
 
     Route::resource('permissions', PermissionController::class);
     Route::delete('/admin/permissions/{permission}', [PermissionController::class, 'destroy'])->name('permissions.destroy');
@@ -44,7 +47,7 @@ Route::middleware([
     Route::get('/admin/schools/{id}', [SchoolController::class, 'show'])->name('schools.show');
     Route::get('/admin/schools/{id}/edit', [SchoolController::class, 'edit'])->name('schools.edit');
     Route::put('/admin/schools/{id}', [SchoolController::class, 'update'])->name('schools.update');
-
+    
     Route::resource('majors', MajorController::class);
 });
 

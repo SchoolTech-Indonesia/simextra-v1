@@ -49,10 +49,8 @@ class PermissionController extends Controller
      */
     public function show(string $id)
     {
-        $permission = Permission::findOrFail($id);
-        return view('admin.permissions.show', compact('permission'));
+        return view('admin.permissions.edit', compact('permission'));
     }
-    
 
     /**
      * Show the form for editing the specified resource.

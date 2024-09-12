@@ -29,11 +29,11 @@ class School extends Model
       
     ];
 
+
     public function users()
     {
-        return $this->belongsToMany(User::class, 'school_user', 'id_user', 'id_school');
+        return $this->belongsToMany(User::class, 'school_user');
     }
-    
 
 
 }

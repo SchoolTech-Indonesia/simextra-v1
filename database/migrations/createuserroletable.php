@@ -1,4 +1,4 @@
-<?php
+<!-- 
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -30,4 +30,4 @@ class CreateUserRoleSchoolTable extends Migration
     {
         Schema::dropIfExists('user_role');
     }
-}
+} -->

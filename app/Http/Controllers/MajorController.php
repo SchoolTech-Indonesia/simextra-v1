@@ -14,14 +14,31 @@ class MajorController extends Controller
         return view('admin.majors.index', compact('majors'));
     }
 
+    public function create()
+    {
+        // Generate a unique code for the major
+        $generatedCode = 'MJR' . str_pad(Major::count() + 1, 3, '0', STR_PAD_LEFT);
+        
+        // Return the view for creating a new major with the generated code
+        return view('admin.majors', compact('generatedCode'));
+    }
+    
+
     public function store(StoreMajorRequest $request)
     {
-        $validated = $request->validated();
+        // Generate a unique code for the major when the form is submitted
+        $generatedCode = 'MJR' . str_pad(Major::count() + 1, 3, '0', STR_PAD_LEFT);
     
+        // Merge the generated code into the validated request data
+        $validated = $request->validated();
+        $validated['code'] = $generatedCode;
+    
+        // Store the new major with the generated code
         Major::create($validated);
     
-        return response()->json(['message' => 'Major created successfully.']);
+        return response()->json(['message' => 'Major created successfully']);
     }
+    
     
     public function edit(Major $major)
     {

@@ -1,4 +1,4 @@
-<?php  
+ 
 <table class="table table-bordered mt-4">
     <thead>
         <tr>
@@ -25,4 +25,3 @@
         @endforeach
     </tbody>
 </table>
-?>

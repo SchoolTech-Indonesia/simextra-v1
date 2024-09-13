@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Major extends Model
+class Classroom extends Model
 {
     use HasFactory;
 
@@ -13,14 +13,15 @@ class Major extends Model
         'name',
         'code',
         'description',
-
+        'created_by',
+        'updated_by',
+        'status',
     ];
 
     public $timestamps = true;
 
-public function classrooms()
+public function major()
 {
-    return $this->hasMany(Classroom::class);
+    return $this->belongsTo(Major::class);
 }
-
 }

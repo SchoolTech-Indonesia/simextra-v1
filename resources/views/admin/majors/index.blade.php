@@ -8,9 +8,17 @@
         </div>
 
         <div class="section-body">
+            <form method="GET" action="{{ route('majors.index') }}">
+                <div class="input-group mb-3">
+                    <input type="text" name="search" class="form-control" placeholder="Search by major name or code" value="{{ request('search') }}">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="submit">Search</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </section>
-    
+
     <div class="card-header-action">
         <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#addMajorsModal">Create Major</button>
     </div>
@@ -21,39 +29,56 @@
               <h4>Major List</h4>
             </div>
             <div class="card-body">
-              <div class="table-responsive">
-                <table class="table table-striped" id="table-1">
-                  <thead>
-                    <tr>
-                      <th class="text-center">#</th>
-                      <th>Major Name</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <?php $i= 1 ?>
-                    @foreach($majors as $major)
-                    <tr>
-                      <td class="text-center"><?= $i ?></td>
-                      <td>{{ $major->name }}</td>
-                      <td class="align-middle">
-                        <button class="btn btn-icon btn-primary" data-id="{{ $major->id }}" data-name="{{ $major->name }}" data-toggle="modal" data-target="#editMajorsModal" onclick="editMajor({{ $major->id }})">
-                          <i class="far fa-edit"></i>
-                        </button>
-                        <form action="{{ route('majors.destroy', $major->id) }}" method="POST" style="display:inline;" onsubmit="return deleteMajor(event, this);">
-                          @csrf
-                          @method('DELETE')
-                          <button type="submit" class="btn btn-icon btn-danger"><i class="fas fa-times"></i></button>
-                        </form>
-                      </td>
-                    </tr>
-                    <?php $i++ ?>
-                    @endforeach
-                  </tbody>
-                </table>
-              </div>
+                <div class="table-responsive">
+                    <table class="table table-striped" id="table-1">
+                        <thead>
+                            <tr>
+                                <th class="text-center">#</th>
+                                <th>Major Code</th>
+                                <th>Major Name</th>
+                                <th>Class List</th> <!-- Added column for classes -->
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($majors as $major)
+                            <tr>
+                                <td class="text-center">{{ $loop->iteration }}</td>
+                                <td>{{ $major->code }}</td>
+                                <td>{{ $major->name }}</td>
+                                <td>
+                                    @if($major->classrooms->isEmpty())
+                                        -
+                                    @else
+                                        @foreach($major->classrooms as $classroom)
+                                            {{ $classroom->class_name }} ({{ $classroom->class_code }})
+                                            @if(!$loop->last), @endif
+                                        @endforeach
+                                    @endif
+                                </td>
+                                <td class="align-middle">
+                                    <!-- Action buttons here -->
+                                    <button class="btn btn-icon btn-primary" data-id="{{ $major->id }}" data-toggle="modal" data-target="#editMajorsModal" onclick="editMajor({{ $major->id }})">
+                                        <i class="far fa-edit"></i>
+                                    </button>
+                                    <form action="{{ route('majors.destroy', $major->id) }}" method="POST" style="display:inline;" onsubmit="return deleteMajor(event, this);">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-icon btn-danger"><i class="fas fa-times"></i></button>
+                                    </form>
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="5" class="text-center">No Majors Found</td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+                
               <div class="card-footer text-right">
-                {{-- Optional: Add pagination or other actions --}}
+         
               </div>
             </div>
           </div>
@@ -61,7 +86,6 @@
       </div>
 </div>
 
-{{-- Add Major Modal --}}
 <div class="modal fade" id="addMajorsModal" tabindex="-1" role="dialog" aria-labelledby="addMajorsModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -72,9 +96,12 @@
               </button>
           </div>
           <div class="modal-body">
-            {{-- Form to add Major --}}
             <form id="add-major-form" action="{{ route('majors.store') }}" method="POST">
                 @csrf
+                {{-- <div class="form-group">
+                    <label for="major-code">Major Code (will be auto-generated)</label>
+                    <input type="text" name="code" class="form-control" id="major-code" readonly>
+                </div> --}}
                 <div class="form-group">
                     <label for="major-name">Major Name</label>
                     <input type="text" name="name" class="form-control" id="major-name" value="{{ old('name') }}" required>
@@ -84,12 +111,14 @@
                 </div>
                 <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
             </form>
+            
+
           </div>
       </div>
   </div>
 </div>
 
-{{-- Edit Major Modal --}}
+
 <div class="modal fade" id="editMajorsModal" tabindex="-1" role="dialog" aria-labelledby="editMajorsModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -105,8 +134,12 @@
                 @method('PUT')
                 <input type="hidden" id="major-id">
                 <div class="form-group">
+                    <label for="edit-major-code">Major Code</label>
+                    <input type="text" name="code" class="form-control" id="edit-major-code" readonly>
+                </div>
+                <div class="form-group">
                     <label for="edit-major-name">Major Name</label>
-                    <input type="text" name="name" class="form-control" id="edit-major-name" value="{{ old('name') }}" required>
+                    <input type="text" name="name" class="form-control" id="edit-major-name" required>
                     @error('name')
                         <span class="text-danger">{{ $message }}</span>
                     @enderror
@@ -131,6 +164,7 @@ function editMajor(id) {
         type: 'GET',
         success: function(response) {
             $('#major-id').val(response.major.id);
+            $('#edit-major-code').val(response.major.code);
             $('#edit-major-name').val(response.major.name);
             $('#edit-major-form').attr('action', '/majors/' + id);
         }
@@ -212,7 +246,7 @@ function deleteMajor(e, form) {
         if (result.isConfirmed) {
             $.ajax({
                 url: $(form).attr('action'),
-                method: 'POST',
+                method: 'DELETE',
                 data: $(form).serialize(),
                 success: function(response) {
                     Swal.fire(

@@ -10,9 +10,11 @@ class CreateMajorsTable extends Migration
     {
         Schema::create('majors', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('code')->unique(); // Unique code for each major
+            $table->string('name')->unique(); // Major name should also be unique
             $table->timestamps();
         });
+        
     }
 
     public function down()

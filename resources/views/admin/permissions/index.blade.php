@@ -26,7 +26,6 @@
                   <thead>
                     <tr>
                       <th class="text-center">#</th>
-                      <th>Permission Slug</th>
                       <th>Permission Name</th>
                       <th>Action</th>
                     </tr>
@@ -36,10 +35,9 @@
                     @foreach($permissions as $permission)
                     <tr>
                       <td class="text-center"><?= $i ?></td>
-                      <td>{{ $permission->slug }}</td>
                       <td>{{ $permission->name }}</td>
                       <td class="align-middle">
-                        <button class="btn btn-icon btn-primary" data-id="{{ $permission->id }}" data-name="{{ $permission->name }}" data-slug="{{ $permission->slug }}" data-toggle="modal" data-target="#editPermissionsModal" onclick="editPermission({{ $permission->id }})">
+                        <button class="btn btn-icon btn-primary" data-id="{{ $permission->id }}" data-name="{{ $permission->name }}" data-toggle="modal" data-target="#editPermissionsModal" onclick="editPermission({{ $permission->id }})">
                           <i class="far fa-edit"></i>
                         </button>
                         <form action="{{ route('permissions.destroy', $permission->id) }}" method="POST" style="display:inline;" onsubmit="return deletePermission(event, this);">
@@ -78,13 +76,6 @@
             <form id="add-permission-form" action="{{ route('permissions.store') }}" method="POST">
                 @csrf
                 <div class="form-group">
-                    <label for="permission-slug">Permission Slug</label>
-                    <input type="text" name="slug" class="form-control" id="permission-slug" value="{{ old('slug') }}" required>
-                    @error('slug')
-                        <span class="text-danger">{{ $message }}</span>
-                    @enderror
-                </div>
-                <div class="form-group">
                     <label for="permission-name">Permission Name</label>
                     <input type="text" name="name" class="form-control" id="permission-name" value="{{ old('name') }}" required>
                     @error('name')
@@ -114,13 +105,6 @@
               @method('PUT')
               <input type="hidden" id="permission-id">
               <div class="form-group">
-                  <label for="edit-permission-slug">Permission Slug</label>
-                  <input type="text" name="slug" class="form-control" id="edit-permission-slug" value="{{ old('slug') }}" required>
-                  @error('slug')
-                      <span class="text-danger">{{ $message }}</span>
-                  @enderror
-              </div>
-              <div class="form-group">
                   <label for="edit-permission-name">Permission Name</label>
                   <input type="text" name="name" class="form-control" id="edit-permission-name" value="{{ old('name') }}" required>
                   @error('name')
@@ -148,7 +132,6 @@ function editPermission(id) {
         type: 'GET',
         success: function(response) {
             $('#permission-id').val(response.permission.id);
-            $('#edit-permission-slug').val(response.permission.slug);
             $('#edit-permission-name').val(response.permission.name);
 
             $('#edit-permission-form').attr('action', '/admin/permissions/' + id);
@@ -179,7 +162,7 @@ $('#add-permission-form').on('submit', function(e) {
         error: function(xhr) {
             Swal.fire({
                 title: 'Error!',
-                text: 'Nama/Slug Sudah Pernah Ditambahkan!',
+                text: 'Nama Sudah Pernah Ditambahkan!',
                 icon: 'error',
                 confirmButtonText: 'OK'
             });
@@ -217,7 +200,7 @@ $('#edit-permission-form').on('submit', function(e) {
         error: function(xhr) {
             Swal.fire({
                 title: 'Error!',
-                text: 'Nama/Slug Sudah Pernah Ditambahkan!',
+                text: 'Nama Sudah Pernah Ditambahkan!',
                 icon: 'error',
                 confirmButtonText: 'OK'
             });

@@ -29,6 +29,7 @@ class UserSeeder extends Seeder
             'NISN_NIP' => '11111111',
             'email' => 'siswa@gmail.com',
             'password' => Hash::make('siswa'),
+            'id_role' => '1'
             
         ]);
 
@@ -37,6 +38,7 @@ class UserSeeder extends Seeder
             'NISN_NIP' => '22222222',
             'email' => $faker->unique()->safeEmail,
             'password' => Hash::make('koordinator'),
+            'id_role' => '2'
         ]);
 
         $adminSekolah = User::create([
@@ -44,6 +46,7 @@ class UserSeeder extends Seeder
             'NISN_NIP' => '33333333',
             'email' => $faker->unique()->safeEmail,
             'password' => Hash::make('adminsekolah'),
+            'id_role' => '3'
         ]);
 
 
@@ -52,6 +55,7 @@ class UserSeeder extends Seeder
             'NISN_NIP' => '44444444',
             'email' => $faker->unique()->safeEmail,
             'password' => Hash::make('superadmin'),
+            'id_role' => '4'
         ]);
 
         

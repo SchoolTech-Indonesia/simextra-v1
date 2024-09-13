@@ -32,10 +32,8 @@ class PermissionController extends Controller
     {
         $request->validate([
             'name' => 'required|unique:permissions,name',
-            'slug' => 'required|unique:permissions,slug',
         ], [
             'name.unique' => 'Nama Untuk Permission ini Sudah Ada!.',
-            'slug.unique' => 'Slug Untuk Permission ini Sudah Ada!.',
         ]);
     
     
@@ -76,10 +74,8 @@ class PermissionController extends Controller
     
         $request->validate([
             'name' => 'required|unique:permissions,name,' . $permission->id,
-            'slug' => 'required|unique:permissions,slug,' . $permission->id,
         ], [
             'name.unique' => 'Nama Untuk Permission ini Sudah Ada!.',
-            'slug.unique' => 'Slug Untuk Permission ini Sudah Ada!.',
         ]);
     
         $permission->update($request->only('name', 'slug'));

@@ -16,13 +16,13 @@ class CreateUserSchoolTable extends Migration
         Schema::create('user_school', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('id_user');
-            $table->unsignedBigInteger('school_id');
+            $table->unsignedBigInteger('id_school');
             $table->timestamps();
 
             $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('id_school')->references('id')->on('schools')->onDelete('cascade');
 
-            $table->unique(['user_id', 'id_school']);
+            $table->unique(['id_user', 'id_school']);
         });
     }
 

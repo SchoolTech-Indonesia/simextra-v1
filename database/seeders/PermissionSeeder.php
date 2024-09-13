@@ -14,29 +14,29 @@ class PermissionSeeder extends Seeder
      */
     public function run(): void
     {
-        $role_siswa = Role::updateOrCreate(
+        $role_Student = Role::updateOrCreate(
             [
-                'name' => 'siswa'
+                'name' => 'Student'
             ], 
-            ['name' =>'siswa']
+            ['name' =>'Student']
         );
-        $role_koordinator = Role::updateOrCreate(
+        $role_Koordinator  = Role::updateOrCreate(
             [
-                'name' => 'koordinator'
+                'name' => 'Koordinator'
             ], 
-            ['name' =>'koordinator']
+            ['name' =>'Koordinator']
         );
-        $role_adminsekolah= Role::updateOrCreate(
+        $role_Admin= Role::updateOrCreate(
             [
-                'name' => 'adminsekolah'
+                'name' => 'Admin'
             ], 
-            ['name' =>'adminsekolah']
+            ['name' =>'Admin']
         );
-        $role_superadmin = Role::updateOrCreate(
+        $role_SuperAdmin = Role::updateOrCreate(
             [
-                'name' => 'superadmin'
+                'name' => 'Super Admin'
             ], 
-            ['name' =>'superadmin']
+            ['name' =>'Super Admin']
         );
         
 
@@ -142,7 +142,7 @@ class PermissionSeeder extends Seeder
             ]
         );
 
-        // PERMISSION SUPERADMIN
+        // PERMISSION Super Admin
         $permissionAkses = Permission::updateOrCreate(
             [
                 'name' => 'permission.index',
@@ -176,36 +176,36 @@ class PermissionSeeder extends Seeder
             ]
         );
 
-        // MENAMBAHKAN PERMISSION KEDALAM ROLE SISWA
-        $role_siswa->givePermissionTo($permissionAksesSekolah);
-        $role_siswa->givePermissionTo($permissionAksesUser);
-        $role_siswa->givePermissionTo($permissionUbahUser);
-        $role_siswa->givePermissionTo($permissionAksesEkstrakurikuler);
+        // MENAMBAHKAN PERMISSION KEDALAM ROLE Student
+        $role_Student->givePermissionTo($permissionAksesSekolah);
+        $role_Student->givePermissionTo($permissionAksesUser);
+        $role_Student->givePermissionTo($permissionUbahUser);
+        $role_Student->givePermissionTo($permissionAksesEkstrakurikuler);
         // MENAMBAHKAN PERMISSION KEDALAM ROLE KOORDINATOR
-        $role_koordinator->givePermissionTo($permissionAksesSekolah);
-        $role_koordinator->givePermissionTo($permissionAksesUser);
-        $role_koordinator->givePermissionTo($permissionUbahUser);
-        $role_koordinator->givePermissionTo($permissionAksesEkstrakurikuler);
-        $role_koordinator->givePermissionTo($permissionUbahEkstrakurikuler);
+        $role_Koordinator ->givePermissionTo($permissionAksesSekolah);
+        $role_Koordinator ->givePermissionTo($permissionAksesUser);
+        $role_Koordinator ->givePermissionTo($permissionUbahUser);
+        $role_Koordinator ->givePermissionTo($permissionAksesEkstrakurikuler);
+        $role_Koordinator ->givePermissionTo($permissionUbahEkstrakurikuler);
         // MENAMBAHKAN PERMISSION KEDALAM ROLE ADMIN SEKOLAH
-        $role_adminsekolah->givePermissionTo($permissionAksesSekolah);
-        $role_adminsekolah->givePermissionTo($permissionUbahSekolah);
-        $role_adminsekolah->givePermissionTo($permissionTambahSekolah);
-        $role_adminsekolah->givePermissionTo($permissionTambahUser);
-        $role_adminsekolah->givePermissionTo($permissionUbahUser);
-        $role_adminsekolah->givePermissionTo($permissionAksesEkstrakurikuler);
-        $role_adminsekolah->givePermissionTo($permissionUbahEkstrakurikuler);
+        $role_Admin->givePermissionTo($permissionAksesSekolah);
+        $role_Admin->givePermissionTo($permissionUbahSekolah);
+        $role_Admin->givePermissionTo($permissionTambahSekolah);
+        $role_Admin->givePermissionTo($permissionTambahUser);
+        $role_Admin->givePermissionTo($permissionUbahUser);
+        $role_Admin->givePermissionTo($permissionAksesEkstrakurikuler);
+        $role_Admin->givePermissionTo($permissionUbahEkstrakurikuler);
 
-        // MENAMBAHKAN PERMISSION KEDALAM ROLE ADMIN SEKOLAH
-        $role_superadmin->givePermissionTo($permissionAkses);
-        $role_superadmin->givePermissionTo($permissionTambah);
-        $role_superadmin->givePermissionTo($permissionUbah);
-        $role_superadmin->givePermissionTo($permissionAksesUser);
-        $role_superadmin->givePermissionTo($permissionTambahUser);
-        $role_superadmin->givePermissionTo($permissionUbahUser);
-        $role_superadmin->givePermissionTo($permissionAksesSekolah);
-        $role_superadmin->givePermissionTo($permissionUbahSekolah);
-        $role_superadmin->givePermissionTo($permissionAksesEkstrakurikuler);
-        $role_superadmin->givePermissionTo($permissionUbahEkstrakurikuler);
+        // MENAMBAHKAN PERMISSION KEDALAM ROLE Super Admin
+        $role_SuperAdmin->givePermissionTo($permissionAkses);
+        $role_SuperAdmin->givePermissionTo($permissionTambah);
+        $role_SuperAdmin->givePermissionTo($permissionUbah);
+        $role_SuperAdmin->givePermissionTo($permissionAksesUser);
+        $role_SuperAdmin->givePermissionTo($permissionTambahUser);
+        $role_SuperAdmin->givePermissionTo($permissionUbahUser);
+        $role_SuperAdmin->givePermissionTo($permissionAksesSekolah);
+        $role_SuperAdmin->givePermissionTo($permissionUbahSekolah);
+        $role_SuperAdmin->givePermissionTo($permissionAksesEkstrakurikuler);
+        $role_SuperAdmin->givePermissionTo($permissionUbahEkstrakurikuler);
     }
 }

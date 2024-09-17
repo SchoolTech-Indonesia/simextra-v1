@@ -4,10 +4,10 @@ use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\SchoolController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OtpController;
-use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProfileController;
+
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('auth.login');

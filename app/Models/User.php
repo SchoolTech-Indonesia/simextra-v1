@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Jetstream\HasProfilePhoto;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-
 
 class User extends Authenticatable
 {
@@ -32,13 +32,14 @@ class User extends Authenticatable
         'status',
         'otp',
         'otp_token',
-        'otp_expires_at'
+        'otp_expires_at',
     ];
 
     public function username()
-{
-    return 'NISN_NIP';
-}
+    {
+        return 'NISN_NIP';
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

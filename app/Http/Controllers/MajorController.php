@@ -8,26 +8,19 @@ use Illuminate\Http\Request;
 
 class MajorController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $majors = Major::all();
-        return view('admin.majors.index', compact('majors'));
-    }
+    // Retrieve majors with pagination and include the 'koordinator' relationship
+    $majors = Major::with(['classrooms', 'koordinator'])
+                   ->where('name', 'like', '%' . $request->search . '%')
+                   ->paginate(15); // Adjust the number of items per page as needed
 
-    public function create()
-    {
-        // Generate a unique code for the major
-        $generatedCode = 'MJR' . str_pad(Major::count() + 1, 3, '0', STR_PAD_LEFT);
-        
-        // Return the view for creating a new major with the generated code
-        return view('admin.majors', compact('generatedCode'));
+    return view('admin.majors.index', compact('majors'));
     }
-    
-
     public function store(StoreMajorRequest $request)
     {
         // Generate a unique code for the major when the form is submitted
-        $generatedCode = 'MJR' . str_pad(Major::count() + 1, 3, '0', STR_PAD_LEFT);
+        $generatedCode = 'JRS' . str_pad(Major::count() + 1, 3, '0', STR_PAD_LEFT);
     
         // Merge the generated code into the validated request data
         $validated = $request->validated();

@@ -11,7 +11,7 @@ class MajorSeeder extends Seeder
     {
         // Generate major code
         $count = Major::count();
-        $generatedCode = 'MJR' . str_pad($count + 1, 3, '0', STR_PAD_LEFT);
+        $generatedCode = 'JRS' . str_pad($count + 1, 3, '0', STR_PAD_LEFT);
 
         // Create the major
         Major::create([

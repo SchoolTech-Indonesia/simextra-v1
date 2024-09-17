@@ -14,7 +14,8 @@ use Illuminate\Support\Str;
 use Laravel\Fortify\Fortify;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Http\RedirectResponse;
+use Laravel\Fortify\Contracts\LoginResponse;
 class FortifyServiceProvider extends ServiceProvider
 {
     /**
@@ -22,7 +23,7 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+     
     }
 
     /**

@@ -24,27 +24,34 @@ class UserSeeder extends Seeder
         //     'role' => 'student', // Set role
         // ]);
 
-        User::create([
+        $siswa = User::create([
             'name' => $faker->unique()->userName,
-            'NISN_NIP' => '2',
-            'email' => 'admin2@gmail.com',
-            'password' => Hash::make('admin'),
-            'role' => 'admin', // Set role
+            'NISN_NIP' => '11111111',
+            'email' => 'siswa@gmail.com',
+            'password' => Hash::make('siswa'),
+            
         ]);
 
-        User::create([
+        $koordinator = User::create([
             'name' => $faker->unique()->userName,
-            'NISN_NIP' => '113113113113',
+            'NISN_NIP' => '22222222',
             'email' => $faker->unique()->safeEmail,
-            'password' => Hash::make('0987'),
-            'role' => 'teacher', // Set role
+            'password' => Hash::make('koordinator'),
         ]);
-        User::create([
+
+        $adminSekolah = User::create([
             'name' => $faker->unique()->userName,
-            'NISN_NIP' => '12345678910',
+            'NISN_NIP' => '33333333',
             'email' => $faker->unique()->safeEmail,
-            'password' => Hash::make('user1234'),
-            'role' => 'student', // Set role
+            'password' => Hash::make('adminsekolah'),
+        ]);
+
+
+        $superAdmin = User::create([
+            'name' => $faker->unique()->userName,
+            'NISN_NIP' => '44444444',
+            'email' => $faker->unique()->safeEmail,
+            'password' => Hash::make('superadmin'),
         ]);
     }
 }

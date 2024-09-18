@@ -7,13 +7,41 @@
             <h1>User Management</h1>
         </div>
 
-        <div class="section-body">
+        <div class="section-body mb-3">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="btn-group" role="group" aria-label="Filter by Role">
+                        <a href="{{ route('users.index') }}" class="btn btn-primary {{ request('role') == '' ? 'active' : '' }}">All Roles</a>
+                        <a href="{{ route('users.index', ['role' => 3]) }}" class="btn btn-primary {{ request('role') == 3 ? 'active' : '' }}">Admin</a>
+                        <a href="{{ route('users.index', ['role' => 2]) }}" class="btn btn-primary {{ request('role') == 2 ? 'active' : '' }}">Koordinator</a>
+                        <a href="{{ route('users.index', ['role' => 1]) }}" class="btn btn-primary {{ request('role') == 1 ? 'active' : '' }}">Student</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
+    </section>
 
-    <div class="card-header-action">
-        <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#addUserModal">Create New User</button>
+    <div class="card-header-form d-flex justify-content-between align-items-center">
+        <div class="form-group mb-0">
+            <div class="input-group">
+                <input type="text" name="search" id="search-user" class="form-control" placeholder="Search Name" value="{{ request('search') }}">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-primary" type="button">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="form-group mb-0">
+            <div class="d-flex">
+                <button class="btn btn-primary mb-3 mr-2" data-toggle="modal" data-target="#addUserModal">Create New User</button>
+                <button class="btn btn-success mb-3 mr-2" data-toggle="modal" data-target="">Download</button>
+                <button class="btn btn-success mb-3" data-toggle="modal" data-target="">Import</button>
+            </div>
+        </div>
     </div>
+
     <div class="row">
         <div class="col-12">
             <div class="card">
@@ -32,7 +60,7 @@
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="user-table-body">
                                 <?php $i = 1 ?>
                                 @foreach($users as $user)
                                 <tr>
@@ -62,6 +90,32 @@
                                 @endforeach
                             </tbody>
                         </table>
+                        <div class="card-footer text-right">
+                            <nav class="d-inline-block">
+                                <ul class="pagination mb-0">
+                                    {{-- Previous button --}}
+                                    <li class="page-item {{ $users->onFirstPage() ? 'disabled' : '' }}">
+                                        <a class="page-link" href="{{ $users->previousPageUrl() . (request('role') ? '&role=' . request('role') : '') }}" tabindex="-1">
+                                            <i class="fas fa-chevron-left"></i>
+                                        </a>
+                                    </li>
+
+                                    {{-- Page numbers --}}
+                                    @for ($i = 1; $i <= $users->lastPage(); $i++)
+                                        <li class="page-item {{ $i == $users->currentPage() ? 'active' : '' }}">
+                                            <a class="page-link" href="{{ $users->url($i) . (request('role') ? '&role=' . request('role') : '') }}">{{ $i }}</a>
+                                        </li>
+                                    @endfor
+
+                                    {{-- Next button --}}
+                                    <li class="page-item {{ $users->hasMorePages() ? '' : 'disabled' }}">
+                                        <a class="page-link" href="{{ $users->nextPageUrl() . (request('role') ? '&role=' . request('role') : '') }}">
+                                            <i class="fas fa-chevron-right"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -81,7 +135,7 @@
             </div>
             <div class="modal-body">
                 {{-- Form to add user --}}
-                <form id ="add-user-form" action="{{ route('users.store') }}" method="POST">
+                <form id="add-user-form" action="{{ route('users.store') }}" method="POST">
                     @csrf
                     <div class="form-group">
                         <label for="user-name">Name</label>
@@ -107,17 +161,24 @@
                         <label for="user-password_confirmation">Confirm Password</label>
                         <input type="password" name="password_confirmation" class="form-control" id="user-password_confirmation" required>
                     </div>
+
+                    {{-- Hilangkan dropdown role jika ada roleId --}}
+                    @if(!request('role'))
+                        <div class="form-group">
+                            <label for="user-id_role">Role</label>
+                            <select name="id_role" class="form-control" id="user-id_role" required>
+                                @foreach($roles as $role)
+                                    <option value="{{ $role->id }}">{{ $role->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    @else
+                        <input type="hidden" name="id_role" value="{{ request('role') }}">
+                    @endif
+
                     <div class="form-group">
-                        <label for="user-role_id">Role</label>
-                        <select name="id_role" class="form-control" id="user-id_role" required>
-                            @foreach($roles as $role)
-                                <option value="{{ $role->id }}">{{ $role->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="id_school">Sekolah</label>
-                        <select name="id_school[]" class="form-control select2" id="id_school" multiple required>
+                        <label for="user-id_school">Sekolah</label>
+                        <select name="id_school" class="form-control" id="user-id_school"required>
                             @foreach($schools as $school)
                                 <option value="{{ $school->id }}">{{ $school->name }}</option>
                             @endforeach
@@ -161,14 +222,21 @@
                         <label for="edit-user-phone_number">Phone Number</label>
                         <input type="text" name="phone_number" class="form-control" id="edit-user-phone_number" required>
                     </div>
-                    <div class="form-group">
-                        <label for="edit-user-id_role">Role</label>
-                        <select name="id_role" class="form-control" id="edit-user-id_role" required>
-                            @foreach($roles as $role)
-                                <option value="{{ $role->id }}">{{ $role->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+
+                    {{-- Hilangkan dropdown role jika ada roleId --}}
+                    @if(!request('role'))
+                        <div class="form-group">
+                            <label for="edit-user-id_role">Role</label>
+                            <select name="id_role" class="form-control" id="edit-user-id_role" required>
+                                @foreach($roles as $role)
+                                    <option value="{{ $role->id }}">{{ $role->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    @else
+                        <input type="hidden" name="id_role" value="{{ request('role') }}">
+                    @endif
+
                     <div class="form-group">
                         <label for="edit-user-status">Status</label>
                         <select name="status" class="form-control" id="edit-user-status" required>
@@ -178,7 +246,7 @@
                     </div>
                     <div class="form-group">
                         <label for="edit-user-id_school">Sekolah</label>
-                        <select name="id_school[]" class="form-control select2" id="edit-user-id_school" multiple required>
+                        <select name="id_school" class="form-control " id="edit-user-id_school" required>
                             @foreach($schools as $school)
                                 <option value="{{ $school->id }}">{{ $school->name }}</option>
                             @endforeach
@@ -190,6 +258,7 @@
         </div>
     </div>
 </div>
+
 
 {{-- Detail User Modal --}}
 <div class="modal fade" id="detailUserModal" tabindex="-1" role="dialog" aria-labelledby="detailUserModalLabel" aria-hidden="true">
@@ -207,9 +276,7 @@
                 <p><strong>Phone: </strong><span id="detail-user-phone_number"></span></p>
                 <p><strong>Role: </strong><span id="detail-user-role"></span></p>
                 <p><strong>Status: </strong><span id="detail-user-status"></span></p>
-                <p class="mb-0"><strong>Sekolah: </strong></p>
-                <ul id="detail-user-school" class="list-group ml-3 mt-0">
-                </ul>
+                <p><strong>School: </strong><span id="detail-user-school"></span></p>
             </div>
         </div>
     </div>
@@ -217,6 +284,51 @@
 
 
 <script>
+    $(document).ready(function() {
+        $('#search-user').on('keyup', function() {
+            var query = $(this).val();
+            var role = "{{ request('role') }}"; // Ambil role yang aktif
+            $.ajax({
+                url: "{{ route('users.index') }}",
+                type: "GET",
+                data: { 'search': query, 'role': role }, // Kirimkan query dan role
+                success: function(data) {
+                    var rows = '';
+
+                    if (data.users.data.length > 0) {
+                        data.users.data.forEach(function(user, index) {
+                            rows += `
+                                <tr>
+                                    <td class="text-center">${index + 1}</td>
+                                    <td>${user.name}</td>
+                                    <td>${user.email}</td>
+                                    <td>${user.role ? user.role.name : 'No Role'}</td>
+                                    <td class="align-middle">
+                                        <button class="btn btn-icon btn-info" data-id="${user.id}" data-toggle="modal" data-target="#detailUserModal" onclick="detailUser(${user.id})">
+                                            <i class="fas fa-info-circle"></i>
+                                        </button>
+                                        <button class="btn btn-icon btn-primary" data-id="${user.id}" data-toggle="modal" data-target="#editUserModal" onclick="editUser(${user.id})">
+                                            <i class="far fa-edit"></i>
+                                        </button>
+                                        <form action="/admin/users/${user.id}" method="POST" style="display:inline;" onsubmit="return deleteUser(event, this);">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-icon btn-danger"><i class="fas fa-times"></i></button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            `;
+                        });
+                    } else {
+                        rows = '<tr><td colspan="5" class="text-center">No Users Found</td></tr>';
+                    }
+
+                    $('#user-table-body').html(rows);
+                }
+            });
+        });
+    });
+
     function editUser(id) {
         $.ajax({
             url: '/admin/users/' + id + '/edit',
@@ -225,7 +337,6 @@
                 var user = response.user;
                 var roles = response.roles;
                 var schools = response.schools;
-                var userSchoolIds = response.userSchoolIds;
 
                 $('#edit-user-id').val(user.id);
                 $('#edit-user-name').val(user.name);
@@ -235,24 +346,24 @@
                 $('#edit-user-id_role').val(user.id_role);
                 $('#edit-user-status').val(user.status);
 
-                $('#edit-user-id_role').empty();
-                $.each(roles, function(index, role) {
-                    $('#edit-user-id_role').append(new Option(role.name, role.id, false, role.id == user.id_role));
-                });
+                // Sesuaikan dropdown role jika ada roleId
+                @if(request('role'))
+                    $('#edit-user-id_role').prop('disabled', true);
+                @else
+                    $('#edit-user-id_role').prop('disabled', false);
+                @endif
 
                 $('#edit-user-id_school').empty();
                 $.each(response.schools, function(index, school) {
-                    var selected = response.userSchoolIds.includes(school.id) ? 'selected' : '';
+                    var selected = user.id_school == school.id ? 'selected' : '';
                     $('#edit-user-id_school').append('<option value="'+school.id+'" '+selected+'>'+school.name+'</option>');
                 });
 
                 $('#edit-user-form').attr('action', '/admin/users/' + id);
-            },
-            error: function(xhr) {
-                console.log(xhr.responseText);
             }
         });
     }
+
 
     $('#add-user-form').on('submit', function(e) {
         e.preventDefault();
@@ -298,7 +409,7 @@
             success: function(response) {
                 var user = response.user;
                 var roles = {
-                    1: 'Super Admin', 
+                    1: 'Super Admin',
                     2: 'Admin',
                     3: 'Koordinator',
                     4: 'Student'
@@ -321,21 +432,20 @@
                 $('#detail-user-phone_number').text(user.phone_number);
                 $('#detail-user-role').html(`<span class="badge ${roleClasses[user.role ? user.role.name : 'No Role']}">${user.role ? user.role.name : 'No Role'}</span>`);
                 $('#detail-user-status').html(`<span class="badge ${statusClasses[user.status]}">${user.status === 1 ? 'Active' : 'Inactive'}</span>`);
-                var schoolNames = user.schools.map(school => school.name).join(', ');
-                $('#detail-user-school').empty();
-                    if (user.schools.length > 0) {
-                        $.each(user.schools, function(index, school) {
-                            $('#detail-user-school').append(`<li>${school.name}</li>`);
-                        });
-                    } else {
-                        $('#detail-user-school').append('<li>No School</li>');
-                    }
+
+                // Menampilkan nama sekolah jika ada
+                if (user.school) {
+                    $('#detail-user-school').text(user.school.name);
+                } else {
+                    $('#detail-user-school').text('No School');
+                }
             },
             error: function(xhr) {
                 console.log(xhr.responseText);
             }
         });
     }
+
 
 
     $('#edit-user-form').on('submit', function(e) {

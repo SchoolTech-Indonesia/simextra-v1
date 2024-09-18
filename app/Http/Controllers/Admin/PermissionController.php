@@ -11,9 +11,25 @@ class PermissionController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $permissions = Permission::all();
+        $searchTerm = $request->input('query');
+
+        if ($searchTerm) {
+            $permissions = Permission::where('name', 'LIKE', '%' . $searchTerm . '%')->get();
+        } else {
+            $permissions = Permission::all();
+        }
+    
+        if ($request->ajax()) {
+            return response()->json([
+                'permissions' => $permissions
+            ]);
+        }
+    
+        $permissions = Permission::paginate(10);
+
+        $permissions = Permission::paginate(10);
         return view('admin.permissions.index', compact('permissions'));
     }
 

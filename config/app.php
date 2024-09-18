@@ -123,4 +123,9 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'aliases' => [
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+        'Auth' => Illuminate\Support\Facades\Auth::class,
+    ],
+
 ];

@@ -10,8 +10,9 @@ class AddRoleAndSchoolToUsersTable extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->unsignedBigInteger('id_role')->nullable();
-
-           $table->foreign('id_role')->references('id')->on('roles');
+            $table->foreign('id_role')->references('id')->on('roles');
+            $table->unsignedBigInteger('id_school')->nullable();
+            $table->foreign('id_school')->references('id')->on('schools');
         });
     }
 
@@ -20,6 +21,9 @@ class AddRoleAndSchoolToUsersTable extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->dropForeign(['id_role']);
             $table->dropColumn(['id_role']);
+
+            $table->dropForeign(['id_school']);
+            $table->dropColumn(['id_school']);
         });
     }
 }

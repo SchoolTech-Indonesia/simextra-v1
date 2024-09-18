@@ -21,19 +21,8 @@ class School extends Model
         'address',
     ];
 
-    protected $hidden = [
-    
-    ];
-
-    protected $casts = [
-      
-    ];
-
-
     public function users()
     {
-        return $this->belongsToMany(User::class, 'school_user');
+        return $this->hasMany(User::class, 'id_school');
     }
-
-
 }

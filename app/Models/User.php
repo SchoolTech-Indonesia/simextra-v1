@@ -25,6 +25,7 @@ class User extends Authenticatable
         'otp_token',
         'otp_expires_at',
         'id_role',
+        'id_school'
     ];
 
     protected $hidden = [
@@ -52,9 +53,9 @@ class User extends Authenticatable
         return $this->belongsTo(\Spatie\Permission\Models\Role::class, 'id_role');
     }
     
-    public function schools()
+    public function school()
     {
-        return $this->belongsToMany(School::class, 'user_school', 'id_user', 'id_school');
+        return $this->belongsTo(School::class, 'id_school');
     }
     
 

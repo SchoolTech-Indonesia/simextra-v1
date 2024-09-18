@@ -15,27 +15,27 @@ class RoleSeeder extends Seeder
     {
         Role::updateOrCreate(
             [
-                'name' => 'siswa'
+                'name' => 'Student'
             ], 
-            ['name' =>'siswa']
+            ['name' =>'Student']
         );
         Role::updateOrCreate(
             [
-                'name' => 'koordinator'
+                'name' => 'Koordinator'
             ], 
-            ['name' =>'koordinator']
+            ['name' =>'Koordinator']
         );
         Role::updateOrCreate(
             [
-                'name' => 'adminsekolah'
+                'name' => 'Admin'
             ], 
-            ['name' =>'adminsekolah']
+            ['name' =>'Admin']
         );
         Role::updateOrCreate(
             [
-                'name' => 'superadmin'
+                'name' => 'Super Admin'
             ], 
-            ['name' =>'superadmin']
+            ['name' =>'Super Admin']
         );
     }
 }

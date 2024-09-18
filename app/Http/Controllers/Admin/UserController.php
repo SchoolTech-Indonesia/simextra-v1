@@ -13,18 +13,36 @@ use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::all();
+        $query = $request->input('search'); // Ganti 'query' dengan 'search'
+        $roleId = $request->input('role');
+        
+        $users = User::when($roleId, function($query, $roleId) {
+            return $query->whereHas('role', function($query) use ($roleId) {
+                $query->where('id', $roleId);
+            });
+        })->when($query, function($query, $search) {
+            return $query->where('name', 'LIKE', "%{$search}%");
+        })->with('role') // Eager load role untuk menghindari N+1 query
+        ->paginate(10);
+        
         $roles = Role::all(); 
         $schools = School::all(); 
- 
+        
+        if ($request->ajax()) {
+            return response()->json(['users' => $users]);
+        }
+        
         return view('admin.users.index', compact('users', 'roles', 'schools'));
     }
-
+    
+    
+    
+    
     public function show($id)
     {
-        $user = User::with('role', 'schools')->findOrFail($id);
+        $user = User::with('role', 'school')->findOrFail($id);
         $roles = Role::all(); 
         $schools = School::all(); 
         
@@ -40,6 +58,13 @@ class UserController extends Controller
     {
         $roles = Role::all();
         $schools = School::all();
+    
+        $roleId = request('role');
+    
+        if ($roleId) {
+            $roles = $roles->where('id', $roleId);
+        }
+    
         return view('admin.users.create', compact('roles', 'schools'));
     }
 
@@ -52,7 +77,7 @@ class UserController extends Controller
             'NISN_NIP' => 'required|numeric|unique:users',
             'password' => 'required|string|confirmed',
             'id_role' => 'required|exists:roles,id',
-            'id_school' => 'required|array',
+            'id_school' => 'required|exists:schools,id',
         ], [
             'email.unique' => 'Email untuk User ini Sudah Ada!.',
             'phone_number.unique' => 'Nomor Telepon untuk User ini Sudah Ada!.',
@@ -68,8 +93,6 @@ class UserController extends Controller
             'id_role' => $validated['id_role'],
             'id_school' => $validated['id_school'],
         ]);
-
-        $user->schools()->sync($validated['id_school'] ?? []);
         
         return redirect()->route('users.index')->with('success', 'User Berhasil Ditambahkan.');
     }
@@ -79,17 +102,20 @@ class UserController extends Controller
         $user = User::find($id);
         $roles = Role::all();
         $schools = School::all();
+        $roleId = request('role');
+    
+        if ($roleId) {
+            // Filter roles yang sesuai dengan pilihan navbar
+            $roles = $roles->where('id', $roleId);
+        }
     
         return response()->json([
             'user' => $user,
             'roles' => $roles,
-            'schools' => $schools,
-            'userSchoolIds' =>$user->schools->pluck('id')->toArray()
+            'schools' => $schools, 
         ]);
     }
-    
-    
-    
+   
 
     public function update(Request $request, $id)
     {
@@ -116,18 +142,14 @@ class UserController extends Controller
                 Rule::unique('users')->ignore($id),
             ],
             'id_role' => 'required|exists:roles,id',
-            'id_school' => 'required|array', 
-            'id_school.*' => 'exists:schools,id',
+            'id_school' => 'required|exists:schools,id', 
             'status' => 'sometimes|boolean',
         ]);
         
         $user->update($validated);
-
-         $user->schools()->sync($validated['id_school']);
         
         return redirect()->route('users.index')->with('success', 'User Berhasil Diubah!');
-    }
-    
+    } 
 
     public function destroy(User $user)
     {

@@ -36,7 +36,10 @@ Route::middleware([
     Route::get('/admin/users/{id}', [UserController::class, 'show'])->name('users.show');
     Route::get('/admin/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::put('/admin/users/{id}', [UserController::class, 'update'])->name('users.update');
-    
+    Route::get('/admin/users/import', [UserController::class, 'showImportForm'])->name('users.import.form');
+    Route::post('/admin/users/import', [UserController::class, 'import'])->name('users.import');
+    Route::get('download-pdf', [UserController::class, 'downloadPDF'])->name('users.download-pdf');
+
     Route::resource('schools', SchoolController::class);
     Route::get('/admin/schools/{id}', [SchoolController::class, 'show'])->name('schools.show');
     Route::get('/admin/schools/{id}/edit', [SchoolController::class, 'edit'])->name('schools.edit');

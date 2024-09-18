@@ -10,6 +10,10 @@ use App\Models\School;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\UsersImport;
+use Mpdf\Mpdf;
+
 
 class UserController extends Controller
 {
@@ -156,4 +160,42 @@ class UserController extends Controller
         $user->delete();
         return redirect()->route('users.index')->with('success', 'User Berhasil Dihapus!');
     }
+
+    public function showImportForm()
+    {
+        return view('users.import');
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls',
+        ]);
+
+        Excel::import(new UsersImport, $request->file('file'));
+
+        return redirect()->back()->with('success', 'Users Berhasil Diimport!');
+    }
+
+    public function downloadPDF()
+    {
+        // Ambil semua data pengguna dari database
+        $users = User::all();
+        
+        // Render view ke HTML
+        $html = view('admin.users.download-pdf', compact('users'))->render();
+        
+        // Inisialisasi objek mPDF
+        $mpdf = new Mpdf();
+        
+        // Tuliskan HTML ke PDF
+        $mpdf->WriteHTML($html);
+        
+        // Output PDF untuk diunduh
+    
+        $mpdf->Output('users.pdf', 'D'); 
+
+        return redirect()->back()->with('success', 'Data User Berhasil Diunduh');
+    }
+
 }

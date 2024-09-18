@@ -36,8 +36,14 @@
         <div class="form-group mb-0">
             <div class="d-flex">
                 <button class="btn btn-primary mb-3 mr-2" data-toggle="modal" data-target="#addUserModal">Create New User</button>
-                <button class="btn btn-success mb-3 mr-2" data-toggle="modal" data-target="">Download</button>
-                <button class="btn btn-success mb-3" data-toggle="modal" data-target="">Import</button>
+                <a href="{{ route('users.download-pdf') }}" class="btn btn-danger mb-3 mr-2" id="downloadBtn">
+                    <i class="fas fa-download"></i> Download PDF
+                </a>
+                <form id="import-form" action="{{ route('users.import') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <input type="file" id="file-input" name="file" accept=".xlsx, .xls" style="display: none;" required>
+                    <button class="btn btn-success mb-3 mr-2" type="button" id="import-button"><i class="fas fa-file-excel"></i> Import Users</button>
+                </form>
             </div>
         </div>
     </div>
@@ -517,6 +523,58 @@
             }
         });
     });
+
+    document.getElementById('import-button').addEventListener('click', function() {
+        // Trigger file input click
+        document.getElementById('file-input').click();
+    });
+
+    document.getElementById('file-input').addEventListener('change', function(event) {
+        if (event.target.files.length > 0) {
+            // Show SweetAlert2 confirmation dialog
+            Swal.fire({
+                title: 'Konfirmasi Import',
+                text: 'Apakah Anda yakin ingin mengimpor data ini?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, impor!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('import-form').submit();
+                    document.getElementById('import-form').addEventListener('submit', function(event) {
+                        event.preventDefault();
+                        fetch(this.action, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'multipart/form-data',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                            },
+                            body: new FormData(this)
+                        }).then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                Swal.fire(
+                                    'Sukses!',
+                                    'Data telah berhasil diimpor.',
+                                    'success'
+                                );
+                            } else {
+                                Swal.fire(
+                                    'Gagal!',
+                                    'Terjadi kesalahan saat mengimpor data.',
+                                    'error'
+                                );
+                            }
+                        })
+                    });
+                }
+            });
+        }
+    });
+
 
 
 </script>

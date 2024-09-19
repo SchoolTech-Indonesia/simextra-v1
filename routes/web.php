@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\SchoolController;
+use App\Http\Controllers\ClassController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OtpController;
 use App\Http\Controllers\ProfileController;
@@ -50,6 +51,10 @@ Route::middleware([
     
     Route::resource('majors', MajorController::class);
      Route::get('/majors', [MajorController::class, 'index'])->name('majors.index');
+    Route::resource('classroom', ClassController::class);
+     Route::get('/classroom', [ClassController::class, 'index'])->name('classroom.index');
+     Route::get('/classroom/{id}', [ClassController::class, 'show'])->name('classroom.show');
+
 });
 
 Route::middleware(['role:superadmin'])->prefix('admin')->group(function(){

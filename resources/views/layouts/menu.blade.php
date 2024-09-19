@@ -20,6 +20,12 @@
       <li{% if 'majors-management' in page %} class="active"{% endif %}><a class="nav-link" href="{{ route('majors.index') }}">Major Management</a></li>
     </ul>
   </li>
+  <li class="nav-item dropdown{% if 'class-management' in page %} active{% endif %}">
+    <a href="#" class="nav-link has-dropdown"><i class="fas fa-cogs"></i> <span>Class Management</span></a>
+    <ul class="dropdown-menu">
+      <li{% if 'class-management' in page %} class="active"{% endif %}><a class="nav-link" href="{{ route('classroom.index') }}">Class Management</a></li>
+    </ul>
+  </li>
 
   <li class="nav-item{% if 'schools-management' in page %} active{% endif %}">
     <a href="{{ route('schools.index') }}" class="nav-link"><i class="fas fa-building"></i> <span>School</span></a>

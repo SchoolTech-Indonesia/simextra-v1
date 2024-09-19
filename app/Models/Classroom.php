@@ -12,16 +12,19 @@ class Classroom extends Model
     protected $fillable = [
         'name',
         'code',
-        'description',
-        'created_by',
-        'updated_by',
-        'status',
+        'major_id'
     ];
 
     public $timestamps = true;
 
-public function major()
-{
-    return $this->belongsTo(Major::class);
-}
+    public function major()
+    {
+        return $this->belongsTo(Major::class);
+    }
+
+//!! Silahkan pakai ini, Jika sudah ada mahasiswanya untuk menampilkan detail students
+//     public function students()
+// {
+//     return $this->hasMany(Student::class);
+// }
 }

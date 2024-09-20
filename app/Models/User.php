@@ -39,18 +39,15 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
-    protected function casts(): array
-    {
-        return [ 
-            'NISN_NIP_verified_at' => 'datetime',
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
+    protected $casts = [ 
+        'NISN_NIP_verified_at' => 'datetime',
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+    ];
 
-    public function role()
+    public function customRole()
     {
-        return $this->belongsTo(\Spatie\Permission\Models\Role::class, 'id_role');
+        return $this->belongsTo(\Spatie\Permission\Models\Role::class, 'role_id');
     }
     
     public function school()
@@ -58,5 +55,10 @@ class User extends Authenticatable
         return $this->belongsTo(School::class, 'id_school');
     }
     
+ 
+    public function majors()
+    {
+    return $this->hasMany(Major::class, 'koordinator_id');
+    }
 
 }

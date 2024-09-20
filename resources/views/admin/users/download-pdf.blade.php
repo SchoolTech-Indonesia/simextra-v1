@@ -53,7 +53,6 @@
             <th>No HP</th>
             <th>NISN/NIP</th>
             <th>Role</th>
-            <th>School</th>
         </tr>
         <?php $i = 1 ?>
         @foreach($users as $user)
@@ -64,7 +63,6 @@
             <td>{{ $user->phone_number }}</td>
             <td>{{ $user->NISN_NIP }}</td>
             <td>{{ $user->role ? $user->role->name : 'No Role' }}</td>
-            <td>{{ $user->school ? $user->school->name : 'No School' }}</td>
         </tr>
         @endforeach
     </table>

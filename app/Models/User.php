@@ -54,5 +54,10 @@ class User extends Authenticatable
         return $this->belongsToMany(School::class, 'school_user', 'id_user', 'id_school');
     }
     
+ 
+    public function majors()
+    {
+    return $this->hasMany(Major::class, 'koordinator_id');
+    }
 
 }

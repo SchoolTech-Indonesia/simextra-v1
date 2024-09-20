@@ -55,9 +55,9 @@ class User extends Authenticatable
     }
     
     // User.php
-    public function majors()
-    {
-    return $this->hasMany(Major::class, 'koordinator_id');
-    }
+    // public function majors()
+    // {
+    // return $this->hasMany(Major::class, 'koordinator_id');
+    // }
 
 }

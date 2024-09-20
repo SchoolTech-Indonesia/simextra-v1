@@ -20,8 +20,8 @@ class Classroom extends Model
 
     public $timestamps = true;
 
-public function major()
-{
-    return $this->belongsTo(Major::class);
-}
+// public function major()
+// {
+//     return $this->belongsTo(Major::class);
+// }
 }

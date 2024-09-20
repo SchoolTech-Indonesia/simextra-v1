@@ -10,7 +10,7 @@
         <div class="section-body">
             <form method="GET" action="{{ route('majors.index') }}">
                 <div class="input-group mb-3">
-                    <input type="text" name="search" class="form-control" placeholder="Search by major name or code" value="{{ request('search') }}">
+                    <input type="text" name="search" class="form-control" style="max-width: 200px; width: 100%;"placeholder="Search Jurusan atau Kode Jurusan   " value="{{ request('search') }}">
                     <div class="input-group-append">
                         <button class="btn btn-primary" type="submit">Search</button>
                     </div>
@@ -36,7 +36,7 @@
                                 <th class="text-center">#</th>
                                 <th>Major Code</th>
                                 <th>Major Name</th>
-                                <th>Koordinator</th>
+                                <th>Coordinator</th>
                                 <th>Class List</th>
                                 <th>Action</th>
                             </tr>
@@ -49,18 +49,22 @@
                                 <td>{{ $major->name }}</td>
                                 <td>{{ $major->koordinator ? $major->koordinator->name : '-' }}</td>
                                 <td>
-                                    {{-- Waiting for classroom tables... --}}
-                                    {{-- @if($major->classrooms->isEmpty())
+                                    
+                                    @if($major->classrooms->isEmpty())
                                         -
                                     @else
                                         @foreach($major->classrooms as $classroom)
                                             {{ $classroom->class_name }} ({{ $classroom->class_code }})
                                             @if(!$loop->last), @endif
                                         @endforeach
-                                    @endif --}}
+                                    @endif
                                 </td>
-                                <td class="align-middle">
-                                    <!-- Action buttons here -->
+                                <td>
+                                    {{ $major->class }}
+
+                                </td>
+                                <td class="align-right">
+                                    
                                     <button class="btn btn-icon btn-info" data-id="{{ $major->id }}" data-toggle="modal" data-target="#detailMajorsModal" onclick="showMajorDetails({{ $major->id }})">
                                         <i class="fas fa-info-circle"></i>
                                     </button>
@@ -76,7 +80,7 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="6" class="text-center">No Majors Found</td>
+                                <td colspan="6" class="text-center">Major is not found</td>
                             </tr>
                             @endforelse
                         </tbody>
@@ -105,15 +109,16 @@
             $('#detail-major-code').text(response.major.code);
             $('#detail-major-name').text(response.major.name);
             
-            let coordinators = response.major.koordinator.map(koor => koor.name).join(', ');
-            $('#detail-major-koordinator').text(coordinators);
+             let coordinators = response.major.koordinator.map(koor => koor.name).join(', ');
+             $('#detail-major-koordinator').text(coordinators);
 
-            let classes = response.major.classrooms.map(classroom => `${classroom.class_name} (${classroom.class_code})`).join(', ');
-            $('#detail-major-classes').text(classes);
+             let classes = response.major.classrooms.map(classroom => `${classroom.class_name} (${classroom.class_code})`).join(', ');
+             $('#detail-major-classes').text(classes);
 
             $('#detailMajorsModal').modal('show');
         }
     });
 }
+
 </script>
 @endsection

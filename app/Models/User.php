@@ -45,9 +45,9 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function customRole()
+    public function role()
     {
-        return $this->belongsTo(\Spatie\Permission\Models\Role::class, 'role_id');
+        return $this->belongsTo(\Spatie\Permission\Models\Role::class, 'id_role');
     }
     
     public function school()

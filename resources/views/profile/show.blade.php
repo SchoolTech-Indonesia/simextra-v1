@@ -13,19 +13,19 @@
             </div>
         </div>
         <div class="col-md-12 mb-1" style="position: relative; top: -100px; z-index: 1;">
-            @if(Auth::user()->role == 'superadmin')
+            @if(Auth::user()->role->name == 'Super Admin')
                 <div class="alert alert-info">
                     <strong>Hi, Superadmin!</strong> Change the information about yourself on this page.
                 </div>
-            @elseif(Auth::user()->role == 'admin')
+            @elseif(Auth::user()->role->name == 'Admin')
                 <div class="alert alert-info">
                     <strong>Hi, Admin!</strong> Change the information about yourself on this page.
                 </div>
-            @elseif(Auth::user()->role == 'coordinator')
+            @elseif(Auth::user()->role->name == 'Koordinator')
                 <div class="alert alert-info">
                     <strong>Hi, Coordinator!</strong> Change the information about yourself on this page.
                 </div>
-            @elseif(Auth::user()->role == 'student')
+            @elseif(Auth::user()->role->name == 'Student')
                 <div class="alert alert-info">
                     <strong>Hi, Student!</strong> Change the information about yourself on this page.
                 </div>
@@ -80,7 +80,7 @@
                         <div class="col-md-6 col-sm-12 mb-3">
                             <div class="card">
                                 <h5><strong>Peran</strong></h5>
-                                <p>{{ Auth::user()->role }}</p>
+                                <p>{{ Auth::user()->role->name }}</p>
                             </div>
                         </div>
                         <div class="col-md-6 col-sm-12 mb-3">
@@ -91,7 +91,7 @@
                         </div>
 
                         <!-- Additional Information Based on Role -->
-                        @if(Auth::user()->role == 'superadmin')
+                        @if(Auth::user()->role->name == 'Super Admin')
                             <div class="col-md-6 col-sm-12 mb-3">
                                 <div class="card">
                                     <h5><strong>Sekolah yang Ditugaskan</strong></h5>
@@ -104,7 +104,7 @@
                                     <p>Akses penuh ke seluruh sistem</p>
                                 </div>
                             </div>
-                        @elseif(Auth::user()->role == 'admin')
+                        @elseif(Auth::user()->role->name == 'Admin')
                             <div class="col-md-6 col-sm-12 mb-3">
                                 <div class="card">
                                     <h5><strong>Sekolah yang Ditugaskan</strong></h5>
@@ -117,7 +117,7 @@
                                     <p>Manajemen sekolah dan guru</p>
                                 </div>
                             </div>
-                        @elseif(Auth::user()->role == 'coordinator')
+                        @elseif(Auth::user()->role->name == 'Koordinator')
                             <div class="col-md-6 col-sm-12 mb-3">
                                 <div class="card">
                                     <h5><strong>Ekstrakurikuler</strong></h5>

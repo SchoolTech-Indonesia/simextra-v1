@@ -30,6 +30,11 @@
                         </div>
                     @endif
 
+                    <div class="form-group">
+                        <a href="/login" class="text-decoration-none">
+                            {{ __('Kembali Login?') }}
+                        </a>
+                    </div>
                     <form method="POST" action="{{ route('password.forgot') }}" class="needs-validation" novalidate>
                         @csrf
 

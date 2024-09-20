@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-6 col-lg-4">
             <div class="login-brand">
-              <img src="{{ asset('assets/img/logo/logo-smk.png') }}" alt="logo" width="100" class="shadow-light rounded-circle">
+              <img src="{{ asset('assets/img/logo/SchoolTech-Logo1.png') }}" alt="logo" width="100" class="shadow-light rounded-circle">
             </div>
             <div class="card">
                 <div class="card-header">

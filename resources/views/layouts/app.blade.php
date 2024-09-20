@@ -74,8 +74,11 @@
         </nav>
         <div class="main-sidebar sidebar-style-2">
           <aside id="sidebar-wrapper">
-            <div class="sidebar-brand">
-              <a href="index.html">SchoolTech</a>
+            <div class="navbar-brand">
+            
+            </div>
+            <div class="sidebar-brand mb-3">
+              <img src="{{ asset('assets/img/logo/SchoolTech-Logo1full.png') }}" alt="logo" width="100">
             </div>
             <div class="sidebar-brand sidebar-brand-sm">
               <a href="index.html">St</a>

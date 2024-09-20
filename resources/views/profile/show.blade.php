@@ -130,7 +130,7 @@
                                     <p>Springfield Elementary</p>
                                 </div>
                             </div>
-                        @elseif(Auth::user()->role == 'student')
+                        @elseif(Auth::user()->role->name == 'Student')
                             <div class="col-md-6 col-sm-12 mb-3">
                                 <div class="card">
                                     <h5><strong>Kelas</strong></h5>

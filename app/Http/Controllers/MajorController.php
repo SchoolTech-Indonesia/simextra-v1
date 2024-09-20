@@ -10,10 +10,10 @@ class MajorController extends Controller
 {
     public function index(Request $request)
     {
-    // // Retrieve majors with pagination and include the 'koordinator' relationship
-    // $majors = Major::with(['classrooms', 'koordinator'])
-    //                ->where('name', 'like', '%' . $request->search . '%')
-    //                ->paginate(10); // Adjust the number of items per page as needed
+    // Retrieve majors with pagination and include the 'koordinator' relationship
+    $majors = Major::with(['classrooms', 'koordinator'])
+                   ->where('name', 'like', '%' . $request->search . '%')
+                   ->paginate(10); // Adjust the number of items per page as needed
     $majors = Major::paginate(10);
     return view('admin.majors.index', compact('majors'));
     }

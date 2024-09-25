@@ -19,12 +19,10 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::put('/user/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::put('/user/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
-    Route::post('/user/profile/photo', [ProfileController::class, 'uploadPhoto'])->name('profile.photo.upload');
     Route::post('/profile/delete-photo', [ProfileController::class, 'deletePhoto'])->name('profile.deletePhoto');
-    Route::get('/user/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-
+    Route::post('/profile/photo/upload', [ProfileController::class, 'uploadPhoto'])->name('profile.photo.upload');
+    Route::put('/profile/update', [ProfileController::class, 'updateProfile'])->name('profile.update');
+    
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
@@ -57,12 +55,7 @@ Route::middleware([
     Route::resource('majors', MajorController::class);
      Route::get('/majors', [MajorController::class, 'index'])->name('majors.index');
      Route::get('/majors/{id}', [MajorController::class, 'show']);
-     Route::get('/majors', [MajorController::class, 'index'])->name('majors.index');
-     Route::post('/majors', [MajorController::class, 'store'])->name('majors.store');
-     Route::get('/majors/{major}', [MajorController::class, 'show'])->name('majors.show');
-     Route::put('/majors/{major}', [MajorController::class, 'update'])->name('majors.update');
-     Route::delete('/majors/{major}', [MajorController::class, 'destroy'])->name('majors.destroy');
-     
+
     Route::resource('classroom', ClassController::class);
      Route::get('/classroom', [ClassController::class, 'index'])->name('classroom.index');
      Route::get('/classroom/{id}', [ClassController::class, 'show'])->name('classroom.show');

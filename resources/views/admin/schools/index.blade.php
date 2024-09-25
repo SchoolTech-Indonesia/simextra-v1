@@ -6,7 +6,6 @@
         <div class="section-header">
             <h1>School Management</h1>
         </div>
-
         <div class="section-body">
         </div>
     </section>
@@ -36,8 +35,10 @@
                                 <?php $i = 1 ?>
                                 @foreach($schools as $school)
                                 <tr>
-                                    <td class="text-center">{{ $i }}</td>
-                                    <td><img src="{{ asset('storage/' . $school->logo_img) }}" alt="Logo" width="100" height="100"></td>
+                                    <td class="text-center">{{ $i }}</td>   
+                                    <td>
+                                        <img src="{{ $school->logo_img ? asset('storage/' . $school->logo_img) : asset('assets/img/logo/SchoolTech-Logo1full.png') }}" alt="Logo" width="100" height="100">
+                                    </td>
                                     <td>{{ $school->name }}</td>
                                     <td>{{ $school->address }}</td>
                                     <td>
@@ -211,35 +212,26 @@
         });
     });
 
-    $('#edit-school-form').on('submit', function(e) {
-        e.preventDefault();
-        var form = $(this);
-        var formData = form.serialize();
+    function editSchool(id) {
+    $.ajax({
+        url: '/admin/schools/' + id + '/edit',
+        type: 'GET',
+        success: function(response) {
+            $('#school-id').val(response.school.id);
+            $('#edit-school-name').val(response.school.name);
+            $('#edit-school-address').val(response.school.address);
 
-        $.ajax({
-            url: form.attr('action'),
-            method: form.attr('method'),
-            data: formData,
-            success: function(response) {
-                Swal.fire({
-                    title: 'Success!',
-                    text: 'Sekolah Berhasil Diubah.',
-                    icon: 'success',
-                    confirmButtonText: 'OK'
-                }).then(() => {
-                    location.reload(); 
-                });
-            },
-            error: function(xhr) {
-                Swal.fire({
-                    title: 'Error!',
-                    text: 'Nama Sekolah Sudah Pernah Ditambahkan!',
-                    icon: 'error',
-                    confirmButtonText: 'OK'
-                });
+            var logoUrl = response.school.logo_img ? '/storage/' + response.school.logo_img : '';
+            if (logoUrl) {
+                $('#current-logo').attr('src', logoUrl).show();
+            } else {
+                $('#current-logo').hide();
             }
-        });
+
+            $('#edit-school-form').attr('action', '/admin/schools/' + id);
+        }
     });
+}
 
     $('.delete-btn').on('click', function(e) {
         e.preventDefault();
@@ -295,27 +287,6 @@
                 } else {
                     $('#detail-logo').text('No logo available');
                 }
-            }
-        });
-    }
-
-    function editSchool(id) {
-        $.ajax({
-            url: '/admin/schools/' + id + '/edit',
-            type: 'GET',
-            success: function(response) {
-                $('#school-id').val(response.school.id);
-                $('#edit-school-name').val(response.school.name);
-                $('#edit-school-address').val(response.school.address);
-                
-                var logoUrl = response.school.logo_img ? '/storage/' + response.school.logo_img : '';
-                if (logoUrl) {
-                    $('#current-logo').attr('src', logoUrl).show();
-                } else {
-                    $('#current-logo').hide();
-                }
-
-                $('#edit-school-form').attr('action', '/admin/schools/' + id);
             }
         });
     }

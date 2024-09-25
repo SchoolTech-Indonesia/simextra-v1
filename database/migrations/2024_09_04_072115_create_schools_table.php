@@ -17,7 +17,7 @@ class CreateSchoolsTable extends Migration
             $table->id(); 
             $table->string('logo_img')->nullable(); 
             $table->string('name'); 
-            // $table->text('address'); 
+            $table->text('address'); 
             $table->timestamps(); 
         });
     }

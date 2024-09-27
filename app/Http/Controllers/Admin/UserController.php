@@ -71,7 +71,6 @@ class UserController extends Controller
     
         return view('admin.users.create', compact('roles', 'schools'));
     }
-
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -82,12 +81,27 @@ class UserController extends Controller
             'password' => 'required|string|confirmed',
             'id_role' => 'required|exists:roles,id',
             'id_school' => 'required|exists:schools,id',
+            'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Allow optional profile photo upload
         ], [
             'email.unique' => 'Email untuk User ini Sudah Ada!.',
             'phone_number.unique' => 'Nomor Telepon untuk User ini Sudah Ada!.',
-            'NISN_NIP.unique' => 'NISN/NIP untuk User ini Sudah Ada!.'
+            'NISN_NIP.unique' => 'NISN/NIP untuk User ini Sudah Ada!.',
+            'profile_photo.image' => 'Profile photo must be an image.',
+            'profile_photo.mimes' => 'Profile photo must be a jpeg, png, jpg, or gif.',
+            'profile_photo.max' => 'Profile photo must be less than 2MB.',
         ]);
-        
+    
+        // Initialize the profile photo path
+        $profilePhotoPath = 'https://freesvg.org/img/abstract-user-flat-4.png'; // Default photo URL
+    
+        // If a profile photo is uploaded, store it and update the path
+        if ($request->hasFile('profile_photo')) {
+            $imageName = time() . '.' . $request->profile_photo->extension();
+            $request->profile_photo->move(public_path('assets/img/fotoprofil'), $imageName);
+            $profilePhotoPath = asset('assets/img/fotoprofil/' . $imageName); // Use the stored file path
+        }
+    
+        // Create the user with the validated data
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
@@ -96,11 +110,13 @@ class UserController extends Controller
             'password' => bcrypt($validated['password']),
             'id_role' => $validated['id_role'],
             'id_school' => $validated['id_school'],
+            'profile_photo_path' => $profilePhotoPath, // Use the stored file path or default URL
         ]);
-        
+    
         return redirect()->route('users.index')->with('success', 'User Berhasil Ditambahkan.');
     }
-      
+    
+
     public function edit($id)
     {
         $user = User::find($id);

@@ -14,13 +14,10 @@ class StoreMajorRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|max:255|unique:majors,name',
-            'code' => 'nullable|string|max:50|unique:majors,code',
-            'description' => 'nullable|string',
-
+            'name' => 'required|string|max:255',
+            'classrooms' => 'array|exists:classrooms,id',
         ];
     }
-
     public function messages()
     {
         return [

@@ -47,17 +47,11 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    //CARA MAS ARKA
     public function role()
     {
         return $this->belongsTo(\Spatie\Permission\Models\Role::class, 'id_role');
     }
 
-    // COBA CARA VINSEN
-    // public function role()
-    // {
-    //     return $this->belongsTo(Role::class, 'id_role');
-    // }
     public function school()
     {
         return $this->belongsTo(School::class, 'id_school');
@@ -79,8 +73,8 @@ class User extends Authenticatable
     /**
      * Check if the user has a specific role.
      */
-    public function hasRole($role)
-    {
-        return $this->roles()->where('name', $role)->exists();
-    }
+    // public function hasRole($role)
+    // {
+    //     return $this->roles()->where('name', $role)->exists();
+    // }
 }

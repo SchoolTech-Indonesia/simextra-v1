@@ -4,11 +4,12 @@ use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\SchoolController;
+use App\Http\Controllers\Admin\MajorController;
 use App\Http\Controllers\ClassController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OtpController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\MajorController;
+
 
 Route::get('/', function () {
     return view('auth.login');
@@ -21,7 +22,8 @@ Route::middleware([
 ])->group(function () {
     Route::put('/user/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::put('/user/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
-    Route::post('/user/profile/photo', [ProfileController::class, 'uploadPhoto'])->name('profile.photo.upload');
+   Route::post('/profile/photo/upload', [ProfileController::class, 'uploadPhoto'])->name('profile.photo.upload');
+
     Route::post('/profile/delete-photo', [ProfileController::class, 'deletePhoto'])->name('profile.deletePhoto');
     Route::get('/user/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
 
@@ -55,13 +57,14 @@ Route::middleware([
     Route::put('/admin/schools/{id}', [SchoolController::class, 'update'])->name('schools.update');
     
     Route::resource('majors', MajorController::class);
-     Route::get('/majors', [MajorController::class, 'index'])->name('majors.index');
-     Route::get('/majors/{id}', [MajorController::class, 'show']);
-     Route::get('/majors', [MajorController::class, 'index'])->name('majors.index');
-     Route::post('/majors', [MajorController::class, 'store'])->name('majors.store');
-     Route::get('/majors/{major}', [MajorController::class, 'show'])->name('majors.show');
-     Route::put('/majors/{major}', [MajorController::class, 'update'])->name('majors.update');
-     Route::delete('/majors/{major}', [MajorController::class, 'destroy'])->name('majors.destroy');
+     Route::get('/admin/majors', [MajorController::class, 'index'])->name('majors.index');
+     Route::get('/admin/majors/{id}', [MajorController::class, 'show']);
+     Route::get('/admin/majors', [MajorController::class, 'index'])->name('majors.index');
+     Route::post('/admin/majors', [MajorController::class, 'store'])->name('majors.store');
+     Route::get('/admin/majors/{major}', [MajorController::class, 'show'])->name('majors.show');
+     Route::put('/admin/majors/{major}', [MajorController::class, 'update'])->name('majors.update');
+     Route::delete('/admin/majors/{major}', [MajorController::class, 'destroy'])->name('majors.destroy');
+     Route::get('/admin/majors/{id}/edit', [MajorController::class, 'edit'])->name('majors.edit');
      
     Route::resource('classroom', ClassController::class);
      Route::get('/classroom', [ClassController::class, 'index'])->name('classroom.index');

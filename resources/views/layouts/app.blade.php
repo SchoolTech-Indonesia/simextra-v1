@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
   <title>{{ $title ?? 'Simextra - SchoolTech' }}</title>
 
@@ -44,7 +45,7 @@
             
             <li class="dropdown">
       <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
-        <img src="{{ asset(Auth::user()->profile_photo_path) }}" alt="Profile Picture" class="rounded-circle" width="30" height="30" style="margin-right: 8px;">  
+       
         <div class="d-sm-none d-lg-inline-block">Hi, {{ Auth::user()->name }}</div>
       </a>
       <div class="dropdown-menu dropdown-menu-right">
@@ -135,4 +136,5 @@
   <!-- Page Specific JS File -->
   <script src="{{ asset('assets/js/page/modules-datatables.js')}}" ></script>
 </body>
+
 </html>

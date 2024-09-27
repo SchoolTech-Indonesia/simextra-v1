@@ -1,57 +1,92 @@
 <?php
 
-namespace Database\Seeders;
+    namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use App\Models\Major;
-use App\Models\User;
-use App\Models\Classroom;
-use Spatie\Permission\Models\Role;
+    use Illuminate\Database\Seeder;
+    use App\Models\Major;
+    use App\Models\User;
+    use App\Models\Classroom;
+    use Spatie\Permission\Models\Role;
 
-class MajorSeeder extends Seeder
-{
-    public function run()
+    class MajorSeeder extends Seeder
     {
-        // Fetch the Koordinator role
-        $koordinatorRole = Role::where('name', 'Koordinator')->first();
+        public function run()
+        {
 
-        if (!$koordinatorRole) {
-            throw new \Exception('Koordinator role not found. Please run RoleSeeder first.');
+            // Generate the major code based on the current count of majors
+            $count = Major::count();
+            $generatedCode = 'JRS' . str_pad($count + 1, 3, '0', STR_PAD_LEFT);
+
+            {
+                $major = Major::create([
+                    'code' => $generatedCode,
+                    'name' => 'Matematika dan IPA',
+                ]);
+            
+                $major = Major::create([
+                    'code' => $generatedCode,
+                    'name' => 'IPS',
+                ]);
+            
+                $major = Major::create([
+                    'code' => $generatedCode,
+                    'name' => 'Bahasa',
+                ]);
+            
+                $major = Major::create([
+                    'code' => $generatedCode,
+                    'name' => 'Ekonomi',
+                ]);
+            
+                $major = Major::create([
+                    'code' => $generatedCode,
+                    'name' => 'Elektro',
+                ]);
+            
+                $major = Major::create([
+                    'code' => $generatedCode,
+                    'name' => 'Geografi',
+                ]);
+            
+                $major = Major::create([
+                    'code' => $generatedCode,
+                    'name' => 'Komputer',
+                ]);
+            
+                $major = Major::create([
+                    'code' => $generatedCode,
+                    'name' => 'Akuntansi',
+                ]);
+            
+                $major = Major::create([
+                    'code' => $generatedCode,
+                    'name' => 'Mesin',
+                ]);
+            
+                $major = Major::create([
+                    'code' => $generatedCode,
+                    'name' => 'Multimedia',
+                ]);
+                            
+                $major = Major::create([
+                    'code' => $generatedCode,
+                    'name' => 'Tata Boga',
+                ]);
+            }
+            // // Create classrooms linked to the major
+            // Classroom::create([
+            //     'name' => 'Bahasa',
+            //     // 'code' => 'CLS001',
+            //     'major_id' => $major->id,
+            //     // Add other necessary fields
+            // ]);
+
+            // Optionally, create more classrooms for the major
+            Classroom::create([
+                'name' => 'MIPA',
+                'code' => 'CLS001',
+                'major_id' => $major->id,
+                // Add other necessary fields
+            ]);
         }
-
-        // Fetch users with the Koordinator role by id_role
-        $koordinators = User::where('id_role', $koordinatorRole->id)->get();
-
-        if ($koordinators->isEmpty()) {
-            throw new \Exception('No users found with the "Koordinator" role.');
-        }
-
-        // Generate the major code based on the current count of majors
-        $count = Major::count();
-        $generatedCode = 'JRS' . str_pad($count + 1, 3, '0', STR_PAD_LEFT);
-
-        // Create the major
-        $major = Major::create([
-            'code' => $generatedCode,
-            'name' => 'Matematika dan IPA',
-            'koordinator_id' => $koordinators->first()->id,
-            // Remove 'classroom_id' if it's not needed in majors table
-        ]);
-
-        // // Create classrooms linked to the major
-        // Classroom::create([
-        //     'name' => 'Bahasa',
-        //     // 'code' => 'CLS001',
-        //     'major_id' => $major->id,
-        //     // Add other necessary fields
-        // ]);
-
-        // Optionally, create more classrooms for the major
-        Classroom::create([
-            'name' => 'IPS',
-            'code' => 'CLS002',
-            'major_id' => $major->id,
-            // Add other necessary fields
-        ]);
     }
-}

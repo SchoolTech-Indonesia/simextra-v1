@@ -49,7 +49,7 @@ class User extends Authenticatable
     {
         return $this->belongsTo(\Spatie\Permission\Models\Role::class, 'id_role');
     }
-    
+
     public function school()
     {
         return $this->belongsTo(School::class, 'id_school');
@@ -60,5 +60,19 @@ class User extends Authenticatable
     {
     return $this->hasMany(Major::class, 'koordinator_id');
     }
+        /**
+     * A User can coordinate many Majors.
+     */
+    public function koordinator()
+    {
+        return $this->belongsTo(User::class, 'koordinator_id');
+    }
 
+    /**
+     * Check if the user has a specific role.
+     */
+    // public function hasRole($role)
+    // {
+    //     return $this->roles()->where('name', $role)->exists();
+    // }
 }

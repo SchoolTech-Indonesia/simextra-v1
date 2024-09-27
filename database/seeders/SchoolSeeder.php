@@ -13,7 +13,7 @@ class SchoolSeeder extends Seeder
             ['id' => 1],
             [
                 'name' => 'MIPA',
-                'address' => "Jalan Malang"
+                // Add other necessary fields here
             ]
         );
     }

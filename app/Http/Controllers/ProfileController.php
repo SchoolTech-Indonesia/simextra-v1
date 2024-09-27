@@ -42,6 +42,7 @@ class ProfileController extends Controller
     
         if ($user->profile_photo_path && $user->profile_photo_path !== $this->defaultPhotoUrl) {
             // Delete the current photo from storage if it's not the default
+            
             Storage::disk('public')->delete(str_replace('storage/', '', $user->profile_photo_path));
         }
         

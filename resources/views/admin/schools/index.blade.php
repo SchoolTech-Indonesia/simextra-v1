@@ -35,10 +35,8 @@
                                 <?php $i = 1 ?>
                                 @foreach($schools as $school)
                                 <tr>
-                                    <td class="text-center">{{ $i }}</td>   
-                                    <td>
-                                        <img src="{{ $school->logo_img ? asset('storage/' . $school->logo_img) : asset('assets/img/logo/SchoolTech-Logo1full.png') }}" alt="Logo" width="100" height="100">
-                                    </td>
+                                    <td class="text-center">{{ $i }}</td>                            
+                                    <td><img src="{{ asset('storage/' . $school->logo_img) }}" alt="Logo" width="100" height="100"></td>
                                     <td>{{ $school->name }}</td>
                                     <td>{{ $school->address }}</td>
                                     <td>
@@ -64,7 +62,29 @@
                         </table>
                     </div>
                     <div class="card-footer text-right">
-                        {{-- Optional: Add pagination or other actions --}}
+                        <div class="float-right">
+                            <ul class="pagination mb-0">
+                                {{-- Previous button --}}
+                                <li class="page-item {{ $majors->onFirstPage() ? 'disabled' : '' }}">
+                                    <a class="page-link" href="{{ $majors->previousPageUrl() . (request('search') ? '&search=' . request('search') : '') }}" tabindex="-1">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </a>
+                                </li>
+                            
+                                {{-- Page numbers --}}
+                                @for ($i = 1; $i <= $majors->lastPage(); $i++)
+                                    <li class="page-item {{ $i == $majors->currentPage() ? 'active' : '' }}">
+                                        <a class="page-link" href="{{ $majors->url($i) . (request('search') ? '&search=' . request('search') : '') }}">{{ $i }}</a>
+                                    </li>
+                                @endfor
+                            
+                                {{-- Next button --}}
+                                <li class="page-item {{ $majors->hasMorePages() ? '' : 'disabled' }}">
+                                    <a class="page-link" href="{{ $majors->nextPageUrl() . (request('search') ? '&search=' . request('search') : '') }}">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </a>
+                                </li>
+                            </ul>
                     </div>
                 </div>
             </div>

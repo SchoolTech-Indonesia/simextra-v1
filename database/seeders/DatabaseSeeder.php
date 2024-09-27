@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Classroom;
+use App\Models\Major;
 
 class DatabaseSeeder extends Seeder
 {
@@ -18,5 +20,14 @@ class DatabaseSeeder extends Seeder
         $this->call(SchoolSeeder::class);
         $this->call(UserSeeder::class);
         $this->call(MajorSeeder::class);
+        
+       // DatabaseSeeder.php
+$classroom = Classroom::find(1);
+$major = Major::find(1);
+
+// Set the major_id directly for the classroom
+$classroom->major_id = $major->id;
+$classroom->save();
+
     }
 }

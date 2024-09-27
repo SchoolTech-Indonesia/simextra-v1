@@ -12,7 +12,9 @@ class SchoolSeeder extends Seeder
         School::updateOrCreate(
             ['id' => 1],
             [
-                'name' => 'MIPA',
+                'name' => 'SMA 1 Malang',
+                'address' => 'Malang',
+                'logo_img' => '' // Add the default logo path
                 // Add other necessary fields here
             ]
         );

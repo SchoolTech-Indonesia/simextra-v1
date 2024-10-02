@@ -18,3 +18,9 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+SchoolYearController.php
+SchoolYear.php
+2024_10_01_052804_create_schoolyear_table.php
+/school-year/index.blade.php
+web.php
+/layouts/menu.blade.php

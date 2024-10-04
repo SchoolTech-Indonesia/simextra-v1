@@ -59,14 +59,26 @@ Route::middleware([
     
     Route::resource('majors', MajorController::class);
      Route::get('/admin/majors', [MajorController::class, 'index'])->name('majors.index');
-     Route::get('/admin/majors/{id}', [MajorController::class, 'show']);
-     Route::get('/admin/majors', [MajorController::class, 'index'])->name('majors.index');
      Route::post('/admin/majors', [MajorController::class, 'store'])->name('majors.store');
-     Route::get('/admin/majors/{major}', [MajorController::class, 'show'])->name('majors.show');
-     Route::put('/admin/majors/{major}', [MajorController::class, 'update'])->name('majors.update');
+     Route::get('/admin/majors/{id}', [MajorController::class, 'show'])->name('majors.show');
+     Route::put('/admin/majors/{id}', [MajorController::class, 'update'])->name('majors.update');
      Route::delete('/admin/majors/{major}', [MajorController::class, 'destroy'])->name('majors.destroy');
      Route::get('/admin/majors/{id}/edit', [MajorController::class, 'edit'])->name('majors.edit');
-     
+     Route::delete('/majors/{id}/classrooms', [MajorController::class, 'removeClassroom'])->name('majors.removeClassroom');
+
+     // Route::resource('majors', MajorController::class, [
+    //     'admin' => [
+    //         'index' => 'majors.index',
+    //         'store' => 'majors.store',
+    //         'show' => 'majors.show',
+    //         'edit' => 'majors.edit',
+    //         'update' => 'majors.update',
+    //         'destroy' => 'majors.destroy',
+    //     ],
+    //     'parameters' => [
+    //         'majors' => 'id', // This will replace {major} with {id} in your URLs
+    //     ]
+    // ]);
     Route::resource('classroom', ClassController::class);
      Route::get('/classroom', [ClassController::class, 'index'])->name('classroom.index');
      Route::get('/classroom/{id}', [ClassController::class, 'show'])->name('classroom.show');

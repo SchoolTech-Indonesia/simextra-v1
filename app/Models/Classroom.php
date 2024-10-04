@@ -12,16 +12,16 @@ class Classroom extends Model
     protected $fillable = [
         'name',
         'code',
-        'address'
     ];
 
     public $timestamps = true;
 
     // Define the relationship with majors
-    public function major()
+    public function majors()
     {
-        return $this->belongsTo(Major::class);
+        return $this->belongsToMany(Major::class, 'major_classroom')->withTimestamps();
     }
+    
 }
 
 //!! Silahkan pakai ini, Jika sudah ada mahasiswanya untuk menampilkan detail students

@@ -69,16 +69,32 @@ class ClassController extends Controller
 
 
     
-    
+   //cara mas syami 
+// public function edit(Classroom $classroom)
+// {
+//     $majors = Major::all(); // Mengambil semua data major untuk dropdown
+//     return response()->json([
+//         'classroom' => $classroom,
+//         'majors' => $majors, // Kirim data major ke view
+//         'selected_major_id' => $classroom->major_id // Kirim data major_id yang dipilih sebelumnya
+//     ]);
+// }
 public function edit(Classroom $classroom)
 {
-    $majors = Major::all(); // Mengambil semua data major untuk dropdown
+    // Fetch all majors for dropdown
+    $majors = Major::all();
+
+    // Fetch the IDs of majors associated with the classroom
+    $associatedMajorIds = $classroom->majors()->pluck('id')->toArray();
+
+    // Send data back to the frontend for populating the modal form
     return response()->json([
         'classroom' => $classroom,
-        'majors' => $majors, // Kirim data major ke view
-        'selected_major_id' => $classroom->major_id // Kirim data major_id yang dipilih sebelumnya
+        'majors' => $majors,
+        'associated_major_ids' => $associatedMajorIds // IDs of associated majors
     ]);
 }
+
 
 
     public function update(Request $request, Classroom $classroom)
@@ -95,10 +111,10 @@ public function edit(Classroom $classroom)
         'name' => $request->name,
         'major_id' => $request->major_id,
     ]);
-
+    dd($classroom);
     return response()->json(['success' => 'Classroom updated successfully']);
     }   
-    
+
 
     public function destroy(Classroom $classroom)
     {

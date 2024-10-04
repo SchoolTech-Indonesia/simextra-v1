@@ -61,7 +61,7 @@
                                 </td>
                                 <td class="align-middle">
                                     <!-- Action buttons here -->
-                                    <button class="btn btn-primary btn-detail" data-id="{{ $class->id }}" data-toggle="modal" data-target="#detailClassroomModal">
+                                    <button class="btn btn-primary btn-detail" data-id="{{ $class->id }}" data-toggle="modal" data-target="#detailClassroomModal"onclick="detailClassroomModal({{ $class->id }})">
                                         <i class="fas fa-search"></i>
                                     </button>
                                     <button class="btn btn-icon btn-primary" data-id="{{ $class->id }}" data-toggle="modal" data-target="#editClassroomModal" onclick="editClassroom({{ $class->id }})">
@@ -120,7 +120,7 @@
                     </select>
 
                 </div>
-                <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
+                <button type="submit" class="btn btn-primary">Save Classroom</button>
             </form>
             
 
@@ -191,13 +191,24 @@
 </div>
 
 <script>
-$.ajaxSetup({
-    headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    }
-});
 
-function editClassroom(id) {
+//cara mas syami
+// function editClassroom(id) {
+//     $.ajax({
+//         url: '/classroom/' + id + '/edit',
+//         type: 'GET',
+//         success: function(response) {
+//             $('#classroom-id').val(response.classroom.id);
+//             $('#edit-classroom-code').val(response.classroom.code);
+//             $('#edit-classroom-name').val(response.classroom.name);
+//             $('#edit-assignmajors').val(response.selected_major_id).trigger('change'); // Set major yang sudah dipilih
+//             $('#edit-classroom-form').attr('action', '/classroom/' + id);
+//         }
+//     });
+// }
+
+// cara vinsen
+window.editClassroom = function(id) {
     $.ajax({
         url: '/classroom/' + id + '/edit',
         type: 'GET',
@@ -205,7 +216,10 @@ function editClassroom(id) {
             $('#classroom-id').val(response.classroom.id);
             $('#edit-classroom-code').val(response.classroom.code);
             $('#edit-classroom-name').val(response.classroom.name);
-            $('#edit-assignmajors').val(response.selected_major_id).trigger('change'); // Set major yang sudah dipilih
+            
+            // Set the selected majors
+            $('#edit-assignmajors').val(response.associated_major_ids).trigger('change'); // Select multiple majors
+            
             $('#edit-classroom-form').attr('action', '/classroom/' + id);
         }
     });
@@ -241,15 +255,51 @@ $('#add-classroom-form').on('submit', function(e) {
     });
 });
 
+// cara mas syami
+// $('#edit-classroom-form').on('submit', function(e) {
+//     e.preventDefault();
+//     var form = $(this);
+//     var formData = form.serialize();
+
+//     $.ajax({
+//         url: form.attr('action'),
+//         method: form.attr('method'),
+//         data: formData,
+//         success: function(response) {
+//             Swal.fire({
+//                 title: 'Success!',
+//                 text: 'Classroom successfully updated.',
+//                 icon: 'success',
+//                 confirmButtonText: 'OK'
+//             }).then(() => {
+//                 location.reload(); 
+//             });
+//         },
+//         error: function(xhr) {
+//             Swal.fire({
+//                 title: 'Error!',
+//                 text: 'Failed to update Classroom.',
+//                 icon: 'error',
+//                 confirmButtonText: 'OK'
+//             });
+//         }
+//     });
+// });
+
+//cara vinsen
 $('#edit-classroom-form').on('submit', function(e) {
     e.preventDefault();
     var form = $(this);
     var formData = form.serialize();
-
+    var url = form.attr('action');
+    var formData = new FormData(form[0]);
+formData.append('_method', 'PUT'); 
     $.ajax({
-        url: form.attr('action'),
-        method: form.attr('method'),
+        url: url,
+        method: 'POST',
         data: formData,
+        processData: false,
+        contentType: false,
         success: function(response) {
             Swal.fire({
                 title: 'Success!',
@@ -308,14 +358,15 @@ function deleteClassroom(e, form) {
         }
     });
 }
-$(document).ready(function () {
-    $('.btn-detail').on('click', function () {
-        var classId = $(this).data('id');
+function detailClassroomModal (id) {
+
+    
 
         $.ajax({
-            url: `/classroom/${classId}`,
+            url: `/classroom/${id}`,
             type: 'GET',
             success: function (data) {
+                console.log(data)
                 $('#class-code').text(data.code);
                 $('#class-name').text(data.name);
                 $('#class-major').text(data.major ? data.major.name : '-');
@@ -337,7 +388,6 @@ $(document).ready(function () {
                 alert('Failed to load classroom details');
             }
         });
-    });
-});
+};
 </script>
 @endsection

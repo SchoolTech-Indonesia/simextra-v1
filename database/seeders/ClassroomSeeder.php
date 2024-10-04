@@ -20,22 +20,22 @@ class ClassroomSeeder extends Seeder
         // Create classrooms
         $classroom1 = Classroom::firstOrCreate([
             'name' => 'MIPA 1',
-            'code' => '1',
+
         ]);
         
         $classroom2 = Classroom::firstOrCreate([
             'name' => 'MIPA 2',
-            'code' => 'MIPA2',
+
         ]);
 
         $classroom3 = Classroom::firstOrCreate([
             'name' => 'IPS 1',
-            'code' => 'IPS1',
+ 
         ]);
         
         $classroom4 = Classroom::firstOrCreate([
             'name' => 'Bahasa 1',
-            'code' => 'BAH1',
+  
         ]);
 
         // Associate classrooms with majors (many-to-many)

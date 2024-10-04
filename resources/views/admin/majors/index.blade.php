@@ -171,7 +171,6 @@
     </div>
 </div>
 
-@endsection
 
 <script>
     function majorDetailsModals(id) {

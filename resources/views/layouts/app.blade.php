@@ -21,12 +21,49 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
   <!-- Add jQuery dependency -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<!-- Add Toaster library -->
-<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+  <!-- Add Toaster library -->
+  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
   @stack('styles') <!-- Stack for additional styles -->
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+  <style>
+        .select2-container--default .select2-selection--multiple {
+            background-color: #ffffff;
+            border: 1px solid #433f3f; 
+            color: white; 
+        }
+
+        .select2-container--default .select2-selection--multiple .select2-selection__choice {
+            background-color: #0056b3;
+            color: white;
+        }
+
+        .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+            color: white; 
+        }
+
+        .select2-container--default .select2-selection--multiple .select2-selection__placeholder {
+            color: white; 
+        }
+
+        .select2-container--default .select2-selection--multiple .select2-selection__choice {
+            color: white; 
+        }
+
+        .form-control-file {
+            border: 1px solid #433f3f; 
+            border-radius: 4px;
+            padding: 5px;
+        }
+
+        .form-control-file:focus {
+            border-color: #433f3f; 
+            outline: none;
+        }
+    </style>
 </head>
 
 <body>
@@ -135,6 +172,10 @@
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
   <!-- Page Specific JS File -->
   <script src="{{ asset('assets/js/page/modules-datatables.js')}}" ></script>
+
+  <!-- Tambahkan sebelum penutup </body> -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 </body>
 
 </html>

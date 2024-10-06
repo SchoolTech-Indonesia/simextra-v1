@@ -46,6 +46,10 @@ class ExtraController extends Controller
 
         $extra->save();
 
+        if ($request->has('coordinators')) {
+            $extra->coordinators()->attach($request->coordinators);
+        }    
+
         return redirect()->route('admin.extras.index')->with('success', 'Extra berhasil ditambahkan.');
     }
 
@@ -71,6 +75,12 @@ class ExtraController extends Controller
         }
 
         $extra->save();
+
+        if ($request->has('coordinators')) {
+            $extra->coordinators()->sync($request->coordinators);
+        } else {
+            $extra->coordinators()->sync([]); // Hapus semua jika tidak ada koordinator yang dipilih
+        }    
 
         return redirect()->route('admin.extras.index')->with('success', 'Ekstra berhasil diperbarui.');
     }

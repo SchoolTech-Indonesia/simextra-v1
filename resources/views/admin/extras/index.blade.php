@@ -48,7 +48,7 @@
                                     <tbody>
                                         @foreach($extras as $index => $extra)
                                             <tr>
-                                                <td>{{ $index + 1 }}</td>
+                                                <td class="text-center">{{ $index + 1 }}</td>
                                                 <td>{{ $extra->name }}</td>
                                                 <td><img src="{{ asset('storage/' . $extra->logo) }}" alt="{{ $extra->name }}" width="50"></td>
                                                 <td>
@@ -111,7 +111,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Tutup</button> <!-- Ubah di sini -->
                         <button type="submit" class="btn btn-primary">Simpan</button>
                     </div>
                 </form>
@@ -157,7 +157,7 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Tutup</button> <!-- Ubah di sini -->
                             <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
                         </div>
                     </form>
@@ -165,5 +165,23 @@
             </div>
         </div>
     @endforeach
+
+    <script>
+        $(document).ready(function() {
+            // Inisialisasi Select2 untuk modal tambah
+            $('#coordinators').select2({
+                placeholder: "Pilih Koordinator",
+                allowClear: true
+            });
+
+            // Inisialisasi Select2 untuk modal edit
+            @foreach($extras as $extra)
+                $('#edit_coordinators{{ $extra->id }}').select2({
+                    placeholder: "Pilih Koordinator",
+                    allowClear: true
+                });
+            @endforeach
+        });
+    </script>
 </div>
 @endsection

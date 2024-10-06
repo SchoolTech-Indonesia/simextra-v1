@@ -9,9 +9,16 @@ use Illuminate\Http\Request;
 
 class ExtraController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $extras = Extra::all();
+        $query = Extra::query();
+
+        // Cek apakah ada parameter pencarian
+        if ($request->has('search') && $request->search != '') {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        $extras = $query->get();
         $users = User::all(); // Ambil semua pengguna
         return view('admin.extras.index', compact('extras', 'users')); // Kirim ke tampilan
     }
@@ -46,13 +53,23 @@ class ExtraController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'schedule' => 'required|string',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Tambahkan validasi untuk logo
         ]);
 
         $extra->name = $request->name;
-        $extra->description = $request->description;
-        $extra->schedule = $request->schedule;
+
+        // Periksa apakah ada logo baru yang diunggah
+        if ($request->hasFile('logo')) {
+            // Hapus logo lama jika ada
+            if ($extra->logo) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($extra->logo);
+            }
+
+            // Simpan logo baru
+            $path = $request->file('logo')->store('extras', 'public');
+            $extra->logo = $path;
+        }
+
         $extra->save();
 
         return redirect()->route('admin.extras.index')->with('success', 'Ekstra berhasil diperbarui.');

@@ -73,9 +73,14 @@ Route::middleware([
      Route::get('/classroom/{id}', [ClassController::class, 'show'])->name('classroom.show');
 
     Route::resource('extras', ExtraController::class);
-     Route::get('/admin/ekstras/{id}', [ExtraController::class, 'show'])->name('extras.show');
+    Route::get('/admin/extras/{id}', [ExtraController::class, 'show'])->name('admin.extras.show');
     Route::post('/admin/extras/store', [ExtraController::class, 'store'])->name('admin.extras.store');
-
+    Route::get('/admin/extras', [ExtraController::class, 'index'])->name('admin.extras.index');
+    Route::get('/admin/extras/create', [ExtraController::class, 'create'])->name('admin.extras.create');
+    Route::post('/admin/extras/store', [ExtraController::class, 'store'])->name('admin.extras.store');
+    Route::get('/admin/extras/{id}/edit', [ExtraController::class, 'edit'])->name('admin.extras.edit');
+    Route::put('/admin/extras/{id}', [ExtraController::class, 'update'])->name('admin.extras.update');
+    Route::delete('/admin/extras/{id}', [ExtraController::class, 'destroy'])->name('admin.extras.destroy');
 });
 
 

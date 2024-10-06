@@ -9,6 +9,16 @@
             <h1>Extra Management</h1>
         </div>
 
+        <!-- Search Form -->
+        <form method="GET" action="{{ route('admin.extras.index') }}">
+            <div class="input-group mb-3">
+                <input type="text" name="search" class="form-control" style="max-width: 500px; width: 100%;" placeholder="Search Nama Ekstra" value="{{ request('search') }}">
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="submit">Search</button>
+                </div>
+            </div>
+        </form>
+
         <!-- Button to Add Extra -->
         <div class="mb-3">
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#extraModal">
@@ -47,7 +57,7 @@
                                                     @endforeach
                                                 </td>
                                                 <td>
-                                                    <button type="button" class="btn btn-icon btn-warning" data-toggle="modal" data-target="#editExtraModal{{ $extra->id }}">
+                                                    <button type="button" class="btn btn-icon btn-primary" data-toggle="modal" data-target="#editExtraModal{{ $extra->id }}">
                                                         <i class="fas fa-edit"></i>
                                                     </button>
                                                     <form action="{{ route('extras.destroy', $extra->id) }}" method="POST" style="display: inline;">

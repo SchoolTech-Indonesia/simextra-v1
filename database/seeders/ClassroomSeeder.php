@@ -17,31 +17,29 @@ class ClassroomSeeder extends Seeder
         $major2 = Major::firstOrCreate(['name' => 'IPS']);
         $major3 = Major::firstOrCreate(['name' => 'Bahasa']);
         
-        // Create classrooms
+        // Create classrooms and associate them with a major (one-to-many)
         $classroom1 = Classroom::firstOrCreate([
             'name' => 'MIPA 1',
-            'code' => '1',
+            'code' => 'ClSRM001',
+            'major_id' => $major1->id,  // Associate with major1
         ]);
         
         $classroom2 = Classroom::firstOrCreate([
             'name' => 'MIPA 2',
-            'code' => 'MIPA2',
+            'code' => 'ClSRM002',
+            'major_id' => $major1->id,  // Associate with major1
         ]);
 
         $classroom3 = Classroom::firstOrCreate([
             'name' => 'IPS 1',
-            'code' => 'IPS1',
+            'code' => 'CLSRM003',
+            'major_id' => $major2->id,  // Associate with major2
         ]);
         
         $classroom4 = Classroom::firstOrCreate([
             'name' => 'Bahasa 1',
-            'code' => 'BAH1',
+            'code' => 'CLSRM004',
+            'major_id' => $major3->id,  // Associate with major3
         ]);
-
-        // Associate classrooms with majors (many-to-many)
-        $major1->classrooms()->syncWithoutDetaching([$classroom1->id, $classroom2->id]); // Major 1 linked to MIPA 1 and MIPA 2
-        $major2->classrooms()->syncWithoutDetaching($classroom3->id); // Major 2 linked to IPS 1
-        $major3->classrooms()->syncWithoutDetaching($classroom4->id); // Major 3 linked to Bahasa 1
     }
 }
-

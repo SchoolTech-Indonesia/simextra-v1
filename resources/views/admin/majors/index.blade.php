@@ -35,7 +35,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="POST" action="{{ route('majors.store') }}">
+                    <form method="POST" action="{{ route('majors.store') }}" id="addMajorform">
                         @csrf
                         <div class="form-group">
                             <label for="major-name">Major Name</label>
@@ -74,7 +74,7 @@
                                         <button class="btn btn-info btn-icon" data-id="{{ $major->id }}" data-toggle="modal" data-target="#majorDetailsModal" onclick="majorDetailsModals({{ $major->id }})">
                                             <i class="fas fa-info-circle"></i>
                                         </button>
-                                        <button class="btn btn-primary btn-icon" data-id="{{ $major->id }}" data-toggle="modal" data-target="#editModal" onclick="editMajor({{ $major->id }})">
+                                        <button class="btn btn-primary btn-icon" data-id="{{ $major->id }}" data-name="{{$major->name}}" data-toggle="modal" data-target="#editModal" onclick="editMajor({{ $major->id }})">
                                             <i class="far fa-edit"></i>
                                         </button>
                                         <form action="{{ route('majors.destroy', $major->id) }}" method="POST" style="display:inline;" onsubmit="return confirmDelete(event, this);">
@@ -99,7 +99,7 @@
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title">Major Details</h5>
+                                    <h5 class="modal-title"id="majorDetailsModalLabel">Major Details</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
@@ -115,11 +115,11 @@
                         </div>
                     </div>
 
-                    <div id="editModal" class="modal fade" tabindex="-1" role="dialog">
+                    <div id="editModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="editMajorsModalLabel">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title">Edit Major</h5>
+                                    <h5 class="modal-title" aria-labelledby="editMajorsModalLabel">Edit Major</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
@@ -136,10 +136,12 @@
                                         <div class="form-group">
                                             <label for="majorsclassrooms">Assign Classrooms</label>
                                             <select name="classrooms[]" class="form-control select2" id="majorsclassrooms" multiple required>
-                                                <!-- Options will be dynamically populated here -->
+                                                @foreach($majors as $majors)
+                                                <option value="{{ $major->id }}">{{ $major->name }}</option>
+                                            @endforeach
                                             </select>
                                         </div>
-                                        <button type="submit" class="btn btn-primary">Save</button>
+                                        <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
                                     </form>
                                 </div>
                             </div>
@@ -148,30 +150,29 @@
                 </div>
 
                 <div class="card-footer text-right float-right">
-                    <ul class="pagination mb-0">
+                    {{-- <ul class="pagination mb-0">
                         <li class="page-item {{ $majors->onFirstPage() ? 'disabled' : '' }}">
-                            <a class="page-link" href="{{ $majors->previousPageUrl() . (request('search') ? '&search=' . request('search') : '') }}" tabindex="-1">
+                            <a class="page-link" href="{{ $majors->previousPageUrl() . (request('major') ? '&major=' . request('major') : '') }}" tabindex="-1">
                                 <i class="fas fa-chevron-left"></i>
                             </a>
                         </li>
                         @for ($i = 1; $i <= $majors->lastPage(); $i++)
                             <li class="page-item {{ $i == $majors->currentPage() ? 'active' : '' }}">
-                                <a class="page-link" href="{{ $majors->url($i) . (request('search') ? '&search=' . request('search') : '') }}">{{ $i }}</a>
+                                <a class="page-link" href="{{ $majors->url($i) . (request('major') ? '&major=' . request('major') : '') }}">{{ $i }}</a>
                             </li>
                         @endfor
                         <li class="page-item {{ $majors->hasMorePages() ? '' : 'disabled' }}">
-                            <a class="page-link" href="{{ $majors->nextPageUrl() . (request('search') ? '&search=' . request('search') : '') }}">
+                            <a class="page-link" href="{{ $majors->nextPageUrl() . (request('major') ? '&major=' . request('major') : '') }}">
                                 <i class="fas fa-chevron-right"></i>
                             </a>
                         </li>
-                    </ul>
+                    </ul> --}}
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-@endsection
 
 <script>
     function majorDetailsModals(id) {
@@ -207,57 +208,103 @@
             }
         });
     }
+   window.editMajor = function(id) {
+    $.ajax({
+        url: '/admin/majors/' + id + '/edit', // Add '/admin' here
+        type: 'GET',
+        success: function(response) {
+            // Populate the form with the major name
+            $('#edit-major-name').val(response.major.name);
 
-    window.editMajor = function(id) {
-        $.ajax({
-            url: '/majors/' + id + '/edit', // URL to fetch major and classroom details
-            type: 'GET',
-            success: function(response) {
-                // Populate the form with the major name
-                $('#edit-major-name').val(response.major.name);
+            // Empty the classroom select box first
+            $('#majorsclassrooms').empty();
 
-                // Empty the classroom select box first
-                $('#majorsclassrooms').empty();
+            // Loop through all classrooms and add options to the select2 dropdown
+            $.each(response.classrooms, function(key, classroom) {
+                // Check if the classroom is already associated with the major
+                var selected = response.majorClassrooms.includes(classroom.id) ? 'selected' : '';
+                
+                // Append the classroom option (with 'selected' if it's already associated)
+                $('#majorsclassrooms').append('<option value="'+classroom.id+'" '+selected+'>'+classroom.name+'</option>');
+            });
 
-                // Loop through all classrooms and add options to the select2 dropdown
-                $.each(response.classrooms, function(key, classroom) {
-                    // Check if the classroom is already associated with the major
-                    var selected = response.majorClassrooms.includes(classroom.id) ? 'selected' : '';
-                    
-                    // Append the classroom option (with 'selected' if it's already associated)
-                    $('#majorsclassrooms').append('<option value="'+classroom.id+'" '+selected+'>'+classroom.name+'</option>');
+            // Reinitialize the select2 to reflect the new data
+            $('#majorsclassrooms').select2();
+
+            // Set the form action dynamically
+            $('#editMajorForm').attr('action', '/majors/' + id);
+
+            // Handle the unselect event for classroom removal
+            $('#majorsclassrooms').off('select2:unselect').on('select2:unselect', function(e) {
+                const classroomId = e.params.data.id; // Get the ID of the unselected classroom
+
+                // Send AJAX request to remove the classroom association
+                $.ajax({
+                    url: '/admin/majors/' + id + '/remove-classroom', // Ensure this route exists
+                    type: 'POST',
+                    data: {
+                        classroom_id: classroomId,
+                        _token: $('meta[name="csrf-token"]').attr('content') // Include CSRF token
+                    },
+                    success: function(response) {
+                        // Handle success response
+                        console.log(response.success);
+                        // Optionally, you can display a notification to the user
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: response.success
+                        });
+                    },
+                    error: function(xhr) {
+                        console.log('Error:', xhr.responseText);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Failed to remove classroom.'
+                        });
+                    }
                 });
+            });
+        },
+        error: function(xhr) {
+            console.log('Error:', xhr.responseText);
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Something went wrong while fetching major details.'
+            });
+        }
+    });
+};
 
-                // Reinitialize the select2 to reflect the new data
-                $('#majorsclassrooms').select2();
 
-                // Set the form action dynamically
-                $('#editMajorForm').attr('action', '/majors/' + id);
-            },
-            error: function(xhr) {
-                console.log('Error:', xhr.responseText);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Something went wrong while fetching major details.'
-                });
-            }
-        });
-    };
+    // $('#editMajorForm').on('submit', function(e) {
+    //     e.preventDefault();
+    //     var form = $(this);
+    //     var url = form.attr('action');
+    //     var formData = new FormData(form[0]);
+    //     formData.append('_method', 'PUT'); // Add this line to simulate PUT request
+
+    //     $.ajax({
+    //         url: url,
+    //         method: 'POST', // Change this to POST
+    //         data: formData,
+    //         processData: false,
+    //         contentType: false,|
 
     $('#editMajorForm').on('submit', function(e) {
-        e.preventDefault();
-        var form = $(this);
-        var url = form.attr('action');
-        var formData = new FormData(form[0]);
-        formData.append('_method', 'PUT'); // Add this line to simulate PUT request
+    e.preventDefault();
+    var form = $(this);
+    var url = '/admin' + form.attr('action'); // Add '/admin' prefix
+    var method = form.attr('method');
+    var formData = form.serialize();
 
-        $.ajax({
-            url: url,
-            method: 'POST', // Change this to POST
+
+    $.ajax({
+        url: url,
+            method: method,
             data: formData,
-            processData: false,
-            contentType: false,
             success: function(response) {
                 $('#editModal').modal('hide');
                 Swal.fire({

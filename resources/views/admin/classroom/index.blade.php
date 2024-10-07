@@ -120,7 +120,7 @@
                     </select>
 
                 </div>
-                <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
+                <button type="submit" class="btn btn-primary">Save</button>
             </form>
             
 
@@ -223,7 +223,7 @@ $('#add-classroom-form').on('submit', function(e) {
         success: function(response) {
             Swal.fire({
                 title: 'Success!',
-                text: 'Classroom successfully added.',
+                text: 'Berhasil menambahkan kelas.',
                 icon: 'success',
                 confirmButtonText: 'OK'
             }).then(() => {
@@ -233,7 +233,7 @@ $('#add-classroom-form').on('submit', function(e) {
         error: function(xhr) {
             Swal.fire({
                 title: 'Error!',
-                text: 'Failed to add Classroom.',
+                text: 'Gagal menambahkan kelas.',
                 icon: 'error',
                 confirmButtonText: 'OK'
             });
@@ -253,7 +253,7 @@ $('#edit-classroom-form').on('submit', function(e) {
         success: function(response) {
             Swal.fire({
                 title: 'Success!',
-                text: 'Classroom successfully updated.',
+                text: 'Berhasil memperbarui kelas.',
                 icon: 'success',
                 confirmButtonText: 'OK'
             }).then(() => {
@@ -263,7 +263,7 @@ $('#edit-classroom-form').on('submit', function(e) {
         error: function(xhr) {
             Swal.fire({
                 title: 'Error!',
-                text: 'Failed to update Classroom.',
+                text: 'Gagal memperbarui kelas.',
                 icon: 'error',
                 confirmButtonText: 'OK'
             });
@@ -275,8 +275,8 @@ function deleteClassroom(e, form) {
     e.preventDefault();
 
     Swal.fire({
-        title: 'Are you sure?',
-        text: "Do you want to delete this Classroom?",
+        title: 'Apakah anda yakin?',
+        text: "Aksi ini tidak bisa anda pulihkan!",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Yes',
@@ -291,7 +291,7 @@ function deleteClassroom(e, form) {
                 success: function(response) {
                     Swal.fire(
                         'Deleted!',
-                        'Classroom successfully deleted',
+                        'Berhasil menghapus kelas.',
                         'success'
                     ).then(() => {
                         location.reload(); 
@@ -300,7 +300,7 @@ function deleteClassroom(e, form) {
                 error: function(xhr) {
                     Swal.fire(
                         'Error!',
-                        'Failed to delete Classroom.',
+                        'Gagal menghapus kelas.',
                         'error'
                     );
                 }
@@ -321,14 +321,14 @@ $(document).ready(function () {
                 $('#class-major').text(data.major ? data.major.name : '-');
 
                 var studentsList = $('#class-students');
-                studentsList.empty(); // Kosongkan daftar siswa sebelumnya
-
-                if (data.students.length > 0) {
+                studentsList.empty(); 
+                if (data.students && data.students.length > 0) {
                     data.students.forEach(function (student, index) {
                         studentsList.append(`<li>${index + 1}. ${student.name}</li>`);
                     });
                 } else {
-                    studentsList.append('<li>No students found</li>');
+                 
+                    studentsList.append('<li>Nama siswa tidak ditemukan</li>');
                 }
 
                 $('#detailClassroomModal').modal('show');
@@ -339,5 +339,6 @@ $(document).ready(function () {
         });
     });
 });
+
 </script>
 @endsection

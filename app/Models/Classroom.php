@@ -12,16 +12,28 @@ class Classroom extends Model
     protected $fillable = [
         'name',
         'code',
+        'major_id'
     ];
 
     public $timestamps = true;
 
     // Define the relationship with majors
-    public function majors()
+    public function major()
     {
-        return $this->belongsToMany(Major::class, 'major_classroom')->withTimestamps();
+        return $this->belongsTo(Major::class);
     }
     
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($classroom) {
+            // Generate a unique code if it's not provided
+            if (empty($classroom->code)) {
+                $classroom->code = 'CLSRM' . strtoupper(uniqid());
+            }
+        });
+    }
 }
 
 //!! Silahkan pakai ini, Jika sudah ada mahasiswanya untuk menampilkan detail students

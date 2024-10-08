@@ -39,14 +39,10 @@
                     <div class="text-center position-absolute" style="top: -150px; left: 50%; transform: translateX(-50%);">
                         <div id="profile-photo-container" class="position-relative" style="width: 150px; height: 150px;">
                             <!-- Profile Photo -->
-                            <img id="profile-photo-display" 
-                                 src="{{ Auth::user()->profile_photo_path ? asset(Auth::user()->profile_photo_path) : 'https://freesvg.org/img/abstract-user-flat-4.png' }}" 
-                                 alt="Profile Picture"
-                                 class="rounded-circle border border-white" 
-                                 width="150" 
-                                 height="150"
-                                 style="cursor: {{ Auth::user()->profile_photo_path && Auth::user()->profile_photo_path !== 'https://freesvg.org/img/abstract-user-flat-4.png' ? 'pointer' : 'default' }}; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);"
-                                 onclick="{{ Auth::user()->profile_photo_path && Auth::user()->profile_photo_path !== 'https://freesvg.org/img/abstract-user-flat-4.png' ? 'confirmRemoveProfilePhoto()' : '' }}">
+                            <img id="profile-photo-display" src="{{ asset(Auth::user()->profile_photo_path) }}" alt="Profile Picture"
+                                class="rounded-circle border border-white" width="150" height="150"
+                                style="cursor: {{ Auth::user()->profile_photo_path !== 'https://freesvg.org/img/abstract-user-flat-4.png' ? 'pointer' : 'default' }}; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);"
+                                onclick="{{ Auth::user()->profile_photo_path !== 'https://freesvg.org/img/abstract-user-flat-4.png' ? 'confirmRemoveProfilePhoto()' : '' }}">
                             <!-- Remove icon overlay (optional for better UX) -->
                             @if(Auth::user()->profile_photo_path !== 'https://freesvg.org/img/abstract-user-flat-4.png')
                                 <div class="position-absolute" style="top: 0; right: 0; width: 30px; height: 30px; background: rgba(0, 0, 0, 0.5); border-radius: 50%;">
@@ -191,8 +187,8 @@
 </div>
 
 <!-- SweetAlert Confirmation Script -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <script>
+    // Button event listener for profile update
     document.getElementById('updateProfileBtn').addEventListener('click', function (e) {
         e.preventDefault(); // Prevent default form submission
 
@@ -217,6 +213,7 @@
         });
     });
 
+    // Function to confirm removal of profile photo
     function confirmRemoveProfilePhoto() {
         Swal.fire({
             title: 'Hapus Foto Profil?',
@@ -227,23 +224,40 @@
             cancelButtonText: 'Tidak'
         }).then((result) => {
             if (result.isConfirmed) {
-                // Call the delete photo function
-                deleteProfilePhoto();
+                // Call the removeProfilePhoto function
+                removeProfilePhoto();
             }
         });
     }
 
-    function deleteProfilePhoto() {
-        // Perform the delete operation (e.g., AJAX request)
-        // This is just a placeholder for your delete logic
-        Swal.fire({
-            title: 'Foto Profil Dihapus!',
-            text: 'Foto profil Anda telah dihapus.',
-            icon: 'success'
+    // AJAX request to remove profile photo
+    function removeProfilePhoto() {
+        $.ajax({
+            url: '{{ route('profile.deletePhoto') }}', // Use Laravel's route helper
+            type: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(response) {
+                Swal.fire({
+                    title: 'Berhasil!',
+                    text: 'Foto profil berhasil dihapus.',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    location.reload(); // Optionally reload or update the UI
+                });
+            },
+            error: function(xhr) {
+                Swal.fire({
+                    title: 'Error!',
+                    text: xhr.responseJSON.error,
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            }
         });
-        // Optionally, reload the page or update the UI to reflect the change
-        location.reload();
     }
 </script>
-
+@include('modals.upload-photo-modal')
 @endsection

@@ -160,7 +160,7 @@
                             <h5>Edit Profile</h5>
                         </div>
                         <div class="card-body">
-                            <form method="POST" action="{{ route('profile.update', Auth::user()->id) }}">
+                            <form id="profileForm" method="POST" action="{{ route('profile.update', Auth::user()->id) }}">
                                 @csrf
                                 @method('PUT')
                                 <div class="form-group">
@@ -174,11 +174,18 @@
                                 <div class="form-group">
                                     <label for="password">Password Baru:</label>
                                     <input type="password" class="form-control" name="new_password">
-                                    <small class="form-text text-muted">*Kosongkan jika tidak ingin mengganti password.</small>
                                 </div>
-                                <button type="submit" class="btn btn-success" id="updateProfileBtn">Simpan Perubahan</button>
+                                <div class="form-group">
+                                    <label for="password_confirmation">Konfirmasi Password:</label>
+                                    <input type="password" class="form-control" name="new_password_confirmation">
+                                </div>
+                                <small class="form-text text-muted">*Kosongkan jika tidak ingin mengganti password.</small>
+                                
+                                <!-- Ensure type="button" so it doesn't auto-submit -->
+                                <button type="button" class="btn btn-success" id="updateProfileBtn">Simpan Perubahan</button>
                             </form>
                         </div>
+                        
                     </div>
                 </div>
             </div>

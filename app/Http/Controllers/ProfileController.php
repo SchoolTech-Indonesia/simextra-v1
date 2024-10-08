@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\User;
+
 use Illuminate\Support\Facades\Hash;
 class ProfileController extends Controller
 {
@@ -72,34 +73,18 @@ public function update(Request $request)
     $request->validate([
         'name' => 'required|string|max:255',
         'email' => 'required|email|max:255|unique:users,email,'.Auth::id(),
+        'new_password' => 'required|string|max:12',
     ]);
 
     $user = Auth::user();
     $user->name = $request->name;
     $user->email = $request->email;
+    if ($request->filled('new_password')) {
+        $user->password = Hash::make($request->new_password);
+    }
     $user->save();
 
     return redirect()->back()->with('success', 'Profile updated successfully!');
 }
 
-
-public function updatePassword(Request $request)
-{
-    $request->validate([
-        'new_password' => 'required|min:8|confirmed',
-    ]);
-
-    $user = auth()->user();
-
-    // Check if the new password is the same as the current password
-    if (Hash::check($request->new_password, $user->password)) {
-        return redirect()->back()->withErrors(['new_password' => 'New password cannot be the same as the current password.']);
-    }
-
-    // Update the user's password
-    $user->password = Hash::make($request->new_password);
-    $user->save();
-
-    return redirect()->back()->with('success', 'Password updated successfully.');
-}
 }

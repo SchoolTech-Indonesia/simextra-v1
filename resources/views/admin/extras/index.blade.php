@@ -60,12 +60,12 @@
                                                     <button type="button" class="btn btn-icon btn-primary" data-toggle="modal" data-target="#editExtraModal{{ $extra->id }}">
                                                         <i class="fas fa-edit"></i>
                                                     </button>
-                                                    <form action="{{ route('extras.destroy', $extra->id) }}" method="POST" style="display: inline;">
+                                                    <button type="button" class="btn btn-icon btn-danger delete-btn" data-id="{{ $extra->id }}">
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+                                                    <form action="{{ route('extras.destroy', $extra->id) }}" method="POST" style="display: inline;" class="delete-form">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" class="btn btn-icon btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus ekstra ini?')">
-                                                            <i class="fas fa-times"></i>
-                                                        </button>
                                                     </form>
                                                 </td>
                                             </tr>
@@ -181,6 +181,46 @@
                     allowClear: true
                 });
             @endforeach
+
+            $('.delete-btn').on('click', function(e) {
+                e.preventDefault();
+                var extraId = $(this).data('id');
+                var form = $(this).closest('tr').find('.delete-form');
+                
+                Swal.fire({
+                    title: 'Apakah Anda Yakin ?',
+                    text: "Apakah Anda Yakin Ingin Menghapus Ekstra ini?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Ya',
+                    cancelButtonText: 'Tidak',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: $(form).attr('action'),
+                            method: 'POST',
+                            data: $(form).serialize(),
+                            success: function(response) {
+                                Swal.fire(
+                                    'Deleted!',
+                                    'Ekstra Berhasil Dihapus',
+                                    'success'
+                                ).then(() => {
+                                    location.reload(); 
+                                });
+                            },
+                            error: function(xhr) {
+                                Swal.fire(
+                                    'Error!',
+                                    'Ekstra Gagal Dihapus!.',
+                                    'error'
+                                );
+                            }
+                        });
+                    }
+                });
+            });
         });
     </script>
 </div>

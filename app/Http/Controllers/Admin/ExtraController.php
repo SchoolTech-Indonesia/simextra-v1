@@ -9,9 +9,7 @@ use Illuminate\Http\Request;
 
 class ExtraController extends Controller
 {
-    public function index(Request $request)
-    {
-        $query = Extra::query();
+    public function index(Request $request){$query = Extra::query();
 
         // Cek apakah ada parameter pencarian
         if ($request->has('search') && $request->search != '') {
@@ -19,7 +17,11 @@ class ExtraController extends Controller
         }
 
         $extras = $query->get();
-        $users = User::all(); // Ambil semua pengguna
+        // Ambil pengguna dengan role 'Koordinator' secara manual
+    $users = User::whereHas('role', function($query) {
+        $query->where('name', 'Koordinator');
+    })->get();
+
         return view('admin.extras.index', compact('extras', 'users')); // Kirim ke tampilan
     }
 

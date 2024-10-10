@@ -9,7 +9,6 @@ use App\Http\Controllers\ClassController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OtpController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\Admin\ExtraController;
 
 
 Route::get('/', function () {
@@ -73,17 +72,7 @@ Route::middleware([
      Route::get('/classroom', [ClassController::class, 'index'])->name('classroom.index');
      Route::get('/classroom/{id}', [ClassController::class, 'show'])->name('classroom.show');
 
-    Route::resource('extras', ExtraController::class);
-    Route::get('/admin/extras/{id}', [ExtraController::class, 'show'])->name('admin.extras.show');
-    Route::post('/admin/extras/store', [ExtraController::class, 'store'])->name('admin.extras.store');
-    Route::get('/admin/extras', [ExtraController::class, 'index'])->name('admin.extras.index');
-    Route::get('/admin/extras/create', [ExtraController::class, 'create'])->name('admin.extras.create');
-    Route::post('/admin/extras/store', [ExtraController::class, 'store'])->name('admin.extras.store');
-    Route::get('/admin/extras/{id}/edit', [ExtraController::class, 'edit'])->name('admin.extras.edit');
-    Route::put('/admin/extras/{id}', [ExtraController::class, 'update'])->name('admin.extras.update');
-    Route::delete('/admin/extras/{id}', [ExtraController::class, 'destroy'])->name('admin.extras.destroy');
 });
-
 
 Route::middleware(['role:superadmin'])->prefix('admin')->group(function(){
 
@@ -99,5 +88,4 @@ Route::post('/verify-otp', [OtpController::class, 'verifyOtp'])->name('otp.verif
 
 Route::get('/reset-password', [OtpController::class, 'showResetForm'])->name('password.reset.form');
 Route::post('/reset-password', [OtpController::class, 'resetPassword'])->name('password.update');
-
 

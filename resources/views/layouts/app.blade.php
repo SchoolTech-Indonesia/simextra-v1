@@ -12,51 +12,22 @@
   
   <!-- SweetAlert CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
-  <!-- Add jQuery dependency -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-  <!-- Add Toaster library -->
-  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+  <!-- Bootstrap Multiselect CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/css/bootstrap-multiselect.css">
+
+  <!-- Select2 CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
+
+  <!-- DataTables CSS -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+
+  <!-- Template CSS -->
+  <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+  <link rel="stylesheet" href="{{ asset('assets/css/components.css') }}">
 
   @stack('styles') <!-- Stack for additional styles -->
-
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
-  <style>
-        .select2-container--default .select2-selection--multiple {
-            background-color: #ffffff;
-            border: 1px solid #433f3f; 
-            color: white; 
-        }
-
-        .select2-container--default .select2-selection--multiple .select2-selection__choice {
-            background-color: #0056b3;
-            color: white;
-        }
-
-        .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
-            color: white; 
-        }
-
-        .select2-container--default .select2-selection--multiple .select2-selection__placeholder {
-            color: white; 
-        }
-
-        .select2-container--default .select2-selection--multiple .select2-selection__choice {
-            color: white; 
-        }
-
-        .form-control-file {
-            border: 1px solid #433f3f; 
-            border-radius: 4px;
-            padding: 5px;
-        }
-
-        .form-control-file:focus {
-            border-color: #433f3f; 
-            outline: none;
-        }
-    </style>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
 </head>
 
 <body>
@@ -160,9 +131,5 @@
 
   </script>
 
-
-  <!-- Tambahkan sebelum penutup </body> -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 </body>
 </html>

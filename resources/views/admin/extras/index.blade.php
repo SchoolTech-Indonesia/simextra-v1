@@ -102,11 +102,11 @@
                             <input type="file" class="form-control-file" id="logo" name="logo">
                         </div>
                         <div class="form-group">
-                            <label for="coordinators">Koordinator</label>
-                            <select multiple class="form-control" id="coordinators" name="coordinators[]" required>
+                            <label for="coordinators">Assign Koordinator</label>
+                            <select name="coordinators[]" class="form-control select2" id="coordinators" multiple required>
                                 @foreach($users as $user)
-                                    <option value="{{ $user->id }}">{{ $user->name }}</option>
-                                @endforeach
+                                <option value="{{ $user->id }}">{{ $user->name }}</option>
+                            @endforeach
                             </select>
                         </div>
                     </div>
@@ -145,9 +145,11 @@
                                     <img src="{{ asset('storage/' . $extra->logo) }}" alt="{{ $extra->name }}" width="50" class="mt-2">
                                 @endif
                             </div>
+                          
                             <div class="form-group">
                                 <label for="edit_coordinators{{ $extra->id }}">Koordinator</label>
-                                <select multiple class="form-control" id="edit_coordinators{{ $extra->id }}" name="coordinators[]" required>
+                              
+                                    <select name="coordinators[]" class="form-control select2" id="edit_coordinators{{ $extra->id }}" multiple required>
                                     @foreach($users as $user)
                                         <option value="{{ $user->id }}" {{ $extra->coordinators->contains($user->id) ? 'selected' : '' }}>
                                             {{ $user->name }}

@@ -22,4 +22,7 @@
   <li class="nav-item{% if 'class-management' in page %} active{% endif %}">
     <a href="{{ route('classroom.index') }}" class="nav-link"><i class="fas fa-building"></i> <span>Class Management</span></a>
   </li>
+  <li class="nav-item{% if 'extras-management' in page %} active{% endif %}">
+    <a href="{{ route('extras.index') }}" class="nav-link"><i class="fas fa-building"></i> <span>Extra Management</span></a>
+  </li>
 </ul>

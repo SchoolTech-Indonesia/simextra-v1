@@ -38,6 +38,24 @@ class UserSeeder extends Seeder
             'id_role' => '2',
             'profile_photo_path' => $this->defaultPhotoUrl
         ]);
+        $koordinator2 = User::create([
+            'name' => $faker->unique()->userName,
+            'NISN_NIP' => '1313131313',
+            'email' => $faker->unique()->safeEmail,
+            'phone_number' => '19823123',
+            'password' => Hash::make('Koordinator'),
+            'id_role' => '2',
+            'profile_photo_path' => $this->defaultPhotoUrl
+        ]);
+        $koordinator3 = User::create([
+            'name' => $faker->unique()->userName,
+            'NISN_NIP' => '90909090990',
+            'email' => $faker->unique()->safeEmail,
+            'phone_number' => '918391723',
+            'password' => Hash::make('Koordinator'),
+            'id_role' => '2',
+            'profile_photo_path' => $this->defaultPhotoUrl
+        ]);
 
         $admin = User::create([
             'name' => $faker->unique()->userName,

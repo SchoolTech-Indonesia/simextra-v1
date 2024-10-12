@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'Simextra'),
 
     /*
     |--------------------------------------------------------------------------
@@ -104,7 +104,7 @@ return [
             explode(',', env('APP_PREVIOUS_KEYS', ''))
         ),
     ],
-
+    
     /*
     |--------------------------------------------------------------------------
     | Maintenance Mode Driver
@@ -121,6 +121,11 @@ return [
     'maintenance' => [
         'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
+    ],
+
+    'aliases' => [
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+        'Auth' => Illuminate\Support\Facades\Auth::class,
     ],
 
 ];

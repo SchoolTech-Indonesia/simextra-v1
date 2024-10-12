@@ -2,43 +2,32 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Sanctum\HasApiTokens;
+use Laravel\Jetstream\HasProfilePhoto;
+use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
-use Laravel\Jetstream\HasProfilePhoto;
-use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use HasApiTokens;
-    use HasFactory;
-    use HasProfilePhoto;
-    use Notifiable;
-    use TwoFactorAuthenticatable;
+    use HasApiTokens, HasFactory, HasProfilePhoto, Notifiable, TwoFactorAuthenticatable, HasRoles;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'name',
         'NISN_NIP',
         'email',
+        'phone_number',
         'password',
+        'status',
+        'otp',
+        'otp_token',
+        'otp_expires_at',
+        'id_role',
+        'id_school'
     ];
 
-    public function username()
-{
-    return 'NISN_NIP';
-}
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
@@ -46,26 +35,44 @@ class User extends Authenticatable
         'two_factor_secret',
     ];
 
-    /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array<int, string>
-     */
     protected $appends = [
         'profile_photo_url',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
+    protected $casts = [ 
+        'NISN_NIP_verified_at' => 'datetime',
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+    ];
+
+    public function role()
     {
-        return [
-            'NISN_NIP_verified_at' => 'datetime',
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return $this->belongsTo(\Spatie\Permission\Models\Role::class, 'id_role');
     }
+
+    public function school()
+    {
+        return $this->belongsTo(School::class, 'id_school');
+    }
+    
+ 
+    public function majors()
+    {
+    return $this->hasMany(Major::class, 'koordinator_id');
+    }
+        /**
+     * A User can coordinate many Majors.
+     */
+    public function koordinator()
+    {
+        return $this->belongsTo(User::class, 'koordinator_id');
+    }
+
+    /**
+     * Check if the user has a specific role.
+     */
+    // public function hasRole($role)
+    // {
+    //     return $this->roles()->where('name', $role)->exists();
+    // }
 }

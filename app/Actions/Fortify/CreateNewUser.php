@@ -24,6 +24,7 @@ class CreateNewUser implements CreatesNewUsers
             'NISN_NIP' => ['required', 'string', 'max:255', 'unique:users'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => $this->passwordRules(),
+             
         ])->validate();
 
         return User::create([
@@ -31,6 +32,7 @@ class CreateNewUser implements CreatesNewUsers
             'NISN_NIP' => $input['NISN_NIP'],
             'email' => $input['email'],
             'password' => Hash::make($input['password']),
+            'profile_photo_path' => $input['profile_photo_path'] ?? 'https://freesvg.org/img/abstract-user-flat-4.png',
         ]);
     }
 }

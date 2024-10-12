@@ -1,45 +1,135 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+  <title>{{ $title ?? 'Simextra - SchoolTech' }}</title>
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+  <!-- General CSS Files -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
+  
+  <!-- SweetAlert CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+  <!-- Bootstrap Multiselect CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/css/bootstrap-multiselect.css">
 
-        <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+  <!-- Select2 CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
 
-        <!-- Styles -->
-        @livewireStyles
-    </head>
-    <body class="font-sans antialiased">
-        <x-banner />
+  <!-- DataTables CSS -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
 
-        <div class="min-h-screen bg-gray-100">
-            @livewire('navigation-menu')
+  <!-- Template CSS -->
+  <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+  <link rel="stylesheet" href="{{ asset('assets/css/components.css') }}">
 
-            <!-- Page Heading -->
-            @if (isset($header))
-                <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endif
+  @stack('styles') <!-- Stack for additional styles -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
+</head>
 
-            <!-- Page Content -->
-            <main>
-                {{ $slot }}
-            </main>
+<body>
+  <div id="app">
+      <div class="main-wrapper">
+        <div class="navbar-bg"></div>
+        <nav class="navbar navbar-expand-lg main-navbar">
+          <form class="form-inline mr-auto">
+            <ul class="navbar-nav mr-3">
+              <li><a href="#" data-toggle="sidebar" class="nav-link nav-link-lg"><i class="fas fa-bars"></i></a></li>
+              <li><a href="#" data-toggle="search" class="nav-link nav-link-lg d-sm-none"><i class="fas fa-search"></i></a></li>
+            </ul>
+          </form>
+          <ul class="navbar-nav navbar-right">
+            <li class="dropdown">
+              <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
+                <div class="d-sm-none d-lg-inline-block">Hi, {{ Auth::user()->name }}</div>
+              </a>
+              <div class="dropdown-menu dropdown-menu-right">
+                  <div class="dropdown-title">Logged in 5 min ago</div>
+                  <a href="{{ route('profile.show') }}" class="dropdown-item has-icon">
+                      <i class="far fa-user"></i> Profile
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                      @csrf
+                  </form>
+                  <a href="#" class="dropdown-item has-icon text-danger" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                      <i class="fas fa-sign-out-alt"></i> Logout
+                  </a>
+              </div>
+            </li>
+          </ul>
+        </nav>
+        <div class="main-sidebar sidebar-style-2">
+          <aside id="sidebar-wrapper">
+            <div class="navbar-brand"></div>
+            <div class="sidebar-brand mb-3">
+              <img src="{{ asset('assets/img/logo/SchoolTech-Logo1full.png') }}" alt="logo" width="100">
+            </div>
+            <div class="sidebar-brand sidebar-brand-sm">
+              <a href="index.html">St</a>
+            </div>
+            @include('layouts.menu')
+          </aside>
         </div>
 
-        @stack('modals')
+        <!-- Main Content -->
+        <div class="main-content">
+          @yield('content')
+        </div>
+        <footer class="main-footer">
+          <div class="footer-left">
+            Copyright &copy; 2024 <div class="bullet">SchoolTech Indonesia</div> 
+          </div>
+          <div class="footer-right"></div>
+        </footer>
+      </div>
+  </div>
 
-        @livewireScripts
-    </body>
+  <!-- General JS Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.nicescroll/3.7.6/jquery.nicescroll.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+  <script src="{{ asset('assets/js/stisla.js') }}"></script>
+
+  <!-- SweetAlert JS -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
+  <!-- Bootstrap Multiselect JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/js/bootstrap-multiselect.min.js"></script>
+
+  <!-- Select2 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+  <!-- DataTables JS -->
+  <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
+
+  <!-- Template JS File -->
+  <script src="{{ asset('assets/js/scripts.js') }}"></script>
+  <script src="{{ asset('assets/js/custom.js') }}"></script>
+
+  <!-- Page Specific JS File -->
+  <script src="{{ asset('assets/js/page/modules-datatables.js') }}"></script>
+
+  <script>
+    $(document).ready(function() {
+        // Initialize DataTable
+        $('majors').DataTable();
+        $('classroom').DataTable(); // Replace 'yourTableId' with the actual ID of your table
+        $('major_classroom').DataTable();
+        $('#majorsclassrooms').select2();  // Initialize the select2 plugin
+        $('#edit-classrooms').multiselect({
+                includeSelectAllOption: true,
+                enableFiltering: true
+            });
+      });
+
+  </script>
+
+</body>
 </html>

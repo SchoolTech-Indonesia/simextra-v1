@@ -116,7 +116,9 @@
               <img src="{{ asset('assets/img/logo/SchoolTech-Logo1full.png') }}" alt="logo" width="100">
             </div>
             <div class="sidebar-brand sidebar-brand-sm">
-              <a href="index.html">St</a>
+                <a href="index.html">
+                    <img src="{{ asset('assets/img/logo/SchoolTech-Logo1.png') }}" alt="Logo" width="auto" height="40" />
+                </a>
             </div>
             @include('layouts.menu')
           </aside>
@@ -153,7 +155,7 @@
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
   <!-- DataTables JS -->
-  <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+  {{-- <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script> --}}
   <script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
 
   <!-- Template JS File -->

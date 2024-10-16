@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Manajemen Ekstra')
+@section('title', 'Manajemen Extra')
 
 @section('content')
 <div class="container">
@@ -9,19 +9,10 @@
             <h1>Extra Management</h1>
         </div>
 
-        <!-- Search Form -->
-        <form method="GET" action="{{ route('admin.extras.index') }}">
-            <div class="input-group mb-3">
-                <input type="text" name="search" class="form-control" style="max-width: 500px; width: 100%;" placeholder="Search Nama Ekstra" value="{{ request('search') }}">
-                <div class="input-group-append">
-                    <button class="btn btn-primary" type="submit">Search</button>
-                </div>
-            </div>
-        </form>
-
-        <!-- Button to Add Extra -->
+        <!-- Search Bar -->
         <div class="mb-3">
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#extraModal">
+            <input type="text" class="form-control" placeholder="Search Nama Extra" aria-label="Search">
+            <button type="button" class="btn btn-primary mt-2" data-toggle="modal" data-target="#extraModal">
                 Create New Extra
             </button>
         </div>
@@ -31,7 +22,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4>Daftar Ekstra</h4>
+                            <h4>Daftar Extra</h4>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -39,7 +30,7 @@
                                     <thead>
                                         <tr>
                                             <th class="text-center">#</th>
-                                            <th>Nama Ekstra</th>
+                                            <th>Nama Extra</th>
                                             <th>Logo</th>
                                             <th>Koordinator</th>
                                             <th>Aksi</th>
@@ -94,7 +85,7 @@
                     @csrf
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="name">Nama Ekstra</label>
+                            <label for="name">Nama Extra</label>
                             <input type="text" class="form-control" id="name" name="name" required>
                         </div>
                         <div class="form-group">
@@ -106,12 +97,12 @@
                             <select name="coordinators[]" class="form-control select2" id="coordinators" multiple required>
                                 @foreach($users as $user)
                                 <option value="{{ $user->id }}">{{ $user->name }}</option>
-                            @endforeach
+                                @endforeach
                             </select>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Tutup</button> <!-- Ubah di sini -->
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Tutup</button>
                         <button type="submit" class="btn btn-primary">Simpan</button>
                     </div>
                 </form>
@@ -125,7 +116,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="editExtraModalLabel{{ $extra->id }}">Edit Ekstra</h5>
+                        <h5 class="modal-title" id="editExtraModalLabel{{ $extra->id }}">Edit Extra</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -135,7 +126,7 @@
                         @method('PUT')
                         <div class="modal-body">
                             <div class="form-group">
-                                <label for="edit_name{{ $extra->id }}">Nama Ekstra</label>
+                                <label for="edit_name{{ $extra->id }}">Nama Extra</label>
                                 <input type="text" class="form-control" id="edit_name{{ $extra->id }}" name="name" value="{{ $extra->name }}" required>
                             </div>
                             <div class="form-group">
@@ -145,11 +136,9 @@
                                     <img src="{{ asset('storage/' . $extra->logo) }}" alt="{{ $extra->name }}" width="50" class="mt-2">
                                 @endif
                             </div>
-                          
                             <div class="form-group">
                                 <label for="edit_coordinators{{ $extra->id }}">Koordinator</label>
-                              
-                                    <select name="coordinators[]" class="form-control select2" id="edit_coordinators{{ $extra->id }}" multiple required>
+                                <select name="coordinators[]" class="form-control select2" id="edit_coordinators{{ $extra->id }}" multiple required>
                                     @foreach($users as $user)
                                         <option value="{{ $user->id }}" {{ $extra->coordinators->contains($user->id) ? 'selected' : '' }}>
                                             {{ $user->name }}
@@ -159,8 +148,8 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-dismiss="modal">Tutup</button> <!-- Ubah di sini -->
-                            <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Tutup</button>
+                            <button type="submit" class="btn btn-primary">Simpan</button>
                         </div>
                     </form>
                 </div>
@@ -170,13 +159,12 @@
 
     <script>
         $(document).ready(function() {
-            // Inisialisasi Select2 untuk modal tambah
+            // Initialize Select2 for modal
             $('#coordinators').select2({
                 placeholder: "Pilih Koordinator",
                 allowClear: true
             });
 
-            // Inisialisasi Select2 untuk modal edit
             @foreach($extras as $extra)
                 $('#edit_coordinators{{ $extra->id }}').select2({
                     placeholder: "Pilih Koordinator",
@@ -191,7 +179,7 @@
                 
                 Swal.fire({
                     title: 'Apakah Anda Yakin ?',
-                    text: "Apakah Anda Yakin Ingin Menghapus Ekstra ini?",
+                    text: "Apakah Anda Yakin Ingin Menghapus Extra ini?",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Ya',
@@ -206,7 +194,7 @@
                             success: function(response) {
                                 Swal.fire(
                                     'Deleted!',
-                                    'Ekstra Berhasil Dihapus',
+                                    'Extra Berhasil Dihapus',
                                     'success'
                                 ).then(() => {
                                     location.reload(); 
@@ -215,7 +203,7 @@
                             error: function(xhr) {
                                 Swal.fire(
                                     'Error!',
-                                    'Ekstra Gagal Dihapus!.',
+                                    'Extra Gagal Dihapus!.',
                                     'error'
                                 );
                             }

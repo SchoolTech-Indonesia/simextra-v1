@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OtpController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\ExtraController;
-
+use App\Http\Controllers\Admin\PresensiController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -82,6 +82,17 @@ Route::middleware([
     Route::get('/admin/extras/{id}/edit', [ExtraController::class, 'edit'])->name('admin.extras.edit');
     Route::put('/admin/extras/{id}', [ExtraController::class, 'update'])->name('admin.extras.update');
     Route::delete('/admin/extras/{id}', [ExtraController::class, 'destroy'])->name('admin.extras.destroy');
+
+    Route::resource('presensi', PresensiController::class);
+    Route::get('/admin/presensi', [PresensiController::class, 'index'])->name('admin.presensi.index');
+    Route::get('/admin/presensi/create', [PresensiController::class, 'create'])->name('admin.presensi.create');
+    Route::post('/admin/presensi', [PresensiController::class, 'store'])->name('admin.presensi.store');
+    Route::get('/admin/presensi/{id}/edit', [PresensiController::class, 'edit'])->name('admin.presensi.edit');
+    Route::put('/admin/presensi/{id}', [PresensiController::class, 'update'])->name('admin.presensi.update');
+    Route::delete('/admin/presensi/{id}', [PresensiController::class, 'destroy'])->name('admin.presensi.destroy');
+
+    Route::get('/admin/presensi/create', [PresensiController::class, 'create'])->name('admin.presensi.create');
+    Route::post('/admin/presensi', [PresensiController::class, 'store'])->name('admin.presensi.store');
 });
 
 

@@ -17,12 +17,15 @@
     <a href="{{ route('schools.index') }}" class="nav-link"><i class="fas fa-building"></i> <span>School Management</span></a>
   </li>
   <li class="nav-item{% if 'majors-management' in page %} active{% endif %}">
-    <a href="{{ route('majors.index') }}" class="nav-link"><i class="fas fa-building"></i> <span>Major Management</span></a>
+    <a href="{{ route('majors.index') }}" class="nav-link"><i class="fas fa-book"></i> <span>Major Management</span></a>
   </li>
   <li class="nav-item{% if 'class-management' in page %} active{% endif %}">
-    <a href="{{ route('classroom.index') }}" class="nav-link"><i class="fas fa-building"></i> <span>Class Management</span></a>
+    <a href="{{ route('classroom.index') }}" class="nav-link"><i class="fas fa-school"></i> <span>Class Management</span></a>
   </li>
   <li class="nav-item{% if 'extras-management' in page %} active{% endif %}">
-    <a href="{{ route('extras.index') }}" class="nav-link"><i class="fas fa-building"></i> <span>Extra Management</span></a>
+    <a href="{{ route('extras.index') }}" class="nav-link"><i class="fas fa-basketball-ball"></i> <span>Extra Management</span></a>
+  </li>
+  <li class="nav-item{% if 'presensi-management' in page %} active{% endif %}">
+    <a href="{{ route('presensi.index') }}" class="nav-link"><i class="fas fa-calendar-check"></i> <span>Presensi Management</span></a>
   </li>
 </ul>

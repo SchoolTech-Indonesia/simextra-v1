@@ -93,6 +93,7 @@ Route::middleware([
 
     Route::get('/admin/presensi/create', [PresensiController::class, 'create'])->name('admin.presensi.create');
     Route::post('/admin/presensi', [PresensiController::class, 'store'])->name('admin.presensi.store');
+    Route::put('/admin/presensi/{uuid}', [PresensiController::class, 'update'])->name('presensi.update');
 });
 
 

@@ -13,7 +13,7 @@ class ResponsPresensi extends Model
     use HasFactory;
 
     protected $table = 'respons_presensi';
-    protected $fillable = ['id_presensi', 'id_status_presensi'];
+    protected $fillable = ['id_presensi','id_user', 'id_status_presensi'];
     protected $primaryKey = 'uuid';
     protected $keyType = 'string';
     public $incrementing = false;

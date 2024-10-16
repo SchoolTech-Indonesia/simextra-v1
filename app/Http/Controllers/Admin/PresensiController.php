@@ -10,19 +10,28 @@ use Illuminate\Support\Str;
 
 class PresensiController extends Controller
 {
-    public function index()
-    {
-        $presensi = Presensi::all(); // This should be correct
-        return view('admin.presensi.index', compact('presensi'));
+    public function index(Request $request)
+{
+    $query = Presensi::query();
+
+    // Cek apakah ada input pencarian
+    if ($request->has('search')) {
+        $search = $request->get('search');
+        $query->where('name', 'like', "%{$search}%"); // Filter berdasarkan nama
     }
 
-    public function create()
-    {
-        return view('admin.presensi.create');
-    }
+    $presensi = $query->get(); // Ambil data sesuai pencarian
+    return view('admin.presensi.index', compact('presensi'));
+}
 
     public function store(Request $request)
     {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after:start_date',
+        ]);
+
         $presensi = new Presensi();
         $presensi->uuid = (string) Str::uuid();
         $presensi->name = $request->name;
@@ -30,24 +39,24 @@ class PresensiController extends Controller
         $presensi->end_date = $request->end_date;
         $presensi->save();
 
-        return redirect()->route('admin.presensi.index');
-    }
-
-    public function edit($uuid)
-    {
-        $presensi = Presensi::findOrFail($uuid);
-        return view('admin.presensi.edit', compact('presensi'));
+        return redirect()->route('admin.presensi.index')->with('success', 'Presensi created successfully.');
     }
 
     public function update(Request $request, $uuid)
     {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after:start_date',
+        ]);
+
         $presensi = Presensi::findOrFail($uuid);
         $presensi->name = $request->name;
         $presensi->start_date = $request->start_date;
         $presensi->end_date = $request->end_date;
         $presensi->save();
 
-        return redirect()->route('admin.presensi.index');
+        return redirect()->route('admin.presensi.index')->with('success', 'Presensi updated successfully.');
     }
 
     public function destroy($uuid)
@@ -55,6 +64,6 @@ class PresensiController extends Controller
         $presensi = Presensi::findOrFail($uuid);
         $presensi->delete();
 
-        return response()->json(['success' => 'Deleted successfully']);
+        return redirect()->back()->with('success', 'Presensi berhasil dihapus');
     }
 }

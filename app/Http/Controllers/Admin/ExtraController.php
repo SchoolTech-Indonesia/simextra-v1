@@ -11,10 +11,11 @@ class ExtraController extends Controller
 {
     public function index(Request $request){$query = Extra::query();
 
-        // Cek apakah ada parameter pencarian
-        if ($request->has('search') && $request->search != '') {
-            $query->where('name', 'like', '%' . $request->search . '%');
-        }
+        // Cek apakah ada input pencarian
+    if ($request->has('search')) {
+        $search = $request->get('search');
+        $query->where('name', 'like', "%{$search}%"); // Filter berdasarkan nama
+    }
 
         $extras = $query->get();
         // Ambil pengguna dengan role 'Koordinator' secara manual

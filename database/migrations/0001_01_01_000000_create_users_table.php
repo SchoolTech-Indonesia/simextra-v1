@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary(); // Change id to UUID
             $table->string('name');
             $table->string('email')->unique();
             $table->string('phone_number')->unique();
@@ -32,8 +32,8 @@ return new class extends Migration
         });
 
         Schema::create('sessions', function (Blueprint $table) {
-            $table->string('id')->primary();
-            $table->foreignId('user_id')->nullable()->index();
+            $table->uuid('id')->primary(); // Change id to UUID
+            $table->foreignUuid('user_id')->nullable()->index(); // Change foreign key to use UUID
             $table->string('ip_address', 45)->nullable();
             $table->text('user_agent')->nullable();
             $table->longText('payload');

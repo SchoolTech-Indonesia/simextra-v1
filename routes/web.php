@@ -9,7 +9,8 @@ use App\Http\Controllers\ClassController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OtpController;
 use App\Http\Controllers\ProfileController;
-
+use App\Http\Controllers\ApplicantController;
+use App\Http\Controllers\Admin\ExtraController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -25,6 +26,14 @@ Route::middleware([
    Route::post('/profile/photo/upload', [ProfileController::class, 'uploadPhoto'])->name('profile.photo.upload');
     Route::post('/profile/delete-photo', [ProfileController::class, 'deletePhoto'])->name('profile.deletePhoto');
 
+    Route::resource('applicants', ApplicantController::class);
+    Route::get('/applicants', [ApplicantController::class, 'index'])->name('applicants.index'); // Get all applicants
+       Route::get('/create', [ApplicantController::class, 'create'])->name('applicant.create'); // Show create form
+       Route::post('/applicants', [ApplicantController::class, 'store'])->name('applicant.store'); // Store a new applicant
+       Route::get('/{applicant}/edit', [ApplicantController::class, 'edit'])->name('applicants.edit'); // Show edit form
+       Route::put('/{applicant}', [ApplicantController::class, 'update'])->name('applicants.update'); // Update an applicant
+       Route::delete('/{applicant}', [ApplicantController::class, 'destroy'])->name('applicants.destroy'); // Delete an applicant
+       Route::get('/user-extracurriculars', [ApplicantController::class, 'getUserExtracurriculars'])->middleware('auth');
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
@@ -71,6 +80,18 @@ Route::middleware([
     Route::resource('classroom', ClassController::class);
      Route::get('/classroom', [ClassController::class, 'index'])->name('classroom.index');
      Route::get('/classroom/{id}', [ClassController::class, 'show'])->name('classroom.show');
+
+     Route::resource('extras', ExtraController::class);
+     Route::get('/admin/extras/{id}', [ExtraController::class, 'show'])->name('admin.extras.show');
+     Route::post('/admin/extras/store', [ExtraController::class, 'store'])->name('admin.extras.store');
+     Route::get('/admin/extras', [ExtraController::class, 'index'])->name('admin.extras.index');
+     Route::get('/admin/extras/create', [ExtraController::class, 'create'])->name('admin.extras.create');
+     Route::post('/admin/extras/store', [ExtraController::class, 'store'])->name('admin.extras.store');
+     Route::get('/admin/extras/{id}/edit', [ExtraController::class, 'edit'])->name('admin.extras.edit');
+     Route::put('/admin/extras/{id}', [ExtraController::class, 'update'])->name('admin.extras.update');
+     Route::delete('/admin/extras/{id}', [ExtraController::class, 'destroy'])->name('admin.extras.destroy');
+
+
 
 });
 

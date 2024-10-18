@@ -4,21 +4,21 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSchoolsTable extends Migration
+class CreateStatusApplicantsTable extends Migration
 {
     public function up()
     {
-        Schema::create('schools', function (Blueprint $table) {
+        Schema::create('status_applicants', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('logo_img')->nullable();
-            $table->string('name');
-            $table->text('address');
+
+            $table->string('name')->unique(); // e.g., 'diterima', 'ditolak'
             $table->timestamps();
         });
     }
 
     public function down()
     {
-        Schema::dropIfExists('schools');
+        Schema::dropIfExists('status_applicants');
     }
 }
+

@@ -9,10 +9,13 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Models\Extra;
+use Illuminate\Support\Str; // Add this line to import Str class
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, HasProfilePhoto, Notifiable, TwoFactorAuthenticatable, HasRoles;
+    use HasApiTokens, HasFactory, HasProfilePhoto, Notifiable, TwoFactorAuthenticatable, HasRoles, HasUuids;
 
     protected $fillable = [
         'name',
@@ -54,19 +57,38 @@ class User extends Authenticatable
     {
         return $this->belongsTo(School::class, 'id_school');
     }
-    
- 
+
     public function majors()
     {
-    return $this->hasMany(Major::class, 'koordinator_id');
+        return $this->hasMany(Major::class, 'koordinator_id');
     }
-        /**
+
+    /**
      * A User can coordinate many Majors.
      */
     public function koordinator()
     {
         return $this->belongsTo(User::class, 'koordinator_id');
     }
+
+    public function extracurriculars()
+    {
+        return $this->belongsToMany(Extra::class, 'extra_has_koor', 'user_id', 'extra_id');
+    }
+
+    // Automatically generate UUID for new models
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (empty($model->id)) {
+                $model->id = (string) Str::uuid(); // Using Str::uuid()
+            }
+        });
+    }
+}
+
 
     /**
      * Check if the user has a specific role.
@@ -75,4 +97,4 @@ class User extends Authenticatable
     // {
     //     return $this->roles()->where('name', $role)->exists();
     // }
-}
+

@@ -7,7 +7,8 @@ use App\Models\User;
 use Illuminate\Database\Seeder;
 use App\Models\Classroom;
 use App\Models\Major;
-
+use App\Models\StatusApplicant;
+use App\Models\Extra;
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -22,6 +23,14 @@ class DatabaseSeeder extends Seeder
         $this->call(MajorSeeder::class);
         $this->call(ClassroomSeeder::class);
         
+        StatusApplicant::create(['name' => 'diterima']);
+        StatusApplicant::create(['name' => 'diproses']);
+        StatusApplicant::create(['name' => 'ditolak']);
+
+        // Seed extrakurikulers
+        Extra::create(['name' => 'Basketball']);
+        Extra::create(['name' => 'Soccer']);
+        Extra::create(['name' => 'Music']);
        // DatabaseSeeder.php
 // $classroom = Classroom::find(1);
 // $major = Major::find(1);

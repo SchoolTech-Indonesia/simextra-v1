@@ -13,13 +13,15 @@ class CreatePresensiTable extends Migration
     {
         Schema::create('presensi', function (Blueprint $table) {
             $table->uuid('uuid')->primary();
+            $table->uuid('id_extras');
             $table->string('name');
             $table->dateTime('start_date');
             $table->dateTime('end_date');
+            $table->foreign('id_extras')->references('id')->on('extras')->onDelete('cascade');
+            // tambahin extra id
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      */

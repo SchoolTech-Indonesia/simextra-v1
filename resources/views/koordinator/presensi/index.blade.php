@@ -8,9 +8,11 @@
 
             <div class="mb-3">
                 <form action="{{ route('presensi.index') }}" method="GET">
-                    <input type="text" name="search" class="form-control" placeholder="Search Name Presensi"
+                    <div class="input-group mb-3">
+                    <input type="text" name="search" class="form-control" style="max-width: 500px; width: 100%;" placeholder="Search Name Presensi"
                         aria-label="Search" value="{{ request()->get('search') }}">
-                    <button type="submit" class="btn btn-primary mt-2">Search</button>
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>
                 </form>
             </div>
             <div class="mb-3">

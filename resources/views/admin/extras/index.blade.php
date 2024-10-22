@@ -12,9 +12,11 @@
             <!-- Search Bar -->
             <div class="mb-3">
                 <form action="{{ route('extras.index') }}" method="GET">
-                    <input type="text" name="search" class="form-control" placeholder="Search Name Extra"
+                    <div class="input-group mb-3">
+                    <input type="text" name="search" class="form-control" style="max-width: 500px; width: 100%;" placeholder="Search Name Extra"
                         aria-label="Search" value="{{ request()->get('search') }}">
-                    <button type="submit" class="btn btn-primary mt-2">Search</button>
+                    <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
                 </form>
             </div>
             <div class="mb-3">

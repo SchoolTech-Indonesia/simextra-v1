@@ -10,7 +10,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OtpController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\ExtraController;
-use App\Http\Controllers\Admin\PresensiController;
+use App\Http\Controllers\Koordinator\PresensiController;
+use App\Http\Controllers\Siswa\PresensiSiswaController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -84,16 +85,24 @@ Route::middleware([
     Route::delete('/admin/extras/{id}', [ExtraController::class, 'destroy'])->name('admin.extras.destroy');
 
     Route::resource('presensi', PresensiController::class);
-    Route::get('/admin/presensi', [PresensiController::class, 'index'])->name('admin.presensi.index');
-    Route::get('/admin/presensi/create', [PresensiController::class, 'create'])->name('admin.presensi.create');
-    Route::post('/admin/presensi', [PresensiController::class, 'store'])->name('admin.presensi.store');
-    Route::get('/admin/presensi/{id}/edit', [PresensiController::class, 'edit'])->name('admin.presensi.edit');
-    Route::put('/admin/presensi/{id}', [PresensiController::class, 'update'])->name('admin.presensi.update');
-    Route::delete('/admin/presensi/{id}', [PresensiController::class, 'destroy'])->name('admin.presensi.destroy');
+    Route::get('/koordinator/presensi', [PresensiController::class, 'index'])->name('koordinator.presensi.index');
+    Route::get('/koordinator/presensi/create', [PresensiController::class, 'create'])->name('koordinator.presensi.create');
+    Route::post('/koordinator/presensi', [PresensiController::class, 'store'])->name('koordinator.presensi.store');
+    Route::get('/koordinator/presensi/{id}/edit', [PresensiController::class, 'edit'])->name('koordinator.presensi.edit');
+    Route::put('/koordinator/presensi/{id}', [PresensiController::class, 'update'])->name('koordinator.presensi.update');
+    Route::delete('/koordinator/presensi/{id}', [PresensiController::class, 'destroy'])->name('koordinator.presensi.destroy');
 
-    Route::get('/admin/presensi/create', [PresensiController::class, 'create'])->name('admin.presensi.create');
-    Route::post('/admin/presensi', [PresensiController::class, 'store'])->name('admin.presensi.store');
-    Route::put('/admin/presensi/{uuid}', [PresensiController::class, 'update'])->name('presensi.update');
+    Route::get('/koordinator/presensi/create', [PresensiController::class, 'create'])->name('koordinator.presensi.create');
+    Route::post('/koordinator/presensi', [PresensiController::class, 'store'])->name('koordinator.presensi.store');
+    Route::put('/koordinator/presensi/{uuid}', [PresensiController::class, 'update'])->name('presensi.update');
+    
+    Route::resource('presensi-siswa', PresensiSiswaController::class);
+    Route::get('/siswa/presensi-siswa', [PresensiSiswaController::class, 'index'])->name('siswa.presensi.index');
+    Route::post('/siswa/presensi-siswa', [PresensiSiswaController::class, 'store'])->name('siswa.presensi-siswa.store');
+    // Route::middleware(['auth:web', config('jetstream.auth_session'), 'verified'])->group(function () {
+    //     Route::post('/siswa/presensi-siswa', [PresensiSiswaController::class, 'store'])->name('siswa.presensi-siswa.store');
+    // });
+
 });
 
 
@@ -111,5 +120,3 @@ Route::post('/verify-otp', [OtpController::class, 'verifyOtp'])->name('otp.verif
 
 Route::get('/reset-password', [OtpController::class, 'showResetForm'])->name('password.reset.form');
 Route::post('/reset-password', [OtpController::class, 'resetPassword'])->name('password.update');
-
-

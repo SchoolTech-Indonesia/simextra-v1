@@ -8,9 +8,9 @@
   <li class="nav-item dropdown{% if 'layout' in page %} active{% endif %}">
     <a href="#" class="nav-link has-dropdown"><i class="fas fa-users"></i> <span>User</span></a>
     <ul class="dropdown-menu">
-      <li{% if 'permissions-management' in page %} class="active"{% endif %}><a class="nav-link" href="{{ route('permissions.index') }}">Permission Management</a></li>
       <li{% if 'roles-management' in page %} class="active"{% endif %}><a class="nav-link" href="{{ route('roles.index') }}">Role Management</a></li>
       <li{% if 'users-management' in page %} class="active"{% endif %}><a class="nav-link" href="{{ route('users.index') }}">User Management</a></li>
+      <li{% if 'permissions-management' in page %} class="active"{% endif %}><a class="nav-link" href="{{ route('permissions.index') }}">Permission Management</a></li>
     </ul>
   </li>
   <li class="nav-item{% if 'schools-management' in page %} active{% endif %}">
@@ -27,5 +27,8 @@
   </li>
   <li class="nav-item{% if 'presensi-management' in page %} active{% endif %}">
     <a href="{{ route('presensi.index') }}" class="nav-link"><i class="fas fa-calendar-check"></i> <span>Presensi Management</span></a>
+  </li>
+  <li class="nav-item{% if 'presensi-siwa' in page %} active{% endif %}">
+    <a href="{{ route('siswa.presensi.index') }}" class="nav-link"><i class="fas fa-calendar-check"></i> <span>Presensi Siswa</span></a>
   </li>
 </ul>

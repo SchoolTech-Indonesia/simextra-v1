@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Koordinator;
 
 use App\Http\Controllers\Controller;
 use App\Models\Presensi;
@@ -21,7 +21,7 @@ class PresensiController extends Controller
     }
 
     $presensi = $query->get(); // Ambil data sesuai pencarian
-    return view('admin.presensi.index', compact('presensi'));
+    return view('koordinator.presensi.index', compact('presensi'));
 }
 
     public function store(Request $request)
@@ -39,7 +39,7 @@ class PresensiController extends Controller
         $presensi->end_date = $request->end_date;
         $presensi->save();
 
-        return redirect()->route('admin.presensi.index')->with('success', 'Presensi created successfully.');
+        return redirect()->route('koordinator.presensi.index')->with('success', 'Presensi created successfully.');
     }
 
     public function update(Request $request, $uuid)
@@ -56,7 +56,7 @@ class PresensiController extends Controller
         $presensi->end_date = $request->end_date;
         $presensi->save();
 
-        return redirect()->route('admin.presensi.index')->with('success', 'Presensi updated successfully.');
+        return redirect()->route('koordinator.presensi.index')->with('success', 'Presensi updated successfully.');
     }
 
     public function destroy($uuid)

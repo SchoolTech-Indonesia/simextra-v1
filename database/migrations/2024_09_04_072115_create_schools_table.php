@@ -9,7 +9,7 @@ class CreateSchoolsTable extends Migration
     public function up()
     {
         Schema::create('schools', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->bigIncrements('id')->primary();
             $table->string('logo_img')->nullable();
             $table->string('name');
             $table->text('address');

@@ -77,16 +77,6 @@ class User extends Authenticatable
     }
 
     // Automatically generate UUID for new models
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($model) {
-            if (empty($model->id)) {
-                $model->id = (string) Str::uuid(); // Using Str::uuid()
-            }
-        });
-    }
 }
 
 

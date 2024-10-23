@@ -8,12 +8,10 @@ class AddRoleAndSchoolToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            // Change to use UUID instead of unsignedBigInteger
-            $table->uuid('id_role')->nullable(); 
-            $table->foreign('id_role')->references('id')->on('roles')->onDelete('set null');
-            
-            $table->uuid('id_school')->nullable(); 
-            $table->foreign('id_school')->references('id')->on('schools')->onDelete('set null');
+            $table->unsignedBigInteger('id_role')->nullable();
+            $table->foreign('id_role')->references('id')->on('roles');
+            $table->unsignedBigInteger('id_school')->nullable();
+            $table->foreign('id_school')->references('id')->on('schools');
         });
     }
 

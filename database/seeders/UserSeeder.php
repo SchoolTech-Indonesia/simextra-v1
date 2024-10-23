@@ -1,60 +1,62 @@
 <?php
+
 namespace Database\Seeders;
 
-use App\Models\Role;
+use Illuminate\Database\Seeder;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Database\Seeder;
+use Faker\Factory as Faker;
 
 class UserSeeder extends Seeder
 {
-    public function run()
-    {
-        // Ensure roles are seeded
-        $roleStudent = Role::firstOrCreate(['name' => 'Student']);
-        $roleKoordinator = Role::firstOrCreate(['name' => 'Koordinator']);
-        $roleAdmin = Role::firstOrCreate(['name' => 'Admin']);
-        $roleSuperAdmin = Role::firstOrCreate(['name' => 'Super Admin']);
+    private $defaultPhotoUrl = 'https://freesvg.org/img/abstract-user-flat-4.png';
 
-        // Seed users and assign roles
+    /**
+     * Run the database seeds.
+     */
+    public function run(): void
+    {
+        $faker = Faker::create(); // Create a Faker instance
+
         $student = User::create([
-            'name' => 'andy42',
+            
+            'name' => $faker->unique()->userName,
             'NISN_NIP' => '11111111',
             'email' => 'siswa@gmail.com',
             'phone_number' => '1234567890',
             'password' => Hash::make('Student'),
-            'profile_photo_path' => 'https://freesvg.org/img/abstract-user-flat-4.png',
+            'id_role' => '1',
+            'profile_photo_path' => $this->defaultPhotoUrl 
         ]);
-        $student->assignRole($roleStudent);
 
         $koordinator = User::create([
-            'name' => 'koordinator42',
+            'name' => $faker->unique()->userName,
             'NISN_NIP' => '22222222',
-            'email' => 'koordinator@gmail.com',
+            'email' => $faker->unique()->safeEmail,
             'phone_number' => '12345678',
             'password' => Hash::make('Koordinator'),
-            'profile_photo_path' => 'https://freesvg.org/img/abstract-user-flat-4.png',
+            'id_role' => '2',
+            'profile_photo_path' => $this->defaultPhotoUrl
         ]);
-        $koordinator->assignRole($roleKoordinator);
 
         $admin = User::create([
-            'name' => 'admin42',
+            'name' => $faker->unique()->userName,
             'NISN_NIP' => '33333333',
-            'email' => 'admin@gmail.com',
+            'email' => $faker->unique()->safeEmail,
             'phone_number' => '1234567',
             'password' => Hash::make('Admin'),
-            'profile_photo_path' => 'https://freesvg.org/img/abstract-user-flat-4.png',
+            'id_role' => '3',
+            'profile_photo_path' => $this->defaultPhotoUrl 
         ]);
-        $admin->assignRole($roleAdmin);
 
         $superAdmin = User::create([
-            'name' => 'superadmin42',
+            'name' => $faker->unique()->userName,
             'NISN_NIP' => '44444444',
-            'email' => 'superadmin@gmail.com',
+            'email' => $faker->unique()->safeEmail,
             'phone_number' => '123456',
             'password' => Hash::make('SuperAdmin'),
-            'profile_photo_path' => 'https://freesvg.org/img/abstract-user-flat-4.png',
+            'id_role' => '4',
+            'profile_photo_path' => $this->defaultPhotoUrl
         ]);
-        $superAdmin->assignRole($roleSuperAdmin);
     }
 }

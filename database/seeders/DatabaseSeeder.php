@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
         $this->call(MajorSeeder::class);
         $this->call(ClassroomSeeder::class);
         $this->call(ExtrasSeeder::class);
+        $this->call(StatusPresensiSeeder::class);
         
        // DatabaseSeeder.php
 // $classroom = Classroom::find(1);

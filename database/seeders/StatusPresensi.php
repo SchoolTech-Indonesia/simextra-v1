@@ -1,1 +1,0 @@
-<!-- sakit,ijin,hadir,alpha -->

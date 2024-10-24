@@ -12,7 +12,7 @@ class Classroom extends Model
     protected $fillable = [
         'name',
         'code',
-        'address'
+        'major_id'
     ];
 
     public $timestamps = true;
@@ -21,6 +21,18 @@ class Classroom extends Model
     public function major()
     {
         return $this->belongsTo(Major::class);
+    }
+    
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($classroom) {
+            // Generate a unique code if it's not provided
+            if (empty($classroom->code)) {
+                $classroom->code = 'CLSRM' . strtoupper(uniqid());
+            }
+        });
     }
 }
 

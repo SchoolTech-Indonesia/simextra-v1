@@ -1,14 +1,13 @@
 <?php
+
 namespace App\Http\Controllers\Admin;
 
-
-
 use App\Models\Major;
-use App\Models\User; 
 use App\Models\Classroom; 
 use App\Http\Requests\StoreMajorRequest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+
 class MajorController extends Controller
 {
     public function index(Request $request)
@@ -16,75 +15,89 @@ class MajorController extends Controller
         $majors = Major::with(['classrooms'])
             ->where('name', 'like', '%' . $request->search . '%')
             ->paginate(10);
-    
+
         $classrooms = Classroom::all();
-    
+
         return view('admin.majors.index', compact('majors', 'classrooms'));
     }
-    
-    public function store(StoreMajorRequest $request)
+
+    public function store(Request $request)
     {
-        // Validate and create the major
-        $validated = $request->validated(); // This uses the StoreMajorRequest for validation
-    
-        $major = Major::create($validated); // Create the new major
-    
-        // If classrooms are provided, associate them with the major
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'classrooms' => 'nullable|array',
+            'classrooms.*' => 'exists:classrooms,id'
+        ]);
+
+        $major = Major::updateOrCreate(
+            ['id' => $request->id],
+            ['name' => $validated['name']]
+        );
+
         if ($request->has('classrooms')) {
-            $major->classrooms()->sync($request->classrooms);
+            $major->classrooms()->sync($validated['classrooms']);
         }
-    
-        // Redirect to the index page with a success message
-        return redirect()->route('majors.index')->with('success', 'Major created successfully.');
+
+        return redirect()->route('majors.index')->with('success', 'Major created/updated successfully.');
+    }
+
+    public function show($id)
+    {
+        $major = Major::with('classrooms')->find($id);
+        return response()->json(['major' => $major]);
     }
 
     public function edit($id)
-{
-    try {
-        $major = Major::with('classrooms')->findOrFail($id);
+    {
+        $major = Major::findOrFail($id);
         $classrooms = Classroom::all();
 
         return response()->json([
             'major' => $major,
             'classrooms' => $classrooms,
+            'majorClassrooms' => $major->classrooms->pluck('id')->toArray()
         ]);
-    } catch (\Exception $e) {
-        return response()->json(['error' => 'Error retrieving major data.'], 500);
     }
-}
-    
-    public function update(Request $request, Major $major)
+
+    public function update(Request $request, $id)
     {
-        try {
-            $validated = $request->validate([
-                'name' => 'required|string|max:255',
-                'classrooms' => 'array|exists:classrooms,id',
-            ]);
-    
-            $major->update($validated);
-    
-            if ($request->has('classrooms')) {
-                $major->classrooms()->sync($request->classrooms);
-            }
-    
-            return redirect()->route('majors.index')->with('success', 'Major updated successfully.');
-        } catch (\Exception $e) {
-            return redirect()->route('majors.index')->with('error', 'Error updating major data.');
+        $major = Major::findOrFail($id);
+
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'classrooms' => 'nullable|array',
+            'classrooms.*' => 'exists:classrooms,id'
+        ]);
+
+        $major->update(['name' => $validatedData['name']]);
+
+        if (isset($validatedData['classrooms'])) {
+            Classroom::whereIn('id', $validatedData['classrooms'])->update(['major_id' => $major->id]);
+
+            Classroom::where('major_id', $major->id)
+                      ->whereNotIn('id', $validatedData['classrooms'])
+                      ->update(['major_id' => null]);
+        } else {
+            Classroom::where('major_id', $major->id)->update(['major_id' => null]);
         }
+
+        return redirect()->route('majors.index')->with('success', 'Major updated successfully!');
     }
-    
-    public function show($id)
+
+    public function removeClassroom(Request $request, $id)
     {
-        try {
-            $major = Major::with('classrooms')->findOrFail($id);
+        $major = Major::findOrFail($id);
     
-            return response()->json([
-                'major' => $major,
-            ]);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Error retrieving major data.'], 500);
-        }
+        $validatedData = $request->validate([
+            'classroom_id' => ['required', 'exists:classrooms,id']
+        ]);
+    
+        // Detach the classroom from the major
+        $major->classrooms()->detach($validatedData['classroom_id']);
+    
+        return response()->json(['success' => 'Classroom removed successfully.']);
     }
+    
 
     public function destroy(Major $major)
     {

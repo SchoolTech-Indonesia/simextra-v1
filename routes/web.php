@@ -21,14 +21,11 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::put('/user/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::put('/user/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
-   Route::post('/profile/photo/upload', [ProfileController::class, 'uploadPhoto'])->name('profile.photo.upload');
 
+    Route::put('/profile/{user}', [ProfileController::class, 'update'])->name('profile.update');
+   Route::post('/profile/photo/upload', [ProfileController::class, 'uploadPhoto'])->name('profile.photo.upload');
     Route::post('/profile/delete-photo', [ProfileController::class, 'deletePhoto'])->name('profile.deletePhoto');
-    Route::post('/profile/photo/upload', [ProfileController::class, 'uploadPhoto'])->name('profile.photo.upload');
-    Route::put('/profile/update', [ProfileController::class, 'updateProfile'])->name('profile.update');
-    
+
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
@@ -57,17 +54,21 @@ Route::middleware([
     Route::get('/admin/schools/{id}', [SchoolController::class, 'show'])->name('schools.show');
     Route::get('/admin/schools/{id}/edit', [SchoolController::class, 'edit'])->name('schools.edit');
     Route::put('/admin/schools/{id}', [SchoolController::class, 'update'])->name('schools.update');
-    
+    // Route::prefix('admin')->group(function () {
+    //     Route::resource('majors', MajorController::class);
+    //     Route::get('/majors/{id}/edit', [MajorController::class, 'edit'])->name('majors.edit');
+    //     // Route::delete('/majors/{id}/classrooms', [MajorController::class, 'removeClassroom'])->name('majors.removeClassroom');
+    // });
     Route::resource('majors', MajorController::class);
      Route::get('/admin/majors', [MajorController::class, 'index'])->name('majors.index');
-     Route::get('/admin/majors/{id}', [MajorController::class, 'show']);
-     Route::get('/admin/majors', [MajorController::class, 'index'])->name('majors.index');
      Route::post('/admin/majors', [MajorController::class, 'store'])->name('majors.store');
-     Route::get('/admin/majors/{major}', [MajorController::class, 'show'])->name('majors.show');
-     Route::put('/admin/majors/{major}', [MajorController::class, 'update'])->name('majors.update');
+     Route::get('/admin/majors/{id}', [MajorController::class, 'show'])->name('majors.show');
+     Route::put('/admin/majors/{id}', [MajorController::class, 'update'])->name('majors.update');
      Route::delete('/admin/majors/{major}', [MajorController::class, 'destroy'])->name('majors.destroy');
      Route::get('/admin/majors/{id}/edit', [MajorController::class, 'edit'])->name('majors.edit');
-     
+     Route::post('/admin/majors/{id}/remove-classroom', [MajorController::class, 'removeClassroom'])->name('majors.remove-classroom');
+
+
     Route::resource('classroom', ClassController::class);
      Route::get('/classroom', [ClassController::class, 'index'])->name('classroom.index');
      Route::get('/classroom/{id}', [ClassController::class, 'show'])->name('classroom.show');

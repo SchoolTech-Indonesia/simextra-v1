@@ -21,7 +21,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-striped" id="table-1">
+                        <table class="table table-striped"  >
                             <thead>
                                 <tr>
                                     <th class="text-center">#</th>
@@ -114,6 +114,7 @@
             <div class="modal-body">
                 <form id="edit-school-form" method="POST" enctype="multipart/form-data">
                     @csrf
+                    
                     @method('PUT')
                     <input type="hidden" id="school-id" name="id">
                     <div class="form-group">

@@ -1,7 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
+
 <div class="container">
+
     <section class="section">
         <div class="section-header">
             <h1>Major Management</h1>
@@ -22,209 +24,248 @@
     <div class="card-header-action">
         <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#addMajorsModal">Create Major</button>
     </div>
-   
+
     <div class="modal fade" id="addMajorsModal" tabindex="-1" role="dialog" aria-labelledby="addMajorLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="addMajorLabel">Create Major</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <form method="POST" action="{{ route('majors.store') }}">
-            @csrf
-            {{-- <div class="form-group">
-              <label for="major-code">Major Code</label>
-              <input type="text" class="form-control" id="major-code" name="code" required>
-            </div> --}}
-            <div class="form-group">
-              <label for="major-name">Major Name</label>
-              <input type="text" class="form-control" id="major-name" name="name" required>
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addMajorLabel">Create Major</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="{{ route('majors.store') }}" id="addMajorform">
+                        @csrf
+                        <div class="form-group">
+                            <label for="major-name">Major Name</label>
+                            <input type="text" class="form-control" id="major-name" name="name" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Major</button>
+                    </form>
+                </div>
             </div>
-            {{-- <div class="form-group">
-              <label for="koordinator">Coordinator</label>
-              <select name="koordinator_id" class="form-control">
-                  <option value="">-- Select Coordinator (Optional) --</option> <!-- Optional coordinator -->
-                  @foreach($koordinators as $koordinator)
-                      <option value="{{ $koordinator->id }}">{{ $koordinator->name }}</option>
-                  @endforeach
-              </select>
-          </div> --}}
-          
-          {{-- <div class="form-group">
-              <label for="classroom">Classroom</label>
-              <select name="classroom_id" class="form-control">
-                  <option value="">-- Select Classroom (Optional) --</option> <!-- Optional classroom -->
-                  @foreach($classrooms as $classroom)
-                      <option value="{{ $classroom->id }}">{{ $classroom->name }}</option>
-                  @endforeach
-              </select>
-          </div> --}}
-          
-            <button type="submit" class="btn btn-primary">Save Major</button>
-          </form>
         </div>
-      </div>
     </div>
-    </div>
-  
+
     <div class="row">
         <div class="col-12">
-          <div class="card">
-            <div class="card-header">
-              <h4>Major List</h4>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-striped" id="table-1">
-                        <thead>
-                            <tr>
-                                <th class="text-center">#</th>
-                                <th>Major Code</th>
-                                <th>Major Name</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($majors as $major)
-                            <tr>
-                                <td class="text-center">{{ $loop->iteration }}</td>
-                                <td>{{ $major->code }}</td>
-                                <td>{{ $major->name }}</td>
-                                {{-- <td>
-                                    @if($major->classrooms->isEmpty())
-                                        -
-                                    @else
-                                        @foreach($major->classrooms as $classroom)
-                                            {{ $classroom->name }} ({{ $classroom->code }})
-                                            @if(!$loop->last), @endif
-                                        @endforeach
-                                    @endif
-                                </td> --}}
-                                <td>
-                                    <!-- View Details Button -->
-                                    <button class="btn btn-info btn-icon" onclick="showMajorDetails({{ $major->id }})">
-                                        <i class="fas fa-info-circle"></i>
-                                    </button>
-                            
-                                    <!-- Edit Button -->
-                                    <button class="btn btn-primary btn-icon btn-edit-major" data-id="{{ $major->id }}">
-                                        <i class="far fa-edit"></i>
-                                    </button>
-                            
-                                    <!-- Include the modals -->
-                                    @include('admin.majors.detail-modal')
-                                    @include('admin.majors.edit-modal')
-
-                                    <form action="{{ route('majors.destroy', $major->id) }}" method="POST" style="display:inline;" onsubmit="return confirmDelete(event, this);">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-icon">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                    </form>
-                                </td>
-                                
-                            </tr>
-                            @empty
-                            <tr>
-                                <td colspan="6" class="text-center">Major is not found</td>
-                            </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
+            <div class="card">
+                <div class="card-header">
+                    <h4>Major List</h4>
                 </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">#</th>
+                                    <th>Major Name</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php $i = 1 ?>
+                                @forelse($majors as $major)
+                                <tr>
+                                    <td class="text-center">{{ $loop->iteration }}</td>
+                                    <td>{{ $major->name }}</td>
+                                    <td>
+                                        <button class="btn btn-info btn-icon" data-id="{{ $major->id }}" data-toggle="modal" data-target="#majorDetailsModal" onclick="majorDetailsModals({{ $major->id }})">
+                                            <i class="fas fa-info-circle"></i>
+                                        </button>
+                                        <button class="btn btn-primary btn-icon" data-id="{{ $major->id }}" data-name="{{$major->name}}" data-toggle="modal" data-target="#editModal" onclick="editMajor({{ $major->id }})">
+                                            <i class="far fa-edit"></i>
+                                        </button>
+                                        <form action="{{ route('majors.destroy', $major->id) }}" method="POST" style="display:inline;" onsubmit="return confirmDelete(event, this);">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger btn-icon">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="4" class="text-center">Major is not found</td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="modal fade" id="majorDetailsModal" tabindex="-1" aria-labelledby="majorDetailsModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title"id="majorDetailsModalLabel">Major Details</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p><strong>Major Name:</strong> <ul id="details-major-name"></ul></p>
+                                    <p><strong>Classrooms:</strong><ul id="classroom-list"></ul></p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="editModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="editMajorsModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" aria-labelledby="editMajorsModalLabel">Edit Major</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="editMajorForm" method="POST">
+                                        @csrf
+                                        @method('PUT')
+                                        <input type="hidden" id="major-id">
+                                        <div class="form-group">
+                                            <label for="edit-major-name">Major Name</label>
+                                            <input type="text" name="name" class="form-control" id="edit-major-name" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="majorsclassrooms">Assign Classrooms</label>
+                                            <select name="classrooms[]" class="form-control select2" id="majorsclassrooms" multiple required>
+                                                @foreach($majors as $majors)
+                                                <option value="{{ $major->id }}">{{ $major->name }}</option>
+                                            @endforeach
+                                            </select>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="card-footer text-right float-right">
-   
-                    <ul class="pagination mb-0">
-                        {{-- Previous button --}}
+                    {{-- <ul class="pagination mb-0">
                         <li class="page-item {{ $majors->onFirstPage() ? 'disabled' : '' }}">
-                            <a class="page-link" href="{{ $majors->previousPageUrl() . (request('search') ? '&search=' . request('search') : '') }}" tabindex="-1">
+                            <a class="page-link" href="{{ $majors->previousPageUrl() . (request('major') ? '&major=' . request('major') : '') }}" tabindex="-1">
                                 <i class="fas fa-chevron-left"></i>
                             </a>
                         </li>
-                    
-                        {{-- Page numbers --}}
                         @for ($i = 1; $i <= $majors->lastPage(); $i++)
                             <li class="page-item {{ $i == $majors->currentPage() ? 'active' : '' }}">
-                                <a class="page-link" href="{{ $majors->url($i) . (request('search') ? '&search=' . request('search') : '') }}">{{ $i }}</a>
+                                <a class="page-link" href="{{ $majors->url($i) . (request('major') ? '&major=' . request('major') : '') }}">{{ $i }}</a>
                             </li>
                         @endfor
-                    
-                        {{-- Next button --}}
                         <li class="page-item {{ $majors->hasMorePages() ? '' : 'disabled' }}">
-                            <a class="page-link" href="{{ $majors->nextPageUrl() . (request('search') ? '&search=' . request('search') : '') }}">
+                            <a class="page-link" href="{{ $majors->nextPageUrl() . (request('major') ? '&major=' . request('major') : '') }}">
                                 <i class="fas fa-chevron-right"></i>
                             </a>
                         </li>
-                    </ul>
+                    </ul> --}}
                 </div>
-                </div>
-              </div>
             </div>
-          </div>
         </div>
-      </div>
+    </div>
 </div>
+
+
 <script>
-$.ajaxSetup({
-    headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    }
-});
-    // SweetAlert for success messages
-    // @if (session('success'))
-    //     Swal.fire({
-    //         icon: 'success',
-    //         title: 'Success',
-    //         text: '{{ session('success') }}',
-    //         confirmButtonText: 'OK'
-    //     });
-    // @endif
-
-    function showMajorDetails(id) {
+    function majorDetailsModals(id) {
         $.ajax({
-            url: `/majors/${id}`,  // Adjust the URL if needed
-            method: 'GET',
+            url: `/majors/${id}`,  // Fetch the data for the selected major
+            type: 'GET',
             success: function(response) {
-                // Populate the modal fields with data from the response
-                $('#detail-major-code').text(response.major.code);
-                $('#detail-major-name').text(response.major.name);
+                console.log(response);  // Log the response for debugging
 
-                // Populate classrooms in details
-                let classrooms = response.major.classrooms.map(c => c.name).join(', ');
-                $('#detail-major-classes').text(classrooms);
+                var major = response.major;
+
+                // Populate modal fields with the major details
+                $('#details-major-name').text(major.name || 'No name available');  // Handle undefined name
+
+                // Clear the classroom list
+                $('#classroom-list').empty();
+
+                // Populate classroom list if there are classrooms
+                if (major.classrooms && major.classrooms.length > 0) {
+                    major.classrooms.forEach(function(classroom) {
+                        $('#classroom-list').append('<li>' + classroom.name + '</li>');
+                    });
+                } else {
+                    $('#classroom-list').append('<li>No classrooms available</li>');
+                }
 
                 // Show the modal
-                $('#detailModal').modal('show');
+                $('#majorDetailsModal').modal('show');
             },
             error: function(xhr) {
-                console.log('Error:', xhr.responseText);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Something went wrong while fetching major details.'
-                });
+                console.log(xhr.responseText);  // Log the error for debugging
+                alert('Error fetching major data.');
             }
         });
     }
-// Define the editMajor function
-function editMajor(id) {
+   window.editMajor = function(id) {
     $.ajax({
-        url: `/admin/majors/${id}/edit`,  // Adjust the URL if needed
-        method: 'GET',
+        url: '/admin/majors/' + id + '/edit', // Add '/admin' here
+        type: 'GET',
         success: function(response) {
-            // Populate the modal fields with data from the response
+            // Populate the form with the major name
             $('#edit-major-name').val(response.major.name);
 
-            // Populate classrooms in edit modal
-            let selectedClassrooms = response.major.classrooms.map(c => c.id);
-            $('#edit-classrooms').val(selectedClassrooms);
+            // Empty the classroom select box first
+            $('#majorsclassrooms').empty();
 
-            // Show the modal
-            $('#editModal').modal('show');
+            // Loop through all classrooms and add options to the select2 dropdown
+            $.each(response.classrooms, function(key, classroom) {
+                // Check if the classroom is already associated with the major
+                var selected = response.majorClassrooms.includes(classroom.id) ? 'selected' : '';
+                
+                // Append the classroom option (with 'selected' if it's already associated)
+                $('#majorsclassrooms').append('<option value="'+classroom.id+'" '+selected+'>'+classroom.name+'</option>');
+            });
+
+            // Reinitialize the select2 to reflect the new data
+            $('#majorsclassrooms').select2();
+
+            // Set the form action dynamically
+            $('#editMajorForm').attr('action', '/majors/' + id);
+
+            // Handle the unselect event for classroom removal
+            $('#majorsclassrooms').off('select2:unselect').on('select2:unselect', function(e) {
+                const classroomId = e.params.data.id; // Get the ID of the unselected classroom
+
+                // Send AJAX request to remove the classroom association
+                $.ajax({
+                    url: '/admin/majors/' + id + '/remove-classroom', // Ensure this route exists
+                    type: 'POST',
+                    data: {
+                        classroom_id: classroomId,
+                        _token: $('meta[name="csrf-token"]').attr('content') // Include CSRF token
+                    },
+                    success: function(response) {
+                        // Handle success response
+                        console.log(response.success);
+                        // Optionally, you can display a notification to the user
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: response.success
+                        });
+                    },
+                    error: function(xhr) {
+                        console.log('Error:', xhr.responseText);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Failed to remove classroom.'
+                        });
+                    }
+                });
+            });
         },
         error: function(xhr) {
             console.log('Error:', xhr.responseText);
@@ -235,17 +276,73 @@ function editMajor(id) {
             });
         }
     });
-}
+};
 
-// Call the editMajor function when the button is clicked
-$('.btn-edit-major').on('click', function() {
-    var id = $(this).data('id');
-    editMajor(id);
-});
+
+    // $('#editMajorForm').on('submit', function(e) {
+    //     e.preventDefault();
+    //     var form = $(this);
+    //     var url = form.attr('action');
+    //     var formData = new FormData(form[0]);
+    //     formData.append('_method', 'PUT'); // Add this line to simulate PUT request
+
+    //     $.ajax({
+    //         url: url,
+    //         method: 'POST', // Change this to POST
+    //         data: formData,
+    //         processData: false,
+    //         contentType: false,|
+
+    $('#editMajorForm').on('submit', function(e) {
+    e.preventDefault();
+    var form = $(this);
+    var url = '/admin' + form.attr('action'); // Add '/admin' prefix
+    var method = form.attr('method');
+    var formData = form.serialize();
+
+
+    $.ajax({
+        url: url,
+            method: method,
+            data: formData,
+            success: function(response) {
+                $('#editModal').modal('hide');
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: 'Major updated successfully!'
+                }).then(() => {
+                    location.reload();
+                });
+            },
+            error: function(xhr) {
+                console.log('Error:', xhr.responseText);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong while updating the major.'
+                });
+            }
+        });
+    });
+
+    $('#add-classroom-button').on('click', function() {
+        var selectedClassroomId = $('#edit-classrooms').val();
+        var selectedClassroomName = $('#edit-classrooms option:selected').text();
+
+        if (selectedClassroomId) {
+            $('#selected-classrooms').append(`
+                <div class="selected-classroom" data-id="${selectedClassroomId}">
+                    ${selectedClassroomName} <button class="remove-classroom">Remove</button>
+                </div>
+            `);
+            $(`#edit-classrooms option[value="${selectedClassroomId}"]`).remove();
+        }
+    });
 
     function confirmDelete(event, form) {
         event.preventDefault();
-        
+
         Swal.fire({
             title: 'Are you sure?',
             text: "You won't be able to revert this!",
@@ -256,10 +353,11 @@ $('.btn-edit-major').on('click', function() {
             confirmButtonText: 'Yes, delete it!'
         }).then((result) => {
             if (result.isConfirmed) {
-                form.submit(); // Submit the form if confirmed
+                form.submit();
             }
         });
     }
 </script>
+
 
 @endsection

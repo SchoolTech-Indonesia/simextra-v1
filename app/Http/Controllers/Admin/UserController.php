@@ -128,7 +128,7 @@ class UserController extends Controller
             // Filter roles yang sesuai dengan pilihan navbar
             $roles = $roles->where('id', $roleId);
         }
-    
+
         return response()->json([
             'user' => $user,
             'roles' => $roles,

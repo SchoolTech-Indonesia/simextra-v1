@@ -23,13 +23,15 @@ class DatabaseSeeder extends Seeder
         $this->call(StatusApplicantSeeder::class);
         // $this->call(ApplicantSeeder::class);
         $this->call(MajorSeeder::class);
+        $this->call(ClassroomSeeder::class);
+        
        // DatabaseSeeder.php
-$classroom = Classroom::find(1);
-$major = Major::find(1);
+// $classroom = Classroom::find(1);
+// $major = Major::find(1);
 
-// Set the major_id directly for the classroom
-$classroom->major_id = $major->id;
-$classroom->save();
+// // Set the major_id directly for the classroom
+// $classroom->major_id = $major->id;
+// $classroom->save();
 
     }
 }

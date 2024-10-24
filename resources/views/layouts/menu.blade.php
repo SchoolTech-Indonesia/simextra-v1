@@ -22,4 +22,8 @@
   <li class="nav-item{% if 'class-management' in page %} active{% endif %}">
     <a href="{{ route('classroom.index') }}" class="nav-link"><i class="fas fa-building"></i> <span>Class Management</span></a>
   </li>
+  <li class="nav-item{% if 'class-management' in page %} active{% endif %}">
+    <a href="{{ route('applicants.index') }}" class="nav-link"><i class="fas fa-building"></i> <span>Applicant Management</span></a>
+
+  </li>
 </ul>

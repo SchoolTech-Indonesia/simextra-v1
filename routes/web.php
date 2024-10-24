@@ -9,6 +9,7 @@ use App\Http\Controllers\ClassController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OtpController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ApplicantController;
 
 
 Route::get('/', function () {
@@ -70,7 +71,16 @@ Route::middleware([
     Route::resource('classroom', ClassController::class);
      Route::get('/classroom', [ClassController::class, 'index'])->name('classroom.index');
      Route::get('/classroom/{id}', [ClassController::class, 'show'])->name('classroom.show');
-
+     
+     Route::resource('applicants', ApplicantController::class);
+     Route::get('/applicant', [ApplicantController::class, 'index'])->name('applicant.index'); // Get all applicants
+        Route::get('/create', [ApplicantController::class, 'create'])->name('applicant.create'); // Show create form
+        Route::post('/applicant', [ApplicantController::class, 'store'])->name('applicant.store'); // Store a new applicant
+        Route::get('/applicant/{applicant}/edit', [ApplicantController::class, 'edit'])->name('applicant.edit'); // Show edit form
+        Route::put('/applicant/{applicant}', [ApplicantController::class, 'update'])->name('applicant.update'); // Update an applicant
+        Route::delete('/{applicant}', [ApplicantController::class, 'destroy'])->name('applicant.destroy'); // Delete an applicant
+        Route::get('/applicant/{id}', [ApplicantController::class, 'show'])->name('applicant.show');
+        Route::get('/user-extracurriculars', [ApplicantController::class, 'getUserExtracurriculars'])->middleware('auth');
 });
 
 Route::middleware(['role:superadmin'])->prefix('admin')->group(function(){

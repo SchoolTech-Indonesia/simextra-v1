@@ -19,8 +19,10 @@ class DatabaseSeeder extends Seeder
         $this->call(RoleSeeder::class);
         $this->call(SchoolSeeder::class);
         $this->call(UserSeeder::class);
+        $this->call(ExtrasSeeder::class);
+        $this->call(StatusApplicantSeeder::class);
+        // $this->call(ApplicantSeeder::class);
         $this->call(MajorSeeder::class);
-        
        // DatabaseSeeder.php
 $classroom = Classroom::find(1);
 $major = Major::find(1);
